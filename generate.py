@@ -4,16 +4,30 @@ real_names = {'aarch64_udf': 'UDF_only_perm_undef', 'MLA_Z_P_ZZZ__': 'mla_z_p_zz
 
 TAB = "    "
 
+# remove prefix
+def r(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
 def to_name(sym):
     if sym in real_names:
         sym = real_names[sym]
-    return sym.lstrip("aarch32_").lstrip("aarch64_").rstrip("_").replace("_", " ").title().replace(" ", "")
+    return r(r(sym, "aarch32_"), "aarch64_").rstrip("_").replace("_", " ").title().replace(" ", "")
 
 class Decoder(NopDecodeListener):
     def __init__(self):
         self.tabs = 0
         self.field_sizes = {}
         self.variants = set(["Nop"])
+        self.unused_var_stack = []
+        self.variant_fields = {}
+
+    def unused_in_scope_vars(self):
+        x = []
+        for y in self.unused_var_stack:
+            x += y
+        return x
 
     def after_listen_case(self, fields):
         if len(fields) != 0:
@@ -28,11 +42,16 @@ class Decoder(NopDecodeListener):
 
     def after_listen_when(self, _):
         self.tabs -= 1
+        self.unused_var_stack.pop()
         print(f"{TAB * self.tabs}}}")
 
     def listen_case(self, fields):
         def f(field):
             if field.name:
+                try:
+                    self.unused_var_stack[-1].remove(field.name)
+                except:
+                    pass
                 return field.name
             elif field.concat_names:
                 shift = self.field_sizes[field.concat_names[1]]
@@ -63,9 +82,24 @@ class Decoder(NopDecodeListener):
     def listen_encoding(self, name):
         name = to_name(name)
         self.variants.add(name)
-        print(f"{TAB * self.tabs}Some(Op::{name})")
+        fields = self.unused_in_scope_vars()
+
+        def to_field(x):
+            bits = self.field_sizes[x]
+            if bits <= 8:
+                ty = "u8"
+            elif bits <= 16:
+                ty = "u16"
+            else:
+                ty = "u32"
+            return (x, ty)
+
+        self.variant_fields[name] = [to_field(x) for x in fields]
+        fields = "" if len(fields) == 0 else (" {" + ", ".join([f"{x}: {x} as _" for x in fields]) + "}")
+        print(f"{TAB * self.tabs}Some(Op::{name}{fields})")
 
     def listen_field(self, name, start, run):
+        self.unused_var_stack[-1].append(name)
         mask = (run << 1) - 1
         self.field_sizes[name] = run
         if start == 0:
@@ -127,15 +161,24 @@ class Decoder(NopDecodeListener):
         else:
             print(f"{TAB * self.tabs}({pats}){cond} => {{")
         self.tabs += 1
+        self.unused_var_stack.append([])
         return True
 
 dec = Decoder()
 parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", dec)
 print()
+print("#[allow(non_snake_case)]")
 print("#[derive(Debug, PartialEq, Clone)]")
 print("pub enum Op {")
 for op in dec.variants:
-    print(f"    {op},")
+    fields = dec.variant_fields.get(op, [])
+    if len(fields) == 0:
+        print(f"    {op},")
+    else:
+        print(f"    {op} {{")
+        for field, ty in fields:
+            print(f"        {field}: {ty},")
+        print(f"    }},")
 print("}")
 print()
 print("""
@@ -145,6 +188,6 @@ mod tests {
 
     #[test]
     fn test() {
-        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::MovsIA1);
+        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::MovsIA1 { cond: 6, S: 0, Rn: 0, Rd: 0, imm12: 1 });
     }
 }""")
