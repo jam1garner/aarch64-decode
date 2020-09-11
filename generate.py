@@ -6,10 +6,11 @@ class Decoder(NopDecodeListener):
     def __init__(self):
         self.tabs = 0
         self.field_sizes = {}
+        self.variants = set(["Nop"])
 
     def after_listen_case(self, fields):
         if len(fields) != 0:
-            print(f"{TAB * self.tabs}_ => unreachable!()")
+            print(f"{TAB * self.tabs}_ => None")
         self.tabs -= 1
         print(f"{TAB * self.tabs}}}")
 
@@ -47,13 +48,13 @@ class Decoder(NopDecodeListener):
         if name == "A64" or name == "A32":
             print("#[allow(unused_variables)]")
             print("#[allow(non_snake_case)]")
-            print(f"pub fn decode_{name.lower()}(instr: u32) {{")
+            print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Op> {{")
             self.tabs += 1
             return True
 
     def listen_encoding(self, name):
-        print(f"{TAB * self.tabs}println!(\"encoding: {name}\");")
-        return True
+        self.variants.add(name)
+        print(f"{TAB * self.tabs}Some(Op::{name})")
 
     def listen_field(self, name, start, run):
         mask = (run << 1) - 1
@@ -65,19 +66,19 @@ class Decoder(NopDecodeListener):
         return True
 
     def listen_unallocated(self):
-        print(f"{TAB * self.tabs}println!(\"unallocated\");")
-        return True
+        print(f"{TAB * self.tabs}None")
 
     def listen_undocumented(self):
-        print(f"{TAB * self.tabs}println!(\"undocumented\");")
-        return True
+        print(f"{TAB * self.tabs}None")
 
     def listen_unused(self):
-        print(f"{TAB * self.tabs}println!(\"unused\");")
-        return True
+        print(f"{TAB * self.tabs}None")
+
+    def listen_nop(self):
+        print(f"{TAB * self.tabs}Some(Op::Nop)")
 
     def listen_unpredictable(self):
-        print(f"{TAB * self.tabs}println!(\"unpredictable\");")
+        print(f"{TAB * self.tabs}None")
         return True
 
     def listen_when(self, values):
@@ -119,15 +120,22 @@ class Decoder(NopDecodeListener):
         self.tabs += 1
         return True
 
-parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", Decoder())
+dec = Decoder()
+parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", dec)
+print()
+print("#[derive(Debug, PartialEq, Clone)]")
+print("pub enum Op {")
+for op in dec.variants:
+    print(f"    {op},")
+print("}")
+print()
 print("""
 #[cfg(test)]
 mod tests {
-    use super::{decode_a64, decode_a32};
+    use super::{decode_a64, decode_a32, Op};
 
     #[test]
     fn test() {
-        decode_a64(0xe3a00001);
-        decode_a32(0xe3a00001);
+        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::aarch32_MOV_i_A1_A);
     }
 }""")
