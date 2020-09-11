@@ -40,7 +40,7 @@ class Decoder(NopDecodeListener):
         return True
 
     def listen_decode(self, name):
-        if name == "A64":
+        if name == "A64" or name == "A32":
             print("#[allow(unused_variables)]")
             print("#[allow(non_snake_case)]")
             print(f"pub fn decode_{name.lower()}(instr: u32) {{")
