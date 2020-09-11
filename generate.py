@@ -75,7 +75,7 @@ class Decoder(NopDecodeListener):
             print("#[allow(unused_variables)]")
             print("#[allow(non_snake_case)]")
             print("#[allow(unreachable_patterns)]")
-            print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Op> {{")
+            print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Instr> {{")
             self.tabs += 1
             return True
 
@@ -96,7 +96,7 @@ class Decoder(NopDecodeListener):
 
         self.variant_fields[name] = [to_field(x) for x in fields]
         fields = "" if len(fields) == 0 else (" {" + ", ".join([f"{x}: {x} as _" for x in fields]) + "}")
-        print(f"{TAB * self.tabs}Some(Op::{name}{fields})")
+        print(f"{TAB * self.tabs}Some(Instr::{name}{fields})")
 
     def listen_field(self, name, start, run):
         self.unused_var_stack[-1].append(name)
@@ -118,7 +118,7 @@ class Decoder(NopDecodeListener):
         print(f"{TAB * self.tabs}None")
 
     def listen_nop(self):
-        print(f"{TAB * self.tabs}Some(Op::Nop)")
+        print(f"{TAB * self.tabs}Some(Instr::Nop)")
 
     def listen_unpredictable(self):
         print(f"{TAB * self.tabs}None")
@@ -169,7 +169,7 @@ parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", dec)
 print()
 print("#[allow(non_snake_case)]")
 print("#[derive(Debug, PartialEq, Clone)]")
-print("pub enum Op {")
+print("pub enum Instr {")
 for op in dec.variants:
     fields = dec.variant_fields.get(op, [])
     if len(fields) == 0:
@@ -184,10 +184,10 @@ print()
 print("""
 #[cfg(test)]
 mod tests {
-    use super::{decode_a32, Op};
+    use super::{decode_a32, Instr};
 
     #[test]
     fn test() {
-        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::MovsIA1 { cond: 6, S: 0, Rn: 0, Rd: 0, imm12: 1 });
+        assert_eq!(decode_a32(0xe3a00001).unwrap(), Instr::MovsIA1 { cond: 6, S: 0, Rn: 0, Rd: 0, imm12: 1 });
     }
 }""")
