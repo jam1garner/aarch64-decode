@@ -1,5 +1,6 @@
 #[allow(unused_variables)]
 #[allow(non_snake_case)]
+#[allow(unreachable_patterns)]
 pub fn decode_a64(instr: u32) -> Option<Op> {
     match ((instr >> 29) & 5, (instr >> 24) & 9, instr & 47) {
         (_, x1, _) if x1 & 30 == 0 => {
@@ -8,7 +9,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let imm16 = instr & 31;
                     match () {
                         () => {
-                            Some(Op::aarch64_udf)
+                            Some(Op::UdfOnlyPermUndef)
                         }
                     }
                 }
@@ -37,10 +38,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zda = instr & 9;
                             match op {
                                 x0 if x0 == 0 => {
-                                    Some(Op::MLA_Z_P_ZZZ__)
+                                    Some(Op::MlaZPZzz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::MLS_Z_P_ZZZ__)
+                                    Some(Op::MlsZPZzz)
                                 }
                                 _ => None
                             }
@@ -54,10 +55,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match op {
                                 x0 if x0 == 0 => {
-                                    Some(Op::MAD_Z_P_ZZZ__)
+                                    Some(Op::MadZPZzz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::MSB_Z_P_ZZZ__)
+                                    Some(Op::MsbZPZzz)
                                 }
                                 _ => None
                             }
@@ -75,16 +76,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ADD_Z_P_ZZ__)
+                                    Some(Op::DdZPZz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::SUB_Z_P_ZZ__)
+                                    Some(Op::SubZPZz)
                                 }
                                 x0 if x0 == 2 => {
                                     None
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::SUBR_Z_P_ZZ__)
+                                    Some(Op::SubrZPZz)
                                 }
                                 x0 if x0 & 4 == 4 => {
                                     None
@@ -101,22 +102,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (opc, U) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SMAX_Z_P_ZZ__)
+                                    Some(Op::SmaxZPZz)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::UMAX_Z_P_ZZ__)
+                                    Some(Op::UmaxZPZz)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::SMIN_Z_P_ZZ__)
+                                    Some(Op::SminZPZz)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UMIN_Z_P_ZZ__)
+                                    Some(Op::UminZPZz)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::SABD_Z_P_ZZ__)
+                                    Some(Op::SabdZPZz)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::UABD_Z_P_ZZ__)
+                                    Some(Op::UabdZPZz)
                                 }
                                 (x0, _) if x0 == 3 => {
                                     None
@@ -133,16 +134,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (H, U) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::MUL_Z_P_ZZ__)
+                                    Some(Op::MulZPZz)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::SMULH_Z_P_ZZ__)
+                                    Some(Op::SmulhZPZz)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UMULH_Z_P_ZZ__)
+                                    Some(Op::UmulhZPZz)
                                 }
                                 _ => None
                             }
@@ -156,16 +157,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (R, U) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SDIV_Z_P_ZZ__)
+                                    Some(Op::SdivZPZz)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::UDIV_Z_P_ZZ__)
+                                    Some(Op::UdivZPZz)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::SDIVR_Z_P_ZZ__)
+                                    Some(Op::SdivrZPZz)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UDIVR_Z_P_ZZ__)
+                                    Some(Op::UdivrZPZz)
                                 }
                                 _ => None
                             }
@@ -178,16 +179,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ORR_Z_P_ZZ__)
+                                    Some(Op::OrrZPZz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::EOR_Z_P_ZZ__)
+                                    Some(Op::EorZPZz)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::AND_Z_P_ZZ__)
+                                    Some(Op::NdZPZz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::BIC_Z_P_ZZ__)
+                                    Some(Op::BicZPZz)
                                 }
                                 x0 if x0 & 4 == 4 => {
                                     None
@@ -209,10 +210,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Vd = instr & 9;
                             match (opc, U) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SADDV_R_P_Z__)
+                                    Some(Op::SaddvRPZ)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::UADDV_R_P_Z__)
+                                    Some(Op::UaddvRPZ)
                                 }
                                 (x0, _) if x0 == 1 => {
                                     None
@@ -232,16 +233,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Vd = instr & 9;
                             match (opc, U) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SMAXV_R_P_Z__)
+                                    Some(Op::SmaxvRPZ)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::UMAXV_R_P_Z__)
+                                    Some(Op::UmaxvRPZ)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::SMINV_R_P_Z__)
+                                    Some(Op::SminvRPZ)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UMINV_R_P_Z__)
+                                    Some(Op::UminvRPZ)
                                 }
                                 (x0, _) if x0 & 2 == 2 => {
                                     None
@@ -258,7 +259,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::MOVPRFX_Z_P_Z__)
+                                    Some(Op::MovprfxZPZ)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -277,13 +278,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Vd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ORV_R_P_Z__)
+                                    Some(Op::OrvRPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::EORV_R_P_Z__)
+                                    Some(Op::EorvRPZ)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ANDV_R_P_Z__)
+                                    Some(Op::NdvRPZ)
                                 }
                                 x0 if x0 == 3 => {
                                     None
@@ -310,19 +311,19 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (opc, L, U) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::ASR_Z_P_ZI__)
+                                    Some(Op::SrZPZi)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LSR_Z_P_ZI__)
+                                    Some(Op::LsrZPZi)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LSL_Z_P_ZI__)
+                                    Some(Op::LslZPZi)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::ASRD_Z_P_ZI__)
+                                    Some(Op::SrdZPZi)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
                                     None
@@ -349,22 +350,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::ASR_Z_P_ZZ__)
+                                    Some(Op::SrZPZz)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LSR_Z_P_ZZ__)
+                                    Some(Op::LsrZPZz)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LSL_Z_P_ZZ__)
+                                    Some(Op::LslZPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::ASRR_Z_P_ZZ__)
+                                    Some(Op::SrrZPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LSRR_Z_P_ZZ__)
+                                    Some(Op::LsrrZPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LSLR_Z_P_ZZ__)
+                                    Some(Op::LslrZPZz)
                                 }
                                 _ => None
                             }
@@ -379,16 +380,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (R, L, U) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::ASR_Z_P_ZW__)
+                                    Some(Op::SrZPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LSR_Z_P_ZW__)
+                                    Some(Op::LsrZPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LSL_Z_P_ZW__)
+                                    Some(Op::LslZPZw)
                                 }
                                 (x0, _, _) if x0 == 1 => {
                                     None
@@ -412,28 +413,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::SXTB_Z_P_Z__)
+                                    Some(Op::SxtbZPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::UXTB_Z_P_Z__)
+                                    Some(Op::UxtbZPZ)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::SXTH_Z_P_Z__)
+                                    Some(Op::SxthZPZ)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::UXTH_Z_P_Z__)
+                                    Some(Op::UxthZPZ)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::SXTW_Z_P_Z__)
+                                    Some(Op::SxtwZPZ)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::UXTW_Z_P_Z__)
+                                    Some(Op::UxtwZPZ)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::ABS_Z_P_Z__)
+                                    Some(Op::BsZPZ)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::NEG_Z_P_Z__)
+                                    Some(Op::NegZPZ)
                                 }
                                 _ => None
                             }
@@ -446,25 +447,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::CLS_Z_P_Z__)
+                                    Some(Op::LsZPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::CLZ_Z_P_Z__)
+                                    Some(Op::LzZPZ)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::CNT_Z_P_Z__)
+                                    Some(Op::NtZPZ)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::CNOT_Z_P_Z__)
+                                    Some(Op::NotZPZ)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::FABS_Z_P_Z__)
+                                    Some(Op::FabsZPZ)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::FNEG_Z_P_Z__)
+                                    Some(Op::FnegZPZ)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::NOT_Z_P_Z__)
+                                    Some(Op::NotZPZ)
                                 }
                                 x0 if x0 == 7 => {
                                     None
@@ -483,25 +484,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::ADD_Z_ZZ__)
+                            Some(Op::DdZZz)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::SUB_Z_ZZ__)
+                            Some(Op::SubZZz)
                         }
                         x0 if x0 & 6 == 2 => {
                             None
                         }
                         x0 if x0 == 4 => {
-                            Some(Op::SQADD_Z_ZZ__)
+                            Some(Op::SqaddZZz)
                         }
                         x0 if x0 == 5 => {
-                            Some(Op::UQADD_Z_ZZ__)
+                            Some(Op::UqaddZZz)
                         }
                         x0 if x0 == 6 => {
-                            Some(Op::SQSUB_Z_ZZ__)
+                            Some(Op::SqsubZZz)
                         }
                         x0 if x0 == 7 => {
-                            Some(Op::UQSUB_Z_ZZ__)
+                            Some(Op::UqsubZZz)
                         }
                         _ => None
                     }
@@ -518,16 +519,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::AND_Z_ZZ__)
+                                    Some(Op::NdZZz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ORR_Z_ZZ__)
+                                    Some(Op::OrrZZz)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::EOR_Z_ZZ__)
+                                    Some(Op::EorZZz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::BIC_Z_ZZ__)
+                                    Some(Op::BicZZz)
                                 }
                                 _ => None
                             }
@@ -547,7 +548,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INDEX_Z_II__)
+                                    Some(Op::IndexZIi)
                                 }
                             }
                         }
@@ -558,7 +559,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INDEX_Z_RI__)
+                                    Some(Op::IndexZRi)
                                 }
                             }
                         }
@@ -569,7 +570,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INDEX_Z_IR__)
+                                    Some(Op::IndexZIr)
                                 }
                             }
                         }
@@ -580,7 +581,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INDEX_Z_RR__)
+                                    Some(Op::IndexZRr)
                                 }
                             }
                         }
@@ -596,10 +597,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Rd = instr & 9;
                             match op {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ADDVL_R_RI__)
+                                    Some(Op::DdvlRRi)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ADDPL_R_RI__)
+                                    Some(Op::DdplRRi)
                                 }
                                 _ => None
                             }
@@ -626,7 +627,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 31 => {
-                                    Some(Op::RDVL_R_I__)
+                                    Some(Op::DvlRI)
                                 }
                                 (x0, _) if x0 == 1 => {
                                     None
@@ -653,16 +654,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ASR_Z_ZW__)
+                                    Some(Op::SrZZw)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LSR_Z_ZW__)
+                                    Some(Op::LsrZZw)
                                 }
                                 x0 if x0 == 2 => {
                                     None
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LSL_Z_ZW__)
+                                    Some(Op::LslZZw)
                                 }
                                 _ => None
                             }
@@ -676,16 +677,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ASR_Z_ZI__)
+                                    Some(Op::SrZZi)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LSR_Z_ZI__)
+                                    Some(Op::LsrZZi)
                                 }
                                 x0 if x0 == 2 => {
                                     None
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LSL_Z_ZI__)
+                                    Some(Op::LslZZi)
                                 }
                                 _ => None
                             }
@@ -701,13 +702,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::ADR_Z_AZ_D_s32_scaled)
+                            Some(Op::DrZAzDS32Scaled)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::ADR_Z_AZ_D_u32_scaled)
+                            Some(Op::DrZAzDU32Scaled)
                         }
                         x0 if x0 & 2 == 2 => {
-                            Some(Op::ADR_Z_AZ_SD_same_scaled)
+                            Some(Op::DrZAzSdSameScaled)
                         }
                         _ => None
                     }
@@ -722,7 +723,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match op {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FTSSEL_Z_ZZ__)
+                                    Some(Op::FtsselZZz)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -737,7 +738,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FEXPA_Z_Z__)
+                                    Some(Op::FexpaZZ)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -764,7 +765,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match (opc, opc2) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::MOVPRFX_Z_Z__)
+                                    Some(Op::MovprfxZZ)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
@@ -807,40 +808,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SQINCH_Z_ZS__)
+                                    Some(Op::SqinchZZs)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::UQINCH_Z_ZS__)
+                                    Some(Op::UqinchZZs)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::SQDECH_Z_ZS__)
+                                    Some(Op::SqdechZZs)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::UQDECH_Z_ZS__)
+                                    Some(Op::UqdechZZs)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SQINCW_Z_ZS__)
+                                    Some(Op::SqincwZZs)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::UQINCW_Z_ZS__)
+                                    Some(Op::UqincwZZs)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::SQDECW_Z_ZS__)
+                                    Some(Op::SqdecwZZs)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::UQDECW_Z_ZS__)
+                                    Some(Op::UqdecwZZs)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SQINCD_Z_ZS__)
+                                    Some(Op::SqincdZZs)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::UQINCD_Z_ZS__)
+                                    Some(Op::UqincdZZs)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::SQDECD_Z_ZS__)
+                                    Some(Op::SqdecdZZs)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::UQDECD_Z_ZS__)
+                                    Some(Op::UqdecdZZs)
                                 }
                                 _ => None
                             }
@@ -856,16 +857,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::CNTB_R_S__)
+                                    Some(Op::NtbRS)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::CNTH_R_S__)
+                                    Some(Op::NthRS)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::CNTW_R_S__)
+                                    Some(Op::NtwRS)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::CNTD_R_S__)
+                                    Some(Op::NtdRS)
                                 }
                                 _ => None
                             }
@@ -884,22 +885,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::INCH_Z_ZS__)
+                                    Some(Op::InchZZs)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::DECH_Z_ZS__)
+                                    Some(Op::DechZZs)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::INCW_Z_ZS__)
+                                    Some(Op::IncwZZs)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::DECW_Z_ZS__)
+                                    Some(Op::DecwZZs)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::INCD_Z_ZS__)
+                                    Some(Op::IncdZZs)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::DECD_Z_ZS__)
+                                    Some(Op::DecdZZs)
                                 }
                                 _ => None
                             }
@@ -912,28 +913,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Rdn = instr & 9;
                             match (size, D) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::INCB_R_RS__)
+                                    Some(Op::IncbRRs)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::DECB_R_RS__)
+                                    Some(Op::DecbRRs)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::INCH_R_RS__)
+                                    Some(Op::InchRRs)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::DECH_R_RS__)
+                                    Some(Op::DechRRs)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::INCW_R_RS__)
+                                    Some(Op::IncwRRs)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::DECW_R_RS__)
+                                    Some(Op::DecwRRs)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::INCD_R_RS__)
+                                    Some(Op::IncdRRs)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::DECD_R_RS__)
+                                    Some(Op::DecdRRs)
                                 }
                                 _ => None
                             }
@@ -954,100 +955,100 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Rdn = instr & 9;
                             match (size, sf, D, U) {
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCB_R_RS_SX)
+                                    Some(Op::SqincbRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCB_R_RS_UW)
+                                    Some(Op::UqincbRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECB_R_RS_SX)
+                                    Some(Op::SqdecbRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECB_R_RS_UW)
+                                    Some(Op::UqdecbRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCB_R_RS_X)
+                                    Some(Op::SqincbRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCB_R_RS_X)
+                                    Some(Op::UqincbRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECB_R_RS_X)
+                                    Some(Op::SqdecbRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECB_R_RS_X)
+                                    Some(Op::UqdecbRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCH_R_RS_SX)
+                                    Some(Op::SqinchRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCH_R_RS_UW)
+                                    Some(Op::UqinchRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECH_R_RS_SX)
+                                    Some(Op::SqdechRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECH_R_RS_UW)
+                                    Some(Op::UqdechRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCH_R_RS_X)
+                                    Some(Op::SqinchRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCH_R_RS_X)
+                                    Some(Op::UqinchRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECH_R_RS_X)
+                                    Some(Op::SqdechRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECH_R_RS_X)
+                                    Some(Op::UqdechRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCW_R_RS_SX)
+                                    Some(Op::SqincwRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCW_R_RS_UW)
+                                    Some(Op::UqincwRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECW_R_RS_SX)
+                                    Some(Op::SqdecwRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECW_R_RS_UW)
+                                    Some(Op::UqdecwRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCW_R_RS_X)
+                                    Some(Op::SqincwRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCW_R_RS_X)
+                                    Some(Op::UqincwRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECW_R_RS_X)
+                                    Some(Op::SqdecwRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECW_R_RS_X)
+                                    Some(Op::UqdecwRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCD_R_RS_SX)
+                                    Some(Op::SqincdRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCD_R_RS_UW)
+                                    Some(Op::UqincdRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECD_R_RS_SX)
+                                    Some(Op::SqdecdRRsSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECD_R_RS_UW)
+                                    Some(Op::UqdecdRRsUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCD_R_RS_X)
+                                    Some(Op::SqincdRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::UQINCD_R_RS_X)
+                                    Some(Op::UqincdRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECD_R_RS_X)
+                                    Some(Op::SqdecdRRsX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::UQDECD_R_RS_X)
+                                    Some(Op::UqdecdRRsX)
                                 }
                                 _ => None
                             }
@@ -1062,7 +1063,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::DUPM_Z_I__)
+                                    Some(Op::DupmZI)
                                 }
                             }
                         }
@@ -1072,13 +1073,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ORR_Z_ZI__)
+                                    Some(Op::OrrZZi)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::EOR_Z_ZI__)
+                                    Some(Op::EorZZi)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::AND_Z_ZI__)
+                                    Some(Op::NdZZi)
                                 }
                                 _ => None
                             }
@@ -1100,10 +1101,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match M {
                                 x0 if x0 == 0 => {
-                                    Some(Op::CPY_Z_O_I__)
+                                    Some(Op::PyZOI)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::CPY_Z_P_I__)
+                                    Some(Op::PyZPI)
                                 }
                                 _ => None
                             }
@@ -1118,7 +1119,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::FCPY_Z_P_I__)
+                                    Some(Op::FcpyZPI)
                                 }
                             }
                         }
@@ -1136,7 +1137,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::DUP_Z_R__)
+                                    Some(Op::DupZR)
                                 }
                             }
                         }
@@ -1146,7 +1147,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INSR_Z_R__)
+                                    Some(Op::InsrZR)
                                 }
                             }
                         }
@@ -1185,16 +1186,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match (U, H) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SUNPKLO_Z_Z__)
+                                    Some(Op::SunpkloZZ)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::SUNPKHI_Z_Z__)
+                                    Some(Op::SunpkhiZZ)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::UUNPKLO_Z_Z__)
+                                    Some(Op::UunpkloZZ)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UUNPKHI_Z_Z__)
+                                    Some(Op::UunpkhiZZ)
                                 }
                                 _ => None
                             }
@@ -1211,7 +1212,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::INSR_Z_V__)
+                                    Some(Op::InsrZV)
                                 }
                             }
                         }
@@ -1239,7 +1240,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::REV_Z_Z__)
+                                    Some(Op::EvZZ)
                                 }
                             }
                         }
@@ -1268,7 +1269,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::DUP_Z_Zi__)
+                                    Some(Op::DupZZi)
                                 }
                             }
                         }
@@ -1279,7 +1280,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::TBL_Z_ZZ_1)
+                                    Some(Op::TblZZz1)
                                 }
                             }
                         }
@@ -1294,10 +1295,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match H {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PUNPKLO_P_P__)
+                                    Some(Op::PunpkloPP)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PUNPKHI_P_P__)
+                                    Some(Op::PunpkhiPP)
                                 }
                                 _ => None
                             }
@@ -1320,22 +1321,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (opc, H) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::ZIP1_P_PP__)
+                                    Some(Op::Zip1PPp)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::ZIP2_P_PP__)
+                                    Some(Op::Zip2PPp)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::UZP1_P_PP__)
+                                    Some(Op::Uzp1PPp)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::UZP2_P_PP__)
+                                    Some(Op::Uzp2PPp)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::TRN1_P_PP__)
+                                    Some(Op::Trn1PPp)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::TRN2_P_PP__)
+                                    Some(Op::Trn2PPp)
                                 }
                                 (x0, _) if x0 == 3 => {
                                     None
@@ -1352,7 +1353,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::REV_P_P__)
+                                    Some(Op::EvPP)
                                 }
                             }
                         }
@@ -1391,22 +1392,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::ZIP1_Z_ZZ__)
+                            Some(Op::Zip1ZZz)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::ZIP2_Z_ZZ__)
+                            Some(Op::Zip2ZZz)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::UZP1_Z_ZZ__)
+                            Some(Op::Uzp1ZZz)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::UZP2_Z_ZZ__)
+                            Some(Op::Uzp2ZZz)
                         }
                         x0 if x0 == 4 => {
-                            Some(Op::TRN1_Z_ZZ__)
+                            Some(Op::Trn1ZZz)
                         }
                         x0 if x0 == 5 => {
-                            Some(Op::TRN2_Z_ZZ__)
+                            Some(Op::Trn2ZZz)
                         }
                         x0 if x0 & 6 == 6 => {
                             None
@@ -1423,7 +1424,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::CPY_Z_P_V__)
+                                    Some(Op::PyZPV)
                                 }
                             }
                         }
@@ -1434,7 +1435,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::COMPACT_Z_P_Z__)
+                                    Some(Op::OmpactZPZ)
                                 }
                             }
                         }
@@ -1446,10 +1447,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Rd = instr & 9;
                             match B {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LASTA_R_P_Z__)
+                                    Some(Op::LastaRPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LASTB_R_P_Z__)
+                                    Some(Op::LastbRPZ)
                                 }
                                 _ => None
                             }
@@ -1462,10 +1463,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Vd = instr & 9;
                             match B {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LASTA_V_P_Z__)
+                                    Some(Op::LastaVPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LASTB_V_P_Z__)
+                                    Some(Op::LastbVPZ)
                                 }
                                 _ => None
                             }
@@ -1478,16 +1479,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::REVB_Z_Z__)
+                                    Some(Op::EvbZZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::REVH_Z_Z__)
+                                    Some(Op::EvhZZ)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::REVW_Z_Z__)
+                                    Some(Op::EvwZZ)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::RBIT_Z_P_Z__)
+                                    Some(Op::BitZPZ)
                                 }
                                 _ => None
                             }
@@ -1502,7 +1503,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::CPY_Z_P_R__)
+                                    Some(Op::PyZPR)
                                 }
                             }
                         }
@@ -1517,10 +1518,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match B {
                                 x0 if x0 == 0 => {
-                                    Some(Op::CLASTA_Z_P_ZZ__)
+                                    Some(Op::LastaZPZz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::CLASTB_Z_P_ZZ__)
+                                    Some(Op::LastbZPZz)
                                 }
                                 _ => None
                             }
@@ -1533,10 +1534,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Vdn = instr & 9;
                             match B {
                                 x0 if x0 == 0 => {
-                                    Some(Op::CLASTA_V_P_Z__)
+                                    Some(Op::LastaVPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::CLASTB_V_P_Z__)
+                                    Some(Op::LastbVPZ)
                                 }
                                 _ => None
                             }
@@ -1548,7 +1549,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::SPLICE_Z_P_ZZ_Des)
+                                    Some(Op::SpliceZPZzDes)
                                 }
                             }
                         }
@@ -1578,10 +1579,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Rdn = instr & 9;
                             match B {
                                 x0 if x0 == 0 => {
-                                    Some(Op::CLASTA_R_P_Z__)
+                                    Some(Op::LastaRPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::CLASTB_R_P_Z__)
+                                    Some(Op::LastbRPZ)
                                 }
                                 _ => None
                             }
@@ -1600,7 +1601,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match () {
                         () => {
-                            Some(Op::SEL_Z_P_ZZ__)
+                            Some(Op::SelZPZz)
                         }
                     }
                 }
@@ -1613,7 +1614,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::EXT_Z_ZI_Des)
+                                    Some(Op::ExtZZiDes)
                                 }
                             }
                         }
@@ -1631,25 +1632,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match (op, opc2) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::ZIP1_Z_ZZ_Q)
+                            Some(Op::Zip1ZZzQ)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::ZIP2_Z_ZZ_Q)
+                            Some(Op::Zip2ZZzQ)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::UZP1_Z_ZZ_Q)
+                            Some(Op::Uzp1ZZzQ)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::UZP2_Z_ZZ_Q)
+                            Some(Op::Uzp2ZZzQ)
                         }
                         (x0, x1) if x0 == 0 && x1 & 6 == 4 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::TRN1_Z_ZZ_Q)
+                            Some(Op::Trn1ZZzQ)
                         }
                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                            Some(Op::TRN2_Z_ZZ_Q)
+                            Some(Op::Trn2ZZzQ)
                         }
                         (x0, _) if x0 == 1 => {
                             None
@@ -1670,28 +1671,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (op, o2, ne) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::CMPHS_P_P_ZZ__)
+                                    Some(Op::MphsPPZz)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::CMPHI_P_P_ZZ__)
+                                    Some(Op::MphiPPZz)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::CMPEQ_P_P_ZW__)
+                                    Some(Op::MpeqPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::CMPNE_P_P_ZW__)
+                                    Some(Op::MpnePPZw)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::CMPGE_P_P_ZZ__)
+                                    Some(Op::MpgePPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::CMPGT_P_P_ZZ__)
+                                    Some(Op::MpgtPPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::CMPEQ_P_P_ZZ__)
+                                    Some(Op::MpeqPPZz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::CMPNE_P_P_ZZ__)
+                                    Some(Op::MpnePPZz)
                                 }
                                 _ => None
                             }
@@ -1707,28 +1708,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (U, lt, ne) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::CMPGE_P_P_ZW__)
+                                    Some(Op::MpgePPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::CMPGT_P_P_ZW__)
+                                    Some(Op::MpgtPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::CMPLT_P_P_ZW__)
+                                    Some(Op::MpltPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::CMPLE_P_P_ZW__)
+                                    Some(Op::MplePPZw)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::CMPHS_P_P_ZW__)
+                                    Some(Op::MphsPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::CMPHI_P_P_ZW__)
+                                    Some(Op::MphiPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::CMPLO_P_P_ZW__)
+                                    Some(Op::MploPPZw)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::CMPLS_P_P_ZW__)
+                                    Some(Op::MplsPPZw)
                                 }
                                 _ => None
                             }
@@ -1746,16 +1747,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Pd = instr & 7;
                     match (lt, ne) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::CMPHS_P_P_ZI__)
+                            Some(Op::MphsPPZi)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::CMPHI_P_P_ZI__)
+                            Some(Op::MphiPPZi)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::CMPLO_P_P_ZI__)
+                            Some(Op::MploPPZi)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::CMPLS_P_P_ZI__)
+                            Some(Op::MplsPPZi)
                         }
                         _ => None
                     }
@@ -1771,22 +1772,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Pd = instr & 7;
                     match (op, o2, ne) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::CMPGE_P_P_ZI__)
+                            Some(Op::MpgePPZi)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::CMPGT_P_P_ZI__)
+                            Some(Op::MpgtPPZi)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::CMPLT_P_P_ZI__)
+                            Some(Op::MpltPPZi)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::CMPLE_P_P_ZI__)
+                            Some(Op::MplePPZi)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::CMPEQ_P_P_ZI__)
+                            Some(Op::MpeqPPZi)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::CMPNE_P_P_ZI__)
+                            Some(Op::MpnePPZi)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 1 => {
                             None
@@ -1805,52 +1806,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Pd = instr & 7;
                     match (op, S, o2, o3) {
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::AND_P_P_PP_Z)
+                            Some(Op::NdPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::BIC_P_P_PP_Z)
+                            Some(Op::BicPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::EOR_P_P_PP_Z)
+                            Some(Op::EorPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::SEL_P_P_PP__)
+                            Some(Op::SelPPPp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::ANDS_P_P_PP_Z)
+                            Some(Op::NdsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::BICS_P_P_PP_Z)
+                            Some(Op::BicsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::EORS_P_P_PP_Z)
+                            Some(Op::EorsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::ORR_P_P_PP_Z)
+                            Some(Op::OrrPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::ORN_P_P_PP_Z)
+                            Some(Op::OrnPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::NOR_P_P_PP_Z)
+                            Some(Op::NorPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::NAND_P_P_PP_Z)
+                            Some(Op::NandPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::ORRS_P_P_PP_Z)
+                            Some(Op::OrrsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::ORNS_P_P_PP_Z)
+                            Some(Op::OrnsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::NORS_P_P_PP_Z)
+                            Some(Op::NorsPPPpZ)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                            Some(Op::NANDS_P_P_PP_Z)
+                            Some(Op::NandsPPPpZ)
                         }
                         _ => None
                     }
@@ -1867,16 +1868,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (op, S, B) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::BRKPA_P_P_PP__)
+                                    Some(Op::BrkpaPPPp)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::BRKPB_P_P_PP__)
+                                    Some(Op::BrkpbPPPp)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::BRKPAS_P_P_PP__)
+                                    Some(Op::BrkpasPPPp)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::BRKPBS_P_P_PP__)
+                                    Some(Op::BrkpbsPPPp)
                                 }
                                 (x0, _, _) if x0 == 1 => {
                                     None
@@ -1899,10 +1900,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pdm = instr & 7;
                             match S {
                                 x0 if x0 == 0 => {
-                                    Some(Op::BRKN_P_P_PP__)
+                                    Some(Op::BrknPPPp)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::BRKNS_P_P_PP__)
+                                    Some(Op::BrknsPPPp)
                                 }
                                 _ => None
                             }
@@ -1940,16 +1941,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, _) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::BRKA_P_P_P__)
+                                    Some(Op::BrkaPPP)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::BRKAS_P_P_P_Z)
+                                    Some(Op::BrkasPPPZ)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::BRKB_P_P_P__)
+                                    Some(Op::BrkbPPP)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::BRKBS_P_P_P_Z)
+                                    Some(Op::BrkbsPPPZ)
                                 }
                                 _ => None
                             }
@@ -1970,7 +1971,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::PTEST__P_P__)
+                                    Some(Op::PtestPP)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
                                     None
@@ -2012,7 +2013,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::PFIRST_P_P_P__)
+                                    Some(Op::PfirstPPP)
                                 }
                                 (x0, _) if x0 == 1 => {
                                     None
@@ -2029,7 +2030,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (op, S) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::PFALSE_P__)
+                                    Some(Op::PfalseP)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
@@ -2050,10 +2051,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (op, S) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::RDFFR_P_P_F__)
+                                    Some(Op::DffrPPF)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::RDFFRS_P_P_F__)
+                                    Some(Op::DffrsPPF)
                                 }
                                 (x0, _) if x0 == 1 => {
                                     None
@@ -2070,7 +2071,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pdn = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::PNEXT_P_P_P__)
+                                    Some(Op::PnextPPP)
                                 }
                             }
                         }
@@ -2086,7 +2087,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (op, S) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::RDFFR_P_F__)
+                                    Some(Op::DffrPF)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
@@ -2110,10 +2111,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match S {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PTRUE_P_S__)
+                                    Some(Op::PtruePS)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PTRUES_P_S__)
+                                    Some(Op::PtruesPS)
                                 }
                                 _ => None
                             }
@@ -2155,16 +2156,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::WHILELT_P_P_RR__)
+                                    Some(Op::WhileltPPRr)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::WHILELE_P_P_RR__)
+                                    Some(Op::WhilelePPRr)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::WHILELO_P_P_RR__)
+                                    Some(Op::WhileloPPRr)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::WHILELS_P_P_RR__)
+                                    Some(Op::WhilelsPPRr)
                                 }
                                 _ => None
                             }
@@ -2180,10 +2181,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::CTERMEQ_RR__)
+                                    Some(Op::TermeqRr)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::CTERMNE_RR__)
+                                    Some(Op::TermneRr)
                                 }
                                 _ => None
                             }
@@ -2210,28 +2211,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ADD_Z_ZI__)
+                                    Some(Op::DdZZi)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::SUB_Z_ZI__)
+                                    Some(Op::SubZZi)
                                 }
                                 x0 if x0 == 2 => {
                                     None
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::SUBR_Z_ZI__)
+                                    Some(Op::SubrZZi)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::SQADD_Z_ZI__)
+                                    Some(Op::SqaddZZi)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::UQADD_Z_ZI__)
+                                    Some(Op::UqaddZZi)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::SQSUB_Z_ZI__)
+                                    Some(Op::SqsubZZi)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::UQSUB_Z_ZI__)
+                                    Some(Op::UqsubZZi)
                                 }
                                 _ => None
                             }
@@ -2247,16 +2248,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::SMAX_Z_ZI__)
+                                    Some(Op::SmaxZZi)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::UMAX_Z_ZI__)
+                                    Some(Op::UmaxZZi)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::SMIN_Z_ZI__)
+                                    Some(Op::SminZZi)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::UMIN_Z_ZI__)
+                                    Some(Op::UminZZi)
                                 }
                                 (x0, _) if x0 & 4 == 4 => {
                                     None
@@ -2272,7 +2273,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match (opc, o2) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::MUL_Z_ZI__)
+                                    Some(Op::MulZZi)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
@@ -2297,7 +2298,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::DUP_Z_I__)
+                                    Some(Op::DupZI)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -2316,7 +2317,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match (opc, o2) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::FDUP_Z_I__)
+                                    Some(Op::FdupZI)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
                                     None
@@ -2342,7 +2343,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (opc, o2) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::CNTP_R_P_P__)
+                            Some(Op::NtpRPP)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
                             None
@@ -2376,16 +2377,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SQINCP_Z_P_Z__)
+                                    Some(Op::SqincpZPZ)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::UQINCP_Z_P_Z__)
+                                    Some(Op::UqincpZPZ)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SQDECP_Z_P_Z__)
+                                    Some(Op::SqdecpZPZ)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::UQDECP_Z_P_Z__)
+                                    Some(Op::UqdecpZPZ)
                                 }
                                 _ => None
                             }
@@ -2403,28 +2404,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQINCP_R_P_R_SX)
+                                    Some(Op::SqincpRPRSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQINCP_R_P_R_X)
+                                    Some(Op::SqincpRPRX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::UQINCP_R_P_R_UW)
+                                    Some(Op::UqincpRPRUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::UQINCP_R_P_R_X)
+                                    Some(Op::UqincpRPRX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::SQDECP_R_P_R_SX)
+                                    Some(Op::SqdecpRPRSx)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::SQDECP_R_P_R_X)
+                                    Some(Op::SqdecpRPRX)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::UQDECP_R_P_R_UW)
+                                    Some(Op::UqdecpRPRUw)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::UQDECP_R_P_R_X)
+                                    Some(Op::UqdecpRPRX)
                                 }
                                 _ => None
                             }
@@ -2444,10 +2445,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::INCP_Z_P_Z__)
+                                    Some(Op::IncpZPZ)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::DECP_Z_P_Z__)
+                                    Some(Op::DecpZPZ)
                                 }
                                 (x0, _, _) if x0 == 1 => {
                                     None
@@ -2470,10 +2471,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::INCP_R_P_R__)
+                                    Some(Op::IncpRPR)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::DECP_R_P_R__)
+                                    Some(Op::DecpRPR)
                                 }
                                 (x0, _, _) if x0 == 1 => {
                                     None
@@ -2491,7 +2492,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pn = (instr >> 5) & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::WRFFR_F_P__)
+                                    Some(Op::WrffrFP)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -2506,7 +2507,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let opc = (instr >> 22) & 3;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::SETFFR_F__)
+                                    Some(Op::SetffrF)
                                 }
                                 x0 if x0 == 1 => {
                                     None
@@ -2557,10 +2558,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zda = instr & 9;
                             match U {
                                 x0 if x0 == 0 => {
-                                    Some(Op::SDOT_Z_ZZZ__)
+                                    Some(Op::SdotZZzz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::UDOT_Z_ZZZ__)
+                                    Some(Op::UdotZZzz)
                                 }
                                 _ => None
                             }
@@ -2587,7 +2588,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::USDOT_Z_ZZZ_S)
+                                    Some(Op::UsdotZZzzS)
                                 }
                                 x0 if x0 == 3 => {
                                     None
@@ -2617,16 +2618,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::SDOT_Z_ZZZi_S)
+                                    Some(Op::SdotZZzziS)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::UDOT_Z_ZZZi_S)
+                                    Some(Op::UdotZZzziS)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::SDOT_Z_ZZZi_D)
+                                    Some(Op::SdotZZzziD)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::UDOT_Z_ZZZi_D)
+                                    Some(Op::UdotZZzziD)
                                 }
                                 _ => None
                             }
@@ -2648,10 +2649,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::USDOT_Z_ZZZi_S)
+                                    Some(Op::UsdotZZzziS)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::SUDOT_Z_ZZZi_S)
+                                    Some(Op::SudotZZzziS)
                                 }
                                 (x0, _) if x0 == 3 => {
                                     None
@@ -2683,16 +2684,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match uns {
                                 x0 if x0 == 0 => {
-                                    Some(Op::SMMLA_Z_ZZZ__)
+                                    Some(Op::SmmlaZZzz)
                                 }
                                 x0 if x0 == 1 => {
                                     None
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::USMMLA_Z_ZZZ__)
+                                    Some(Op::UsmmlaZZzz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::UMMLA_Z_ZZZ__)
+                                    Some(Op::UmmlaZZzz)
                                 }
                                 _ => None
                             }
@@ -2721,7 +2722,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zda = instr & 9;
                     match () {
                         () => {
-                            Some(Op::FCMLA_Z_P_ZZZ__)
+                            Some(Op::FcmlaZPZzz)
                         }
                     }
                 }
@@ -2736,7 +2737,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zdn = instr & 9;
                     match () {
                         () => {
-                            Some(Op::FCADD_Z_P_ZZ__)
+                            Some(Op::FcaddZPZz)
                         }
                     }
                 }
@@ -2766,7 +2767,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 2 && x1 == 2 => {
-                            Some(Op::BFCVTNT_Z_P_Z_S2BF)
+                            Some(Op::BfcvtntZPZS2Bf)
                         }
                         (x0, x1) if x0 == 2 && x1 == 3 => {
                             None
@@ -2794,22 +2795,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zda = instr & 9;
                     match (size, op) {
                         (x0, x1) if x0 & 2 == 0 && x1 == 0 => {
-                            Some(Op::FMLA_Z_ZZZi_H)
+                            Some(Op::FmlaZZzziH)
                         }
                         (x0, x1) if x0 & 2 == 0 && x1 == 1 => {
-                            Some(Op::FMLS_Z_ZZZi_H)
+                            Some(Op::FmlsZZzziH)
                         }
                         (x0, x1) if x0 == 2 && x1 == 0 => {
-                            Some(Op::FMLA_Z_ZZZi_S)
+                            Some(Op::FmlaZZzziS)
                         }
                         (x0, x1) if x0 == 2 && x1 == 1 => {
-                            Some(Op::FMLS_Z_ZZZi_S)
+                            Some(Op::FmlsZZzziS)
                         }
                         (x0, x1) if x0 == 3 && x1 == 0 => {
-                            Some(Op::FMLA_Z_ZZZi_D)
+                            Some(Op::FmlaZZzziD)
                         }
                         (x0, x1) if x0 == 3 && x1 == 1 => {
-                            Some(Op::FMLS_Z_ZZZi_D)
+                            Some(Op::FmlsZZzziD)
                         }
                         _ => None
                     }
@@ -2825,10 +2826,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::FCMLA_Z_ZZZi_H)
+                            Some(Op::FcmlaZZzziH)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::FCMLA_Z_ZZZi_S)
+                            Some(Op::FcmlaZZzziS)
                         }
                         _ => None
                     }
@@ -2840,13 +2841,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match size {
                         x0 if x0 & 2 == 0 => {
-                            Some(Op::FMUL_Z_ZZi_H)
+                            Some(Op::FmulZZziH)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::FMUL_Z_ZZi_S)
+                            Some(Op::FmulZZziS)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::FMUL_Z_ZZi_D)
+                            Some(Op::FmulZZziD)
                         }
                         _ => None
                     }
@@ -2870,7 +2871,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::BFDOT_Z_ZZZi__)
+                                    Some(Op::BfdotZZzzi)
                                 }
                                 _ => None
                             }
@@ -2895,10 +2896,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::BFMLALB_Z_ZZZi__)
+                                    Some(Op::BfmlalbZZzzi)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::BFMLALT_Z_ZZZi__)
+                                    Some(Op::BfmlaltZZzzi)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 1 => {
                                     None
@@ -2924,7 +2925,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::BFDOT_Z_ZZZ__)
+                                    Some(Op::BfdotZZzz)
                                 }
                                 _ => None
                             }
@@ -2947,10 +2948,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::BFMLALB_Z_ZZZ__)
+                                    Some(Op::BfmlalbZZzz)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::BFMLALT_Z_ZZZ__)
+                                    Some(Op::BfmlaltZZzz)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 1 => {
                                     None
@@ -2980,13 +2981,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::BFMMLA_Z_ZZZ__)
+                            Some(Op::BfmmlaZZzz)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::FMMLA_Z_ZZZ_S)
+                            Some(Op::FmmlaZZzzS)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::FMMLA_Z_ZZZ_D)
+                            Some(Op::FmmlaZZzzD)
                         }
                         _ => None
                     }
@@ -3008,28 +3009,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Pd = instr & 7;
                     match (op, o2, o3) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::FCMGE_P_P_ZZ__)
+                            Some(Op::FcmgePPZz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::FCMGT_P_P_ZZ__)
+                            Some(Op::FcmgtPPZz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::FCMEQ_P_P_ZZ__)
+                            Some(Op::FcmeqPPZz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::FCMNE_P_P_ZZ__)
+                            Some(Op::FcmnePPZz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::FCMUO_P_P_ZZ__)
+                            Some(Op::FcmuoPPZz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::FACGE_P_P_ZZ__)
+                            Some(Op::FacgePPZz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::FACGT_P_P_ZZ__)
+                            Some(Op::FacgtPPZz)
                         }
                         _ => None
                     }
@@ -3042,25 +3043,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Zd = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::FADD_Z_ZZ__)
+                            Some(Op::FaddZZz)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::FSUB_Z_ZZ__)
+                            Some(Op::FsubZZz)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::FMUL_Z_ZZ__)
+                            Some(Op::FmulZZz)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::FTSMUL_Z_ZZ__)
+                            Some(Op::FtsmulZZz)
                         }
                         x0 if x0 & 6 == 4 => {
                             None
                         }
                         x0 if x0 == 6 => {
-                            Some(Op::FRECPS_Z_ZZ__)
+                            Some(Op::FrecpsZZz)
                         }
                         x0 if x0 == 7 => {
-                            Some(Op::FRSQRTS_Z_ZZ__)
+                            Some(Op::FrsqrtsZZz)
                         }
                         _ => None
                     }
@@ -3075,46 +3076,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FADD_Z_P_ZZ__)
+                                    Some(Op::FaddZPZz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FSUB_Z_P_ZZ__)
+                                    Some(Op::FsubZPZz)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::FMUL_Z_P_ZZ__)
+                                    Some(Op::FmulZPZz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::FSUBR_Z_P_ZZ__)
+                                    Some(Op::FsubrZPZz)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::FMAXNM_Z_P_ZZ__)
+                                    Some(Op::FmaxnmZPZz)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::FMINNM_Z_P_ZZ__)
+                                    Some(Op::FminnmZPZz)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::FMAX_Z_P_ZZ__)
+                                    Some(Op::FmaxZPZz)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::FMIN_Z_P_ZZ__)
+                                    Some(Op::FminZPZz)
                                 }
                                 x0 if x0 == 8 => {
-                                    Some(Op::FABD_Z_P_ZZ__)
+                                    Some(Op::FabdZPZz)
                                 }
                                 x0 if x0 == 9 => {
-                                    Some(Op::FSCALE_Z_P_ZZ__)
+                                    Some(Op::FscaleZPZz)
                                 }
                                 x0 if x0 == 10 => {
-                                    Some(Op::FMULX_Z_P_ZZ__)
+                                    Some(Op::FmulxZPZz)
                                 }
                                 x0 if x0 == 11 => {
                                     None
                                 }
                                 x0 if x0 == 12 => {
-                                    Some(Op::FDIVR_Z_P_ZZ__)
+                                    Some(Op::FdivrZPZz)
                                 }
                                 x0 if x0 == 13 => {
-                                    Some(Op::FDIV_Z_P_ZZ__)
+                                    Some(Op::FdivZPZz)
                                 }
                                 x0 if x0 & 14 == 14 => {
                                     None
@@ -3129,7 +3130,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::FTMAD_Z_ZZI__)
+                                    Some(Op::FtmadZZzi)
                                 }
                             }
                         }
@@ -3144,28 +3145,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FADD_Z_P_ZS__)
+                                    Some(Op::FaddZPZs)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FSUB_Z_P_ZS__)
+                                    Some(Op::FsubZPZs)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::FMUL_Z_P_ZS__)
+                                    Some(Op::FmulZPZs)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::FSUBR_Z_P_ZS__)
+                                    Some(Op::FsubrZPZs)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::FMAXNM_Z_P_ZS__)
+                                    Some(Op::FmaxnmZPZs)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::FMINNM_Z_P_ZS__)
+                                    Some(Op::FminnmZPZs)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::FMAX_Z_P_ZS__)
+                                    Some(Op::FmaxZPZs)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::FMIN_Z_P_ZS__)
+                                    Some(Op::FminZPZs)
                                 }
                                 _ => None
                             }
@@ -3186,28 +3187,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FRINTN_Z_P_Z__)
+                                    Some(Op::FrintnZPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FRINTP_Z_P_Z__)
+                                    Some(Op::FrintpZPZ)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::FRINTM_Z_P_Z__)
+                                    Some(Op::FrintmZPZ)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::FRINTZ_Z_P_Z__)
+                                    Some(Op::FrintzZPZ)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::FRINTA_Z_P_Z__)
+                                    Some(Op::FrintaZPZ)
                                 }
                                 x0 if x0 == 5 => {
                                     None
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::FRINTX_Z_P_Z__)
+                                    Some(Op::FrintxZPZ)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::FRINTI_Z_P_Z__)
+                                    Some(Op::FrintiZPZ)
                                 }
                                 _ => None
                             }
@@ -3223,28 +3224,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::FCVT_Z_P_Z_S2H)
+                                    Some(Op::FcvtZPZS2H)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::FCVT_Z_P_Z_H2S)
+                                    Some(Op::FcvtZPZH2S)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::BFCVT_Z_P_Z_S2BF)
+                                    Some(Op::BfcvtZPZS2Bf)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::FCVT_Z_P_Z_D2H)
+                                    Some(Op::FcvtZPZD2H)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::FCVT_Z_P_Z_H2D)
+                                    Some(Op::FcvtZPZH2D)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::FCVT_Z_P_Z_D2S)
+                                    Some(Op::FcvtZPZD2S)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::FCVT_Z_P_Z_S2D)
+                                    Some(Op::FcvtZPZS2D)
                                 }
                                 _ => None
                             }
@@ -3257,10 +3258,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zd = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FRECPX_Z_P_Z__)
+                                    Some(Op::FrecpxZPZ)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FSQRT_Z_P_Z__)
+                                    Some(Op::FsqrtZPZ)
                                 }
                                 x0 if x0 & 2 == 2 => {
                                     None
@@ -3283,55 +3284,55 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_H2FP16)
+                                    Some(Op::ScvtfZPZH2Fp16)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_H2FP16)
+                                    Some(Op::UcvtfZPZH2Fp16)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_W2FP16)
+                                    Some(Op::ScvtfZPZW2Fp16)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_W2FP16)
+                                    Some(Op::UcvtfZPZW2Fp16)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_X2FP16)
+                                    Some(Op::ScvtfZPZX2Fp16)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_X2FP16)
+                                    Some(Op::UcvtfZPZX2Fp16)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 & 2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_W2S)
+                                    Some(Op::ScvtfZPZW2S)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_W2S)
+                                    Some(Op::UcvtfZPZW2S)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 == 3 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_W2D)
+                                    Some(Op::ScvtfZPZW2D)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_W2D)
+                                    Some(Op::UcvtfZPZW2D)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_X2S)
+                                    Some(Op::ScvtfZPZX2S)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_X2S)
+                                    Some(Op::UcvtfZPZX2S)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 3 && x2 == 0 => {
-                                    Some(Op::SCVTF_Z_P_Z_X2D)
+                                    Some(Op::ScvtfZPZX2D)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 3 && x2 == 1 => {
-                                    Some(Op::UCVTF_Z_P_Z_X2D)
+                                    Some(Op::UcvtfZPZX2D)
                                 }
                                 _ => None
                             }
@@ -3351,55 +3352,55 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_FP162H)
+                                    Some(Op::FcvtzsZPZFp162H)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_FP162H)
+                                    Some(Op::FcvtzuZPZFp162H)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_FP162W)
+                                    Some(Op::FcvtzsZPZFp162W)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_FP162W)
+                                    Some(Op::FcvtzuZPZFp162W)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_FP162X)
+                                    Some(Op::FcvtzsZPZFp162X)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_FP162X)
+                                    Some(Op::FcvtzuZPZFp162X)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 & 2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_S2W)
+                                    Some(Op::FcvtzsZPZS2W)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_S2W)
+                                    Some(Op::FcvtzuZPZS2W)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 == 3 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_D2W)
+                                    Some(Op::FcvtzsZPZD2W)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_D2W)
+                                    Some(Op::FcvtzuZPZD2W)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_S2X)
+                                    Some(Op::FcvtzsZPZS2X)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_S2X)
+                                    Some(Op::FcvtzuZPZS2X)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 3 && x2 == 0 => {
-                                    Some(Op::FCVTZS_Z_P_Z_D2X)
+                                    Some(Op::FcvtzsZPZD2X)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 3 && x2 == 1 => {
-                                    Some(Op::FCVTZU_Z_P_Z_D2X)
+                                    Some(Op::FcvtzuZPZD2X)
                                 }
                                 _ => None
                             }
@@ -3415,7 +3416,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Vd = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::FADDV_V_P_Z__)
+                            Some(Op::FaddvVPZ)
                         }
                         x0 if x0 == 1 => {
                             None
@@ -3424,16 +3425,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 4 => {
-                            Some(Op::FMAXNMV_V_P_Z__)
+                            Some(Op::FmaxnmvVPZ)
                         }
                         x0 if x0 == 5 => {
-                            Some(Op::FMINNMV_V_P_Z__)
+                            Some(Op::FminnmvVPZ)
                         }
                         x0 if x0 == 6 => {
-                            Some(Op::FMAXV_V_P_Z__)
+                            Some(Op::FmaxvVPZ)
                         }
                         x0 if x0 == 7 => {
-                            Some(Op::FMINV_V_P_Z__)
+                            Some(Op::FminvVPZ)
                         }
                         _ => None
                     }
@@ -3456,10 +3457,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::FRECPE_Z_Z__)
+                                    Some(Op::FrecpeZZ)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::FRSQRTE_Z_Z__)
+                                    Some(Op::FrsqrteZZ)
                                 }
                                 _ => None
                             }
@@ -3482,25 +3483,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pd = instr & 7;
                             match (eq, lt, ne) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::FCMGE_P_P_Z0__)
+                                    Some(Op::FcmgePPZ0)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::FCMGT_P_P_Z0__)
+                                    Some(Op::FcmgtPPZ0)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::FCMLT_P_P_Z0__)
+                                    Some(Op::FcmltPPZ0)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::FCMLE_P_P_Z0__)
+                                    Some(Op::FcmlePPZ0)
                                 }
                                 (x0, _, x2) if x0 == 1 && x2 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::FCMEQ_P_P_Z0__)
+                                    Some(Op::FcmeqPPZ0)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::FCMNE_P_P_Z0__)
+                                    Some(Op::FcmnePPZ0)
                                 }
                                 _ => None
                             }
@@ -3519,7 +3520,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Vdn = instr & 9;
                     match opc {
                         x0 if x0 == 0 => {
-                            Some(Op::FADDA_V_P_Z__)
+                            Some(Op::FaddaVPZ)
                         }
                         x0 if x0 == 1 => {
                             None
@@ -3544,16 +3545,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zda = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FMLA_Z_P_ZZZ__)
+                                    Some(Op::FmlaZPZzz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FMLS_Z_P_ZZZ__)
+                                    Some(Op::FmlsZPZzz)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::FNMLA_Z_P_ZZZ__)
+                                    Some(Op::FnmlaZPZzz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::FNMLS_Z_P_ZZZ__)
+                                    Some(Op::FnmlsZPZzz)
                                 }
                                 _ => None
                             }
@@ -3567,16 +3568,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zdn = instr & 9;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::FMAD_Z_P_ZZZ__)
+                                    Some(Op::FmadZPZzz)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::FMSB_Z_P_ZZZ__)
+                                    Some(Op::FmsbZPZzz)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::FNMAD_Z_P_ZZZ__)
+                                    Some(Op::FnmadZPZzz)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::FNMSB_Z_P_ZZZ__)
+                                    Some(Op::FnmsbZPZzz)
                                 }
                                 _ => None
                             }
@@ -3595,16 +3596,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_BZ_S_x32_scaled)
+                                    Some(Op::PrfbIPBzSX32Scaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_BZ_S_x32_scaled)
+                                    Some(Op::PrfhIPBzSX32Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_BZ_S_x32_scaled)
+                                    Some(Op::PrfwIPBzSX32Scaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_BZ_S_x32_scaled)
+                                    Some(Op::PrfdIPBzSX32Scaled)
                                 }
                                 _ => None
                             }
@@ -3622,16 +3623,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (U, ff) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ld1ShZPBzSX32Scaled)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ldff1ShZPBzSX32Scaled)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ld1HZPBzSX32Scaled)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ldff1HZPBzSX32Scaled)
                                 }
                                 _ => None
                             }
@@ -3649,10 +3650,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ld1WZPBzSX32Scaled)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::Ldff1WZPBzSX32Scaled)
                                 }
                                 _ => None
                             }
@@ -3664,7 +3665,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pt = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::LDR_P_BI__)
+                                    Some(Op::LdrPBi)
                                 }
                             }
                         }
@@ -3678,7 +3679,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::LDR_Z_BI__)
+                                    Some(Op::LdrZBi)
                                 }
                             }
                         }
@@ -3693,16 +3694,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_BI_S)
+                                    Some(Op::PrfbIPBiS)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_BI_S)
+                                    Some(Op::PrfhIPBiS)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_BI_S)
+                                    Some(Op::PrfwIPBiS)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_BI_S)
+                                    Some(Op::PrfdIPBiS)
                                 }
                                 _ => None
                             }
@@ -3721,37 +3722,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (opc, U, ff) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SB_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ld1SbZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SB_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ldff1SbZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1B_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ld1BZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ldff1BZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ld1ShZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ldff1ShZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ld1HZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ldff1HZPBzSX32Unscaled)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ld1WZPBzSX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::Ldff1WZPBzSX32Unscaled)
                                 }
                                 _ => None
                             }
@@ -3767,16 +3768,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_BR_S)
+                                    Some(Op::PrfbIPBrS)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_BR_S)
+                                    Some(Op::PrfhIPBrS)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_BR_S)
+                                    Some(Op::PrfwIPBrS)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_BR_S)
+                                    Some(Op::PrfdIPBrS)
                                 }
                                 _ => None
                             }
@@ -3789,16 +3790,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_AI_S)
+                                    Some(Op::PrfbIPAiS)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_AI_S)
+                                    Some(Op::PrfhIPAiS)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_AI_S)
+                                    Some(Op::PrfwIPAiS)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_AI_S)
+                                    Some(Op::PrfdIPAiS)
                                 }
                                 _ => None
                             }
@@ -3816,37 +3817,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, U, ff) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SB_Z_P_AI_S)
+                                    Some(Op::Ld1SbZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SB_Z_P_AI_S)
+                                    Some(Op::Ldff1SbZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1B_Z_P_AI_S)
+                                    Some(Op::Ld1BZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_AI_S)
+                                    Some(Op::Ldff1BZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_AI_S)
+                                    Some(Op::Ld1ShZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_AI_S)
+                                    Some(Op::Ldff1ShZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_AI_S)
+                                    Some(Op::Ld1HZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_AI_S)
+                                    Some(Op::Ldff1HZPAiS)
                                 }
                                 (x0, x1, _) if x0 == 2 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_AI_S)
+                                    Some(Op::Ld1WZPAiS)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_AI_S)
+                                    Some(Op::Ldff1WZPAiS)
                                 }
                                 (x0, _, _) if x0 == 3 => {
                                     None
@@ -3863,52 +3864,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (dtypeh, dtypel) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::LD1RB_Z_P_BI_U8)
+                                    Some(Op::Ld1RbZPBiU8)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LD1RB_Z_P_BI_U16)
+                                    Some(Op::Ld1RbZPBiU16)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::LD1RB_Z_P_BI_U32)
+                                    Some(Op::Ld1RbZPBiU32)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::LD1RB_Z_P_BI_U64)
+                                    Some(Op::Ld1RbZPBiU64)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::LD1RSW_Z_P_BI_S64)
+                                    Some(Op::Ld1RswZPBiS64)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LD1RH_Z_P_BI_U16)
+                                    Some(Op::Ld1RhZPBiU16)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::LD1RH_Z_P_BI_U32)
+                                    Some(Op::Ld1RhZPBiU32)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::LD1RH_Z_P_BI_U64)
+                                    Some(Op::Ld1RhZPBiU64)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::LD1RSH_Z_P_BI_S64)
+                                    Some(Op::Ld1RshZPBiS64)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::LD1RSH_Z_P_BI_S32)
+                                    Some(Op::Ld1RshZPBiS32)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::LD1RW_Z_P_BI_U32)
+                                    Some(Op::Ld1RwZPBiU32)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
-                                    Some(Op::LD1RW_Z_P_BI_U64)
+                                    Some(Op::Ld1RwZPBiU64)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::LD1RSB_Z_P_BI_S64)
+                                    Some(Op::Ld1RsbZPBiS64)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::LD1RSB_Z_P_BI_S32)
+                                    Some(Op::Ld1RsbZPBiS32)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::LD1RSB_Z_P_BI_S16)
+                                    Some(Op::Ld1RsbZPBiS16)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::LD1RD_Z_P_BI_U64)
+                                    Some(Op::Ld1RdZPBiU64)
                                 }
                                 _ => None
                             }
@@ -3926,16 +3927,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LDNT1B_Z_P_BI_Contiguous)
+                                    Some(Op::Ldnt1BZPBiContiguous)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LDNT1H_Z_P_BI_Contiguous)
+                                    Some(Op::Ldnt1HZPBiContiguous)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LDNT1W_Z_P_BI_Contiguous)
+                                    Some(Op::Ldnt1WZPBiContiguous)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LDNT1D_Z_P_BI_Contiguous)
+                                    Some(Op::Ldnt1DZPBiContiguous)
                                 }
                                 _ => None
                             }
@@ -3948,16 +3949,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LDNT1B_Z_P_BR_Contiguous)
+                                    Some(Op::Ldnt1BZPBrContiguous)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LDNT1H_Z_P_BR_Contiguous)
+                                    Some(Op::Ldnt1HZPBrContiguous)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LDNT1W_Z_P_BR_Contiguous)
+                                    Some(Op::Ldnt1WZPBrContiguous)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LDNT1D_Z_P_BR_Contiguous)
+                                    Some(Op::Ldnt1DZPBrContiguous)
                                 }
                                 _ => None
                             }
@@ -3971,40 +3972,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, opc) {
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LD2B_Z_P_BI_Contiguous)
+                                    Some(Op::Ld2BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::LD3B_Z_P_BI_Contiguous)
+                                    Some(Op::Ld3BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::LD4B_Z_P_BI_Contiguous)
+                                    Some(Op::Ld4BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LD2H_Z_P_BI_Contiguous)
+                                    Some(Op::Ld2HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::LD3H_Z_P_BI_Contiguous)
+                                    Some(Op::Ld3HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::LD4H_Z_P_BI_Contiguous)
+                                    Some(Op::Ld4HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::LD2W_Z_P_BI_Contiguous)
+                                    Some(Op::Ld2WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::LD3W_Z_P_BI_Contiguous)
+                                    Some(Op::Ld3WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
-                                    Some(Op::LD4W_Z_P_BI_Contiguous)
+                                    Some(Op::Ld4WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::LD2D_Z_P_BI_Contiguous)
+                                    Some(Op::Ld2DZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::LD3D_Z_P_BI_Contiguous)
+                                    Some(Op::Ld3DZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::LD4D_Z_P_BI_Contiguous)
+                                    Some(Op::Ld4DZPBiContiguous)
                                 }
                                 _ => None
                             }
@@ -4018,40 +4019,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, opc) {
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LD2B_Z_P_BR_Contiguous)
+                                    Some(Op::Ld2BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::LD3B_Z_P_BR_Contiguous)
+                                    Some(Op::Ld3BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::LD4B_Z_P_BR_Contiguous)
+                                    Some(Op::Ld4BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LD2H_Z_P_BR_Contiguous)
+                                    Some(Op::Ld2HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::LD3H_Z_P_BR_Contiguous)
+                                    Some(Op::Ld3HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::LD4H_Z_P_BR_Contiguous)
+                                    Some(Op::Ld4HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::LD2W_Z_P_BR_Contiguous)
+                                    Some(Op::Ld2WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::LD3W_Z_P_BR_Contiguous)
+                                    Some(Op::Ld3WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
-                                    Some(Op::LD4W_Z_P_BR_Contiguous)
+                                    Some(Op::Ld4WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::LD2D_Z_P_BR_Contiguous)
+                                    Some(Op::Ld2DZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::LD3D_Z_P_BR_Contiguous)
+                                    Some(Op::Ld3DZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::LD4D_Z_P_BR_Contiguous)
+                                    Some(Op::Ld4DZPBrContiguous)
                                 }
                                 _ => None
                             }
@@ -4068,28 +4069,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::LD1RQB_Z_P_BI_U8)
+                                    Some(Op::Ld1RqbZPBiU8)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LD1ROB_Z_P_BI_U8)
+                                    Some(Op::Ld1RobZPBiU8)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::LD1RQH_Z_P_BI_U16)
+                                    Some(Op::Ld1RqhZPBiU16)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LD1ROH_Z_P_BI_U16)
+                                    Some(Op::Ld1RohZPBiU16)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::LD1RQW_Z_P_BI_U32)
+                                    Some(Op::Ld1RqwZPBiU32)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::LD1ROW_Z_P_BI_U32)
+                                    Some(Op::Ld1RowZPBiU32)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::LD1RQD_Z_P_BI_U64)
+                                    Some(Op::Ld1RqdZPBiU64)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::LD1ROD_Z_P_BI_U64)
+                                    Some(Op::Ld1RodZPBiU64)
                                 }
                                 _ => None
                             }
@@ -4102,52 +4103,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match dtype {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LD1B_Z_P_BI_U8)
+                                    Some(Op::Ld1BZPBiU8)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LD1B_Z_P_BI_U16)
+                                    Some(Op::Ld1BZPBiU16)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LD1B_Z_P_BI_U32)
+                                    Some(Op::Ld1BZPBiU32)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LD1B_Z_P_BI_U64)
+                                    Some(Op::Ld1BZPBiU64)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::LD1SW_Z_P_BI_S64)
+                                    Some(Op::Ld1SwZPBiS64)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::LD1H_Z_P_BI_U16)
+                                    Some(Op::Ld1HZPBiU16)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::LD1H_Z_P_BI_U32)
+                                    Some(Op::Ld1HZPBiU32)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::LD1H_Z_P_BI_U64)
+                                    Some(Op::Ld1HZPBiU64)
                                 }
                                 x0 if x0 == 8 => {
-                                    Some(Op::LD1SH_Z_P_BI_S64)
+                                    Some(Op::Ld1ShZPBiS64)
                                 }
                                 x0 if x0 == 9 => {
-                                    Some(Op::LD1SH_Z_P_BI_S32)
+                                    Some(Op::Ld1ShZPBiS32)
                                 }
                                 x0 if x0 == 10 => {
-                                    Some(Op::LD1W_Z_P_BI_U32)
+                                    Some(Op::Ld1WZPBiU32)
                                 }
                                 x0 if x0 == 11 => {
-                                    Some(Op::LD1W_Z_P_BI_U64)
+                                    Some(Op::Ld1WZPBiU64)
                                 }
                                 x0 if x0 == 12 => {
-                                    Some(Op::LD1SB_Z_P_BI_S64)
+                                    Some(Op::Ld1SbZPBiS64)
                                 }
                                 x0 if x0 == 13 => {
-                                    Some(Op::LD1SB_Z_P_BI_S32)
+                                    Some(Op::Ld1SbZPBiS32)
                                 }
                                 x0 if x0 == 14 => {
-                                    Some(Op::LD1SB_Z_P_BI_S16)
+                                    Some(Op::Ld1SbZPBiS16)
                                 }
                                 x0 if x0 == 15 => {
-                                    Some(Op::LD1D_Z_P_BI_U64)
+                                    Some(Op::Ld1DZPBiU64)
                                 }
                                 _ => None
                             }
@@ -4163,52 +4164,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match dtype {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LDNF1B_Z_P_BI_U8)
+                                    Some(Op::Ldnf1BZPBiU8)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LDNF1B_Z_P_BI_U16)
+                                    Some(Op::Ldnf1BZPBiU16)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LDNF1B_Z_P_BI_U32)
+                                    Some(Op::Ldnf1BZPBiU32)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LDNF1B_Z_P_BI_U64)
+                                    Some(Op::Ldnf1BZPBiU64)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::LDNF1SW_Z_P_BI_S64)
+                                    Some(Op::Ldnf1SwZPBiS64)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::LDNF1H_Z_P_BI_U16)
+                                    Some(Op::Ldnf1HZPBiU16)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::LDNF1H_Z_P_BI_U32)
+                                    Some(Op::Ldnf1HZPBiU32)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::LDNF1H_Z_P_BI_U64)
+                                    Some(Op::Ldnf1HZPBiU64)
                                 }
                                 x0 if x0 == 8 => {
-                                    Some(Op::LDNF1SH_Z_P_BI_S64)
+                                    Some(Op::Ldnf1ShZPBiS64)
                                 }
                                 x0 if x0 == 9 => {
-                                    Some(Op::LDNF1SH_Z_P_BI_S32)
+                                    Some(Op::Ldnf1ShZPBiS32)
                                 }
                                 x0 if x0 == 10 => {
-                                    Some(Op::LDNF1W_Z_P_BI_U32)
+                                    Some(Op::Ldnf1WZPBiU32)
                                 }
                                 x0 if x0 == 11 => {
-                                    Some(Op::LDNF1W_Z_P_BI_U64)
+                                    Some(Op::Ldnf1WZPBiU64)
                                 }
                                 x0 if x0 == 12 => {
-                                    Some(Op::LDNF1SB_Z_P_BI_S64)
+                                    Some(Op::Ldnf1SbZPBiS64)
                                 }
                                 x0 if x0 == 13 => {
-                                    Some(Op::LDNF1SB_Z_P_BI_S32)
+                                    Some(Op::Ldnf1SbZPBiS32)
                                 }
                                 x0 if x0 == 14 => {
-                                    Some(Op::LDNF1SB_Z_P_BI_S16)
+                                    Some(Op::Ldnf1SbZPBiS16)
                                 }
                                 x0 if x0 == 15 => {
-                                    Some(Op::LDNF1D_Z_P_BI_U64)
+                                    Some(Op::Ldnf1DZPBiU64)
                                 }
                                 _ => None
                             }
@@ -4228,28 +4229,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::LD1RQB_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RqbZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::LD1ROB_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RobZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::LD1RQH_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RqhZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::LD1ROH_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RohZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::LD1RQW_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RqwZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::LD1ROW_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RowZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 0 => {
-                                    Some(Op::LD1RQD_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RqdZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::LD1ROD_Z_P_BR_Contiguous)
+                                    Some(Op::Ld1RodZPBrContiguous)
                                 }
                                 _ => None
                             }
@@ -4262,52 +4263,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match dtype {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LD1B_Z_P_BR_U8)
+                                    Some(Op::Ld1BZPBrU8)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LD1B_Z_P_BR_U16)
+                                    Some(Op::Ld1BZPBrU16)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LD1B_Z_P_BR_U32)
+                                    Some(Op::Ld1BZPBrU32)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LD1B_Z_P_BR_U64)
+                                    Some(Op::Ld1BZPBrU64)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::LD1SW_Z_P_BR_S64)
+                                    Some(Op::Ld1SwZPBrS64)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::LD1H_Z_P_BR_U16)
+                                    Some(Op::Ld1HZPBrU16)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::LD1H_Z_P_BR_U32)
+                                    Some(Op::Ld1HZPBrU32)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::LD1H_Z_P_BR_U64)
+                                    Some(Op::Ld1HZPBrU64)
                                 }
                                 x0 if x0 == 8 => {
-                                    Some(Op::LD1SH_Z_P_BR_S64)
+                                    Some(Op::Ld1ShZPBrS64)
                                 }
                                 x0 if x0 == 9 => {
-                                    Some(Op::LD1SH_Z_P_BR_S32)
+                                    Some(Op::Ld1ShZPBrS32)
                                 }
                                 x0 if x0 == 10 => {
-                                    Some(Op::LD1W_Z_P_BR_U32)
+                                    Some(Op::Ld1WZPBrU32)
                                 }
                                 x0 if x0 == 11 => {
-                                    Some(Op::LD1W_Z_P_BR_U64)
+                                    Some(Op::Ld1WZPBrU64)
                                 }
                                 x0 if x0 == 12 => {
-                                    Some(Op::LD1SB_Z_P_BR_S64)
+                                    Some(Op::Ld1SbZPBrS64)
                                 }
                                 x0 if x0 == 13 => {
-                                    Some(Op::LD1SB_Z_P_BR_S32)
+                                    Some(Op::Ld1SbZPBrS32)
                                 }
                                 x0 if x0 == 14 => {
-                                    Some(Op::LD1SB_Z_P_BR_S16)
+                                    Some(Op::Ld1SbZPBrS16)
                                 }
                                 x0 if x0 == 15 => {
-                                    Some(Op::LD1D_Z_P_BR_U64)
+                                    Some(Op::Ld1DZPBrU64)
                                 }
                                 _ => None
                             }
@@ -4320,52 +4321,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match dtype {
                                 x0 if x0 == 0 => {
-                                    Some(Op::LDFF1B_Z_P_BR_U8)
+                                    Some(Op::Ldff1BZPBrU8)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_BR_U16)
+                                    Some(Op::Ldff1BZPBrU16)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::LDFF1B_Z_P_BR_U32)
+                                    Some(Op::Ldff1BZPBrU32)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::LDFF1B_Z_P_BR_U64)
+                                    Some(Op::Ldff1BZPBrU64)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::LDFF1SW_Z_P_BR_S64)
+                                    Some(Op::Ldff1SwZPBrS64)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::LDFF1H_Z_P_BR_U16)
+                                    Some(Op::Ldff1HZPBrU16)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::LDFF1H_Z_P_BR_U32)
+                                    Some(Op::Ldff1HZPBrU32)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::LDFF1H_Z_P_BR_U64)
+                                    Some(Op::Ldff1HZPBrU64)
                                 }
                                 x0 if x0 == 8 => {
-                                    Some(Op::LDFF1SH_Z_P_BR_S64)
+                                    Some(Op::Ldff1ShZPBrS64)
                                 }
                                 x0 if x0 == 9 => {
-                                    Some(Op::LDFF1SH_Z_P_BR_S32)
+                                    Some(Op::Ldff1ShZPBrS32)
                                 }
                                 x0 if x0 == 10 => {
-                                    Some(Op::LDFF1W_Z_P_BR_U32)
+                                    Some(Op::Ldff1WZPBrU32)
                                 }
                                 x0 if x0 == 11 => {
-                                    Some(Op::LDFF1W_Z_P_BR_U64)
+                                    Some(Op::Ldff1WZPBrU64)
                                 }
                                 x0 if x0 == 12 => {
-                                    Some(Op::LDFF1SB_Z_P_BR_S64)
+                                    Some(Op::Ldff1SbZPBrS64)
                                 }
                                 x0 if x0 == 13 => {
-                                    Some(Op::LDFF1SB_Z_P_BR_S32)
+                                    Some(Op::Ldff1SbZPBrS32)
                                 }
                                 x0 if x0 == 14 => {
-                                    Some(Op::LDFF1SB_Z_P_BR_S16)
+                                    Some(Op::Ldff1SbZPBrS16)
                                 }
                                 x0 if x0 == 15 => {
-                                    Some(Op::LDFF1D_Z_P_BR_U64)
+                                    Some(Op::Ldff1DZPBrU64)
                                 }
                                 _ => None
                             }
@@ -4389,16 +4390,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_BZ_D_64_scaled)
+                                    Some(Op::PrfbIPBzD64Scaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_BZ_D_64_scaled)
+                                    Some(Op::PrfhIPBzD64Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_BZ_D_64_scaled)
+                                    Some(Op::PrfwIPBzD64Scaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_BZ_D_64_scaled)
+                                    Some(Op::PrfdIPBzD64Scaled)
                                 }
                                 _ => None
                             }
@@ -4415,16 +4416,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_BZ_D_x32_scaled)
+                                    Some(Op::PrfbIPBzDX32Scaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_BZ_D_x32_scaled)
+                                    Some(Op::PrfhIPBzDX32Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_BZ_D_x32_scaled)
+                                    Some(Op::PrfwIPBzDX32Scaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_BZ_D_x32_scaled)
+                                    Some(Op::PrfdIPBzDX32Scaled)
                                 }
                                 _ => None
                             }
@@ -4439,37 +4440,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (opc, U, ff) {
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ld1ShZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ldff1ShZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ld1HZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ldff1HZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SW_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ld1SwZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SW_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ldff1SwZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ld1WZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ldff1WZPBzD64Scaled)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1D_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ld1DZPBzD64Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1D_Z_P_BZ_D_64_scaled)
+                                    Some(Op::Ldff1DZPBzD64Scaled)
                                 }
                                 _ => None
                             }
@@ -4485,37 +4486,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (opc, U, ff) {
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ld1ShZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ldff1ShZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ld1HZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ldff1HZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SW_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ld1SwZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SW_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ldff1SwZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ld1WZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ldff1WZPBzDX32Scaled)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1D_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ld1DZPBzDX32Scaled)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1D_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::Ldff1DZPBzDX32Scaled)
                                 }
                                 _ => None
                             }
@@ -4534,16 +4535,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let prfop = instr & 7;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::PRFB_I_P_AI_D)
+                                    Some(Op::PrfbIPAiD)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::PRFH_I_P_AI_D)
+                                    Some(Op::PrfhIPAiD)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::PRFW_I_P_AI_D)
+                                    Some(Op::PrfwIPAiD)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::PRFD_I_P_AI_D)
+                                    Some(Op::PrfdIPAiD)
                                 }
                                 _ => None
                             }
@@ -4561,49 +4562,49 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, U, ff) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SB_Z_P_AI_D)
+                                    Some(Op::Ld1SbZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SB_Z_P_AI_D)
+                                    Some(Op::Ldff1SbZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1B_Z_P_AI_D)
+                                    Some(Op::Ld1BZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_AI_D)
+                                    Some(Op::Ldff1BZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_AI_D)
+                                    Some(Op::Ld1ShZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_AI_D)
+                                    Some(Op::Ldff1ShZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_AI_D)
+                                    Some(Op::Ld1HZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_AI_D)
+                                    Some(Op::Ldff1HZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SW_Z_P_AI_D)
+                                    Some(Op::Ld1SwZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SW_Z_P_AI_D)
+                                    Some(Op::Ldff1SwZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_AI_D)
+                                    Some(Op::Ld1WZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_AI_D)
+                                    Some(Op::Ldff1WZPAiD)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1D_Z_P_AI_D)
+                                    Some(Op::Ld1DZPAiD)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1D_Z_P_AI_D)
+                                    Some(Op::Ldff1DZPAiD)
                                 }
                                 _ => None
                             }
@@ -4618,49 +4619,49 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, U, ff) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SB_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1SbZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SB_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1SbZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1B_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1BZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1BZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1ShZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1ShZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1HZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1HZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SW_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1SwZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SW_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1SwZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1WZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1WZPBzD64Unscaled)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1D_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ld1DZPBzD64Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1D_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::Ldff1DZPBzD64Unscaled)
                                 }
                                 _ => None
                             }
@@ -4676,49 +4677,49 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, U, ff) {
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SB_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1SbZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SB_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1SbZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1B_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1BZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1B_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1BZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SH_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1ShZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SH_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1ShZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1H_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1HZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1H_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1HZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::LD1SW_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1SwZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::LDFF1SW_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1SwZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1W_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1WZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1W_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1WZPBzDX32Unscaled)
                                 }
                                 (x0, x1, _) if x0 == 3 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::LD1D_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ld1DZPBzDX32Unscaled)
                                 }
                                 (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::LDFF1D_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::Ldff1DZPBzDX32Unscaled)
                                 }
                                 _ => None
                             }
@@ -4741,7 +4742,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Pt = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::STR_P_BI__)
+                                    Some(Op::StrPBi)
                                 }
                             }
                         }
@@ -4755,7 +4756,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match () {
                                 () => {
-                                    Some(Op::STR_Z_BI__)
+                                    Some(Op::StrZBi)
                                 }
                             }
                         }
@@ -4771,19 +4772,19 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (opc, o2) {
                                 (x0, _) if x0 & 6 == 0 => {
-                                    Some(Op::ST1B_Z_P_BR__)
+                                    Some(Op::St1BZPBr)
                                 }
                                 (x0, _) if x0 & 6 == 2 => {
-                                    Some(Op::ST1H_Z_P_BR__)
+                                    Some(Op::St1HZPBr)
                                 }
                                 (x0, _) if x0 & 6 == 4 => {
-                                    Some(Op::ST1W_Z_P_BR__)
+                                    Some(Op::St1WZPBr)
                                 }
                                 (x0, x1) if x0 == 7 && x1 == 0 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 7 && x1 == 1 => {
-                                    Some(Op::ST1D_Z_P_BR__)
+                                    Some(Op::St1DZPBr)
                                 }
                                 _ => None
                             }
@@ -4801,16 +4802,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::STNT1B_Z_P_BR_Contiguous)
+                                    Some(Op::Stnt1BZPBrContiguous)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::STNT1H_Z_P_BR_Contiguous)
+                                    Some(Op::Stnt1HZPBrContiguous)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::STNT1W_Z_P_BR_Contiguous)
+                                    Some(Op::Stnt1WZPBrContiguous)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::STNT1D_Z_P_BR_Contiguous)
+                                    Some(Op::Stnt1DZPBrContiguous)
                                 }
                                 _ => None
                             }
@@ -4824,40 +4825,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, opc) {
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::ST2B_Z_P_BR_Contiguous)
+                                    Some(Op::St2BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::ST3B_Z_P_BR_Contiguous)
+                                    Some(Op::St3BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::ST4B_Z_P_BR_Contiguous)
+                                    Some(Op::St4BZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::ST2H_Z_P_BR_Contiguous)
+                                    Some(Op::St2HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::ST3H_Z_P_BR_Contiguous)
+                                    Some(Op::St3HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::ST4H_Z_P_BR_Contiguous)
+                                    Some(Op::St4HZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::ST2W_Z_P_BR_Contiguous)
+                                    Some(Op::St2WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::ST3W_Z_P_BR_Contiguous)
+                                    Some(Op::St3WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
-                                    Some(Op::ST4W_Z_P_BR_Contiguous)
+                                    Some(Op::St4WZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::ST2D_Z_P_BR_Contiguous)
+                                    Some(Op::St2DZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::ST3D_Z_P_BR_Contiguous)
+                                    Some(Op::St3DZPBrContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::ST4D_Z_P_BR_Contiguous)
+                                    Some(Op::St4DZPBrContiguous)
                                 }
                                 _ => None
                             }
@@ -4879,16 +4880,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::St1BZPBzDX32Unscaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::St1HZPBzDX32Unscaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::St1WZPBzDX32Unscaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_BZ_D_x32_unscaled)
+                                    Some(Op::St1DZPBzDX32Unscaled)
                                 }
                                 _ => None
                             }
@@ -4905,13 +4906,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::St1HZPBzDX32Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::St1WZPBzDX32Scaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_BZ_D_x32_scaled)
+                                    Some(Op::St1DZPBzDX32Scaled)
                                 }
                                 _ => None
                             }
@@ -4925,13 +4926,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::St1BZPBzSX32Unscaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::St1HZPBzSX32Unscaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_S_x32_unscaled)
+                                    Some(Op::St1WZPBzSX32Unscaled)
                                 }
                                 x0 if x0 == 3 => {
                                     None
@@ -4951,10 +4952,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::St1HZPBzSX32Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_S_x32_scaled)
+                                    Some(Op::St1WZPBzSX32Scaled)
                                 }
                                 x0 if x0 == 3 => {
                                     None
@@ -4975,16 +4976,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::St1BZPBzD64Unscaled)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::St1HZPBzD64Unscaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::St1WZPBzD64Unscaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_BZ_D_64_unscaled)
+                                    Some(Op::St1DZPBzD64Unscaled)
                                 }
                                 _ => None
                             }
@@ -5000,13 +5001,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BZ_D_64_scaled)
+                                    Some(Op::St1HZPBzD64Scaled)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BZ_D_64_scaled)
+                                    Some(Op::St1WZPBzD64Scaled)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_BZ_D_64_scaled)
+                                    Some(Op::St1DZPBzD64Scaled)
                                 }
                                 _ => None
                             }
@@ -5019,16 +5020,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_AI_D)
+                                    Some(Op::St1BZPAiD)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_AI_D)
+                                    Some(Op::St1HZPAiD)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_AI_D)
+                                    Some(Op::St1WZPAiD)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_AI_D)
+                                    Some(Op::St1DZPAiD)
                                 }
                                 _ => None
                             }
@@ -5041,13 +5042,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_AI_S)
+                                    Some(Op::St1BZPAiS)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_AI_S)
+                                    Some(Op::St1HZPAiS)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_AI_S)
+                                    Some(Op::St1WZPAiS)
                                 }
                                 x0 if x0 == 3 => {
                                     None
@@ -5068,16 +5069,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::STNT1B_Z_P_BI_Contiguous)
+                                    Some(Op::Stnt1BZPBiContiguous)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::STNT1H_Z_P_BI_Contiguous)
+                                    Some(Op::Stnt1HZPBiContiguous)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::STNT1W_Z_P_BI_Contiguous)
+                                    Some(Op::Stnt1WZPBiContiguous)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::STNT1D_Z_P_BI_Contiguous)
+                                    Some(Op::Stnt1DZPBiContiguous)
                                 }
                                 _ => None
                             }
@@ -5091,40 +5092,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match (msz, opc) {
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::ST2B_Z_P_BI_Contiguous)
+                                    Some(Op::St2BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::ST3B_Z_P_BI_Contiguous)
+                                    Some(Op::St3BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::ST4B_Z_P_BI_Contiguous)
+                                    Some(Op::St4BZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::ST2H_Z_P_BI_Contiguous)
+                                    Some(Op::St2HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::ST3H_Z_P_BI_Contiguous)
+                                    Some(Op::St3HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::ST4H_Z_P_BI_Contiguous)
+                                    Some(Op::St4HZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::ST2W_Z_P_BI_Contiguous)
+                                    Some(Op::St2WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 2 => {
-                                    Some(Op::ST3W_Z_P_BI_Contiguous)
+                                    Some(Op::St3WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 3 => {
-                                    Some(Op::ST4W_Z_P_BI_Contiguous)
+                                    Some(Op::St4WZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 1 => {
-                                    Some(Op::ST2D_Z_P_BI_Contiguous)
+                                    Some(Op::St2DZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 2 => {
-                                    Some(Op::ST3D_Z_P_BI_Contiguous)
+                                    Some(Op::St3DZPBiContiguous)
                                 }
                                 (x0, x1) if x0 == 3 && x1 == 3 => {
-                                    Some(Op::ST4D_Z_P_BI_Contiguous)
+                                    Some(Op::St4DZPBiContiguous)
                                 }
                                 _ => None
                             }
@@ -5138,16 +5139,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             let Zt = instr & 9;
                             match msz {
                                 x0 if x0 == 0 => {
-                                    Some(Op::ST1B_Z_P_BI__)
+                                    Some(Op::St1BZPBi)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::ST1H_Z_P_BI__)
+                                    Some(Op::St1HZPBi)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::ST1W_Z_P_BI__)
+                                    Some(Op::St1WZPBi)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::ST1D_Z_P_BI__)
+                                    Some(Op::St1DZPBi)
                                 }
                                 _ => None
                             }
@@ -5170,10 +5171,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match op {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_address_pc_rel)
+                            Some(Op::AdrpOnlyPcreladdr)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_address_pc_rel)
+                            Some(Op::AdrpOnlyPcreladdr)
                         }
                         _ => None
                     }
@@ -5188,28 +5189,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (sf, op, S) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_immediate)
+                            Some(Op::Subs64SAddsubImm)
                         }
                         _ => None
                     }
@@ -5235,10 +5236,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcaddtag)
+                            Some(Op::Addg64AddsubImmtags)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsubtag)
+                            Some(Op::Subg64AddsubImmtags)
                         }
                         _ => None
                     }
@@ -5256,28 +5257,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 3 => {
-                            Some(Op::aarch64_integer_logical_immediate)
+                            Some(Op::Ands64SLogImm)
                         }
                         _ => None
                     }
@@ -5296,22 +5297,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 & 2 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 & 2 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 & 2 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 3 => {
-                            Some(Op::aarch64_integer_ins_ext_insert_movewide)
+                            Some(Op::Movk64Movewide)
                         }
                         _ => None
                     }
@@ -5332,25 +5333,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_integer_bitfield)
+                            Some(Op::Ubfm64MBitfield)
                         }
                         _ => None
                     }
@@ -5381,13 +5382,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 & 32 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_extract_immediate)
+                            Some(Op::Extr64Extract)
                         }
                         (x0, _, x2, _, _) if x0 == 1 && x2 == 0 => {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_ins_ext_extract_immediate)
+                            Some(Op::Extr64Extract)
                         }
                         _ => None
                     }
@@ -5404,7 +5405,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let cond = instr & 7;
                     match (o1, o0) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_branch_conditional_cond)
+                            Some(Op::BOnlyCondbranch)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
                             None
@@ -5434,19 +5435,19 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_system_exceptions_runtime_svc)
+                            Some(Op::SvcExException)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_system_exceptions_runtime_hvc)
+                            Some(Op::HvcExException)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_system_exceptions_runtime_smc)
+                            Some(Op::SmcExException)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_system_exceptions_debug_breakpoint)
+                            Some(Op::BrkExException)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 & 2 == 2 => {
                             None
@@ -5455,7 +5456,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_system_exceptions_debug_halt)
+                            Some(Op::HltExException)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 & 2 == 2 => {
                             None
@@ -5473,13 +5474,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_system_exceptions_debug_exception)
+                            Some(Op::Dcps3DcException)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_system_exceptions_debug_exception)
+                            Some(Op::Dcps3DcException)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_system_exceptions_debug_exception)
+                            Some(Op::Dcps3DcException)
                         }
                         (x0, x1, _) if x0 == 6 && x1 == 0 => {
                             None
@@ -5495,82 +5496,82 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let op2 = (instr >> 5) & 5;
                     match (CRm, op2) {
                         (_, _) => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 5 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                            Some(Op::aarch64_integer_pac_strip_hint)
+                            Some(Op::XpaclriHiHints)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_integer_pac_pacia_hint)
+                            Some(Op::PaciaspHiHints)
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_integer_pac_pacib_hint)
+                            Some(Op::PacibspHiHints)
                         }
                         (x0, x1) if x0 == 1 && x1 == 4 => {
-                            Some(Op::aarch64_integer_pac_autia_hint)
+                            Some(Op::AutiaspHiHints)
                         }
                         (x0, x1) if x0 == 1 && x1 == 6 => {
-                            Some(Op::aarch64_integer_pac_autib_hint)
+                            Some(Op::AutibspHiHints)
                         }
                         (x0, x1) if x0 == 2 && x1 == 0 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 2 && x1 == 1 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 2 && x1 == 2 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 2 && x1 == 4 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 0 => {
-                            Some(Op::aarch64_integer_pac_pacia_hint)
+                            Some(Op::PaciaspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 1 => {
-                            Some(Op::aarch64_integer_pac_pacia_hint)
+                            Some(Op::PaciaspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 2 => {
-                            Some(Op::aarch64_integer_pac_pacib_hint)
+                            Some(Op::PacibspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 3 => {
-                            Some(Op::aarch64_integer_pac_pacib_hint)
+                            Some(Op::PacibspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 4 => {
-                            Some(Op::aarch64_integer_pac_autia_hint)
+                            Some(Op::AutiaspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 5 => {
-                            Some(Op::aarch64_integer_pac_autia_hint)
+                            Some(Op::AutiaspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 6 => {
-                            Some(Op::aarch64_integer_pac_autib_hint)
+                            Some(Op::AutibspHiHints)
                         }
                         (x0, x1) if x0 == 3 && x1 == 7 => {
-                            Some(Op::aarch64_integer_pac_autib_hint)
+                            Some(Op::AutibspHiHints)
                         }
                         (x0, x1) if x0 == 4 && x1 & 1 == 0 => {
-                            Some(Op::aarch64_system_hints)
+                            Some(Op::BtiHbHints)
                         }
                         _ => None
                     }
@@ -5587,25 +5588,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, x2) if x1 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_system_monitors)
+                            Some(Op::ClrexBnBarriers)
                         }
                         (_, x1, x2) if x1 == 5 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_dmb)
+                            Some(Op::DmbBoBarriers)
                         }
                         (_, x1, x2) if x1 == 6 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_isb)
+                            Some(Op::IsbBiBarriers)
                         }
                         (_, x1, x2) if x1 == 7 && x2 != 31 => {
                             None
                         }
                         (_, x1, x2) if x1 == 7 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_sb)
+                            Some(Op::SbOnlyBarriers)
                         }
                         (x0, x1, x2) if x0 & 11 != 0 && x1 == 4 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_dsb)
+                            Some(Op::DsbBoBarriers)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 4 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_ssbb)
+                            Some(Op::SsbbOnlyBarriers)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 3 => {
                             None
@@ -5617,7 +5618,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 4 && x1 == 4 && x2 == 31 => {
-                            Some(Op::aarch64_system_barriers_pssbb)
+                            Some(Op::PssbbOnlyBarriers)
                         }
                         (x0, x1, _) if x0 & 8 == 8 && x1 == 3 => {
                             None
@@ -5635,16 +5636,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, _, x2) if x2 == 31 => {
-                            Some(Op::aarch64_system_register_cpsr)
+                            Some(Op::MsrSiPstate)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_integer_flags_cfinv)
+                            Some(Op::CfinvMPstate)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 31 => {
-                            Some(Op::aarch64_integer_flags_xaflag)
+                            Some(Op::XaflagMPstate)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_integer_flags_axflag)
+                            Some(Op::AxflagMPstate)
                         }
                         _ => None
                     }
@@ -5658,10 +5659,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match L {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_system_sysops)
+                            Some(Op::SyslRcSysteminstrs)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_system_sysops)
+                            Some(Op::SyslRcSysteminstrs)
                         }
                         _ => None
                     }
@@ -5676,10 +5677,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match L {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_system_register_system)
+                            Some(Op::MrsRsSystemmove)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_system_register_system)
+                            Some(Op::MrsRsSystemmove)
                         }
                         _ => None
                     }
@@ -5698,7 +5699,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 31 && x2 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 31 && x2 == 1 => {
                             None
@@ -5707,13 +5708,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 31 && x2 == 2 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 31 && x2 == 3 && x4 != 31 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 31 && x2 == 3 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5731,7 +5732,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 31 && x2 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 31 && x2 == 1 => {
                             None
@@ -5740,13 +5741,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 31 && x2 == 2 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 31 && x2 == 3 && x4 != 31 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 31 && x2 == 3 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5764,7 +5765,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 2 && x1 == 31 && x2 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 2 && x1 == 31 && x2 == 1 => {
                             None
@@ -5773,13 +5774,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 2 && x1 == 31 && x2 == 2 && x3 == 31 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 2 && x1 == 31 && x2 == 3 && x3 != 31 && x4 != 31 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 2 && x1 == 31 && x2 == 3 && x3 == 31 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 2 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5806,7 +5807,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 4 && x1 == 31 && x2 == 0 && x3 == 31 && x4 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_eret)
+                            Some(Op::Eretab64EBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 4 && x1 == 31 && x2 == 1 => {
                             None
@@ -5821,7 +5822,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 4 && x1 == 31 && x2 == 2 && x3 == 31 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_eret)
+                            Some(Op::Eretab64EBranchReg)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 4 && x1 == 31 && x2 == 3 && x3 != 31 && x4 != 31 => {
                             None
@@ -5833,7 +5834,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 4 && x1 == 31 && x2 == 3 && x3 == 31 && x4 == 31 => {
-                            Some(Op::aarch64_branch_unconditional_eret)
+                            Some(Op::Eretab64EBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 4 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5860,7 +5861,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 5 && x1 == 31 && x2 == 0 && x3 == 31 && x4 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_dret)
+                            Some(Op::Drps64EBranchReg)
                         }
                         (x0, x1, _, _, _) if x0 & 14 == 6 && x1 == 31 => {
                             None
@@ -5869,10 +5870,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 8 && x1 == 31 && x2 == 2 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 8 && x1 == 31 && x2 == 3 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 8 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5890,10 +5891,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 9 && x1 == 31 && x2 == 2 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 9 && x1 == 31 && x2 == 3 => {
-                            Some(Op::aarch64_branch_unconditional_register)
+                            Some(Op::Blrab64PBranchReg)
                         }
                         (x0, x1, x2, _, _) if x0 == 9 && x1 == 31 && x2 & 60 == 4 => {
                             None
@@ -5921,10 +5922,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let imm26 = instr & 51;
                     match op {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_branch_unconditional_immediate)
+                            Some(Op::BlOnlyBranchImm)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_branch_unconditional_immediate)
+                            Some(Op::BlOnlyBranchImm)
                         }
                         _ => None
                     }
@@ -5936,16 +5937,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (sf, op) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_branch_conditional_compare)
+                            Some(Op::Cbnz64Compbranch)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_branch_conditional_compare)
+                            Some(Op::Cbnz64Compbranch)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_branch_conditional_compare)
+                            Some(Op::Cbnz64Compbranch)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_branch_conditional_compare)
+                            Some(Op::Cbnz64Compbranch)
                         }
                         _ => None
                     }
@@ -5958,10 +5959,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match op {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_branch_conditional_test)
+                            Some(Op::TbnzOnlyTestbranch)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_branch_conditional_test)
+                            Some(Op::TbnzOnlyTestbranch)
                         }
                         _ => None
                     }
@@ -5980,37 +5981,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (L, opcode) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 5 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 9 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 0 && x1 == 11 => {
                             None
@@ -6019,37 +6020,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 3 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 5 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 9 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_no_wb)
+                            Some(Op::Ld1AsisdlseR22V)
                         }
                         (x0, x1) if x0 == 1 && x1 == 11 => {
                             None
@@ -6088,46 +6089,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 31 && x2 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 31 && x2 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 1 => {
                             None
@@ -6148,46 +6149,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 31 && x2 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 2 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 4 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 6 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 7 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 8 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 31 && x2 == 10 => {
-                            Some(Op::aarch64_memory_vector_multiple_post_inc)
+                            Some(Op::Ld1AsisdlsepI2I2)
                         }
                         _ => None
                     }
@@ -6209,43 +6210,43 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 2 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 2 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 4 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 4 && x4 & 2 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 4 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 4 && x3 == 1 && x4 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 5 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 5 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 5 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 5 && x3 == 0 && x4 == 3 => {
                             None
@@ -6254,31 +6255,31 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 2 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 2 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 3 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 3 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 4 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 4 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 4 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 4 && x3 == 0 && x4 == 3 => {
                             None
@@ -6287,13 +6288,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 5 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 5 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 5 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 5 && x3 == 0 && x4 == 3 => {
                             None
@@ -6302,43 +6303,43 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 4 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 4 && x4 & 2 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 4 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 4 && x3 == 1 && x4 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 5 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 5 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 5 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 5 && x3 == 0 && x4 == 3 => {
                             None
@@ -6347,43 +6348,43 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 6 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 6 && x3 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 7 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 7 && x3 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 2 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 2 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 3 && x4 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 3 && x4 & 1 == 1 => {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 4 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 4 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 4 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 4 && x3 == 0 && x4 == 3 => {
                             None
@@ -6392,13 +6393,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 5 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 5 && x4 == 2 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 5 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 5 && x3 == 0 && x4 == 3 => {
                             None
@@ -6407,13 +6408,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 6 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 6 && x3 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 7 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_no_wb)
+                            Some(Op::Ld4RAsisdlsoR4)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 7 && x3 == 1 => {
                             None
@@ -6457,52 +6458,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 != 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, _, x3, _, x5) if x0 == 0 && x1 == 1 && x3 == 2 && x5 & 1 == 1 => {
                             None
@@ -6529,52 +6530,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 != 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, _, x3, _, x5) if x0 == 1 && x1 == 0 && x3 == 2 && x5 & 1 == 1 => {
                             None
@@ -6604,64 +6605,64 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 6 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 != 31 && x3 == 7 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 6 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 31 && x3 == 7 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, _, x3, _, x5) if x0 == 1 && x1 == 1 && x3 == 2 && x5 & 1 == 1 => {
                             None
@@ -6694,64 +6695,64 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 6 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 != 31 && x3 == 7 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 2 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 3 && x5 & 1 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 4 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 4 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 5 && x5 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 5 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 6 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 31 && x3 == 7 && x4 == 0 => {
-                            Some(Op::aarch64_memory_vector_single_post_inc)
+                            Some(Op::Ld4RAsisdlsopR4I)
                         }
                         _ => None
                     }
@@ -6779,58 +6780,58 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, imm9, op2) {
                         (x0, _, x2) if x0 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpost)
+                            Some(Op::Stg64SpostLdsttags)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_integer_tags_mcsettag)
+                            Some(Op::Stg64SoffsetLdsttags)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpre)
+                            Some(Op::Stg64SpreLdsttags)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsettagandzeroarray)
+                            Some(Op::Stzgm64BulkLdsttags)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcgettag)
+                            Some(Op::Ldg64LoffsetLdsttags)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_tags_mcsettagandzerodatapost)
+                            Some(Op::Stzg64SpostLdsttags)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_integer_tags_mcsettagandzerodata)
+                            Some(Op::Stzg64SoffsetLdsttags)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_integer_tags_mcsettagandzerodatapre)
+                            Some(Op::Stzg64SpreLdsttags)
                         }
                         (x0, _, x2) if x0 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpairpost)
+                            Some(Op::St2G64SpostLdsttags)
                         }
                         (x0, _, x2) if x0 == 2 && x2 == 2 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpair)
+                            Some(Op::St2G64SoffsetLdsttags)
                         }
                         (x0, _, x2) if x0 == 2 && x2 == 3 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpairpre)
+                            Some(Op::St2G64SpreLdsttags)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 != 0 && x2 == 0 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsettagarray)
+                            Some(Op::Stgm64BulkLdsttags)
                         }
                         (x0, _, x2) if x0 == 3 && x2 == 1 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpairandzerodatapost)
+                            Some(Op::Stz2G64SpostLdsttags)
                         }
                         (x0, _, x2) if x0 == 3 && x2 == 2 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpairandzerodata)
+                            Some(Op::Stz2G64SoffsetLdsttags)
                         }
                         (x0, _, x2) if x0 == 3 && x2 == 3 => {
-                            Some(Op::aarch64_integer_tags_mcsettagpairandzerodatapre)
+                            Some(Op::Stz2G64SpreLdsttags)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 != 0 && x2 == 0 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcgettagarray)
+                            Some(Op::Ldgm64BulkLdsttags)
                         }
                         _ => None
                     }
@@ -6856,196 +6857,196 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_pair)
+                            Some(Op::CaspalCp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_single)
+                            Some(Op::LdaxrLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_memory_exclusive_pair)
+                            Some(Op::LdaxpLp64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_memory_ordered)
+                            Some(Op::LdarLr64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 31 => {
-                            Some(Op::aarch64_memory_atomicops_cas_single)
+                            Some(Op::CasalC64Ldstexcl)
                         }
                         _ => None
                     }
@@ -7058,46 +7059,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (size, opc) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 1 && x1 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 2 && x1 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 2 && x1 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 2 && x1 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 2 && x1 == 3 => {
                             None
                         }
                         (x0, x1) if x0 == 3 && x1 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 3 && x1 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_lda_stl)
+                            Some(Op::Ldapur64LdapstlUnscaled)
                         }
                         (x0, x1) if x0 == 3 && x1 == 2 => {
                             None
@@ -7115,25 +7116,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, V) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_memory_literal_general)
+                            Some(Op::PrfmPLoadlit)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_memory_literal_simdfp)
+                            Some(Op::LdrQLoadlit)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_memory_literal_general)
+                            Some(Op::PrfmPLoadlit)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_memory_literal_simdfp)
+                            Some(Op::LdrQLoadlit)
                         }
                         (x0, x1) if x0 == 2 && x1 == 0 => {
-                            Some(Op::aarch64_memory_literal_general)
+                            Some(Op::PrfmPLoadlit)
                         }
                         (x0, x1) if x0 == 2 && x1 == 1 => {
-                            Some(Op::aarch64_memory_literal_simdfp)
+                            Some(Op::LdrQLoadlit)
                         }
                         (x0, x1) if x0 == 3 && x1 == 0 => {
-                            Some(Op::aarch64_memory_literal_general)
+                            Some(Op::PrfmPLoadlit)
                         }
                         (x0, x1) if x0 == 3 && x1 == 1 => {
                             None
@@ -7151,37 +7152,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, V, L) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_no_alloc)
+                            Some(Op::Ldnp64LdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_no_alloc)
+                            Some(Op::Ldnp64LdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, x1, _) if x0 == 1 && x1 == 0 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_no_alloc)
+                            Some(Op::Ldnp64LdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_no_alloc)
+                            Some(Op::Ldnp64LdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_no_alloc)
+                            Some(Op::LdnpQLdstnapairOffs)
                         }
                         (x0, _, _) if x0 == 3 => {
                             None
@@ -7199,40 +7200,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, V, L) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_post_idx)
+                            Some(Op::Ldp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_post_idx)
+                            Some(Op::Ldp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsettaganddatapairpost)
+                            Some(Op::Stgp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_post_idx)
+                            Some(Op::Ldp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_post_idx)
+                            Some(Op::Ldp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_post_idx)
+                            Some(Op::Ldp64LdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_post_idx)
+                            Some(Op::LdpQLdstpairPost)
                         }
                         (x0, _, _) if x0 == 3 => {
                             None
@@ -7250,40 +7251,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, V, L) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_offset)
+                            Some(Op::Ldp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_offset)
+                            Some(Op::Ldp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsettaganddatapair)
+                            Some(Op::Stgp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_offset)
+                            Some(Op::Ldp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_offset)
+                            Some(Op::Ldp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_offset)
+                            Some(Op::Ldp64LdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_offset)
+                            Some(Op::LdpQLdstpairOff)
                         }
                         (x0, _, _) if x0 == 3 => {
                             None
@@ -7301,40 +7302,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rt = instr & 9;
                     match (opc, V, L) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_pre_idx)
+                            Some(Op::Ldp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_pre_idx)
+                            Some(Op::Ldp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_tags_mcsettaganddatapairpre)
+                            Some(Op::Stgp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_pre_idx)
+                            Some(Op::Ldp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_general_pre_idx)
+                            Some(Op::Ldp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_general_pre_idx)
+                            Some(Op::Ldp64LdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_pair_simdfp_pre_idx)
+                            Some(Op::LdpQLdstpairPre)
                         }
                         (x0, _, _) if x0 == 3 => {
                             None
@@ -7354,46 +7355,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
@@ -7402,34 +7403,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_normal)
+                            Some(Op::PrfumPLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_offset_normal)
+                            Some(Op::LdurDLdstUnscaled)
                         }
                         _ => None
                     }
@@ -7446,46 +7447,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
@@ -7494,34 +7495,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_post_idx)
+                            Some(Op::Ldr64LdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_post_idx)
+                            Some(Op::LdrDLdstImmpost)
                         }
                         _ => None
                     }
@@ -7538,46 +7539,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_offset_unpriv)
+                            Some(Op::Ldtr64LdstUnpriv)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
                             None
@@ -7597,46 +7598,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
@@ -7645,34 +7646,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pre_idx)
+                            Some(Op::Ldr64LdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_signed_pre_idx)
+                            Some(Op::LdrDLdstImmpre)
                         }
                         _ => None
                     }
@@ -7710,448 +7711,448 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 4 => {
-                            Some(Op::aarch64_memory_ordered_rcpc)
+                            Some(Op::Ldapr64LMemop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 4 => {
-                            Some(Op::aarch64_memory_ordered_rcpc)
+                            Some(Op::Ldapr64LMemop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 4 => {
-                            Some(Op::aarch64_memory_ordered_rcpc)
+                            Some(Op::Ldapr64LMemop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 4 => {
-                            Some(Op::aarch64_memory_ordered_rcpc)
+                            Some(Op::Ldapr64LMemop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 2 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 3 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 4 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 5 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 6 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 7 => {
-                            Some(Op::aarch64_memory_atomicops_ld)
+                            Some(Op::Lduminal64Memop)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch64_memory_atomicops_swp)
+                            Some(Op::Swpal64Memop)
                         }
                         _ => None
                     }
@@ -8173,64 +8174,64 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 2 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 2 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 != 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
@@ -8239,34 +8240,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 3 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_register)
+                            Some(Op::PrfmPLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         (x0, x1, x2, _) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_register)
+                            Some(Op::LdrDLdstRegoff)
                         }
                         _ => None
                     }
@@ -8285,16 +8286,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pac)
+                            Some(Op::Ldrab64WLdstPac)
                         }
                         (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pac)
+                            Some(Op::Ldrab64WLdstPac)
                         }
                         (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pac)
+                            Some(Op::Ldrab64WLdstPac)
                         }
                         (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_signed_pac)
+                            Some(Op::Ldrab64WLdstPac)
                         }
                         (x0, x1, _, _) if x0 == 3 && x1 == 1 => {
                             None
@@ -8314,46 +8315,46 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 & 2 == 2 && x1 == 0 && x2 == 3 => {
                             None
@@ -8362,34 +8363,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_memory_single_general_immediate_unsigned)
+                            Some(Op::PrfmPLdstPos)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_memory_single_simdfp_immediate_unsigned)
+                            Some(Op::LdrDLdstPos)
                         }
                         _ => None
                     }
@@ -8441,25 +8442,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_integer_arithmetic_div)
+                            Some(Op::Sdiv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_integer_arithmetic_div)
+                            Some(Op::Sdiv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 & 62 == 4 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 12 => {
                             None
@@ -8468,52 +8469,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 16 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 17 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 18 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 20 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 21 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_pointer_mcsubtracttaggedaddress)
+                            Some(Op::Subp64SDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_integer_arithmetic_div)
+                            Some(Op::Sdiv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_integer_arithmetic_div)
+                            Some(Op::Sdiv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_integer_tags_mcinsertrandomtag)
+                            Some(Op::Irg64IDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_integer_tags_mcinserttagmask)
+                            Some(Op::Gmi64GDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_integer_shift_variable)
+                            Some(Op::Rorv64Dp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_integer_pac_pacga_dp_2src)
+                            Some(Op::Pacga64PDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 & 57 == 16 => {
                             None
@@ -8522,13 +8523,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 19 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 23 => {
-                            Some(Op::aarch64_integer_crc)
+                            Some(Op::Crc32Cx64CDp2Src)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_pointer_mcsubtracttaggedaddresssetflags)
+                            Some(Op::Subps64SDp2Src)
                         }
                         _ => None
                     }
@@ -8572,94 +8573,94 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_rbit)
+                            Some(Op::Rbit64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_rev)
+                            Some(Op::Rev64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 => {
-                            Some(Op::aarch64_integer_arithmetic_rev)
+                            Some(Op::Rev64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 4 => {
-                            Some(Op::aarch64_integer_arithmetic_cnt)
+                            Some(Op::Cls64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_integer_arithmetic_cnt)
+                            Some(Op::Cls64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_rbit)
+                            Some(Op::Rbit64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_rev)
+                            Some(Op::Rev64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 2 => {
-                            Some(Op::aarch64_integer_arithmetic_rev)
+                            Some(Op::Rev64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_integer_arithmetic_rev)
+                            Some(Op::Rev64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 4 => {
-                            Some(Op::aarch64_integer_arithmetic_cnt)
+                            Some(Op::Cls64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_integer_arithmetic_cnt)
+                            Some(Op::Cls64Dp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_pac_pacia_dp_1src)
+                            Some(Op::Paciza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_integer_pac_pacib_dp_1src)
+                            Some(Op::Pacizb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 2 => {
-                            Some(Op::aarch64_integer_pac_pacda_dp_1src)
+                            Some(Op::Pacdza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 3 => {
-                            Some(Op::aarch64_integer_pac_pacdb_dp_1src)
+                            Some(Op::Pacdzb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 4 => {
-                            Some(Op::aarch64_integer_pac_autia_dp_1src)
+                            Some(Op::Autiza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 5 => {
-                            Some(Op::aarch64_integer_pac_autib_dp_1src)
+                            Some(Op::Autizb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 6 => {
-                            Some(Op::aarch64_integer_pac_autda_dp_1src)
+                            Some(Op::Autdza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 7 => {
-                            Some(Op::aarch64_integer_pac_autdb_dp_1src)
+                            Some(Op::Autdzb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 8 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_pacia_dp_1src)
+                            Some(Op::Paciza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 9 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_pacib_dp_1src)
+                            Some(Op::Pacizb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 10 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_pacda_dp_1src)
+                            Some(Op::Pacdza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 11 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_pacdb_dp_1src)
+                            Some(Op::Pacdzb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 12 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_autia_dp_1src)
+                            Some(Op::Autiza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 13 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_autib_dp_1src)
+                            Some(Op::Autizb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 14 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_autda_dp_1src)
+                            Some(Op::Autdza64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 15 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_autdb_dp_1src)
+                            Some(Op::Autdzb64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 16 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_strip_dp_1src)
+                            Some(Op::Xpacd64ZDp1Src)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 17 && x4 == 31 => {
-                            Some(Op::aarch64_integer_pac_strip_dp_1src)
+                            Some(Op::Xpacd64ZDp1Src)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 & 62 == 18 => {
                             None
@@ -8687,52 +8688,52 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 3 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 0 && x1 == 3 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 3 && x2 == 0 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         (x0, x1, x2, _) if x0 == 1 && x1 == 3 && x2 == 1 => {
-                            Some(Op::aarch64_integer_logical_shiftedreg)
+                            Some(Op::Bics64LogShift)
                         }
                         _ => None
                     }
@@ -8754,28 +8755,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         (x0, x1, x2, _, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_shiftedreg)
+                            Some(Op::Subs64AddsubShift)
                         }
                         _ => None
                     }
@@ -8804,28 +8805,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_extendedreg)
+                            Some(Op::Subs64SAddsubExt)
                         }
                         _ => None
                     }
@@ -8839,28 +8840,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (sf, op, S) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_add_sub_carry)
+                            Some(Op::Sbcs64AddsubCarry)
                         }
                         _ => None
                     }
@@ -8881,7 +8882,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_flags_rmif)
+                            Some(Op::RmifOnlyRmif)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
                             None
@@ -8915,10 +8916,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5, x6) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 && x6 == 13 => {
-                            Some(Op::aarch64_integer_flags_setf)
+                            Some(Op::Setf16OnlySetf)
                         }
                         (x0, x1, x2, x3, x4, x5, x6) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 && x6 == 13 => {
-                            Some(Op::aarch64_integer_flags_setf)
+                            Some(Op::Setf16OnlySetf)
                         }
                         (x0, x1, _, _, _, _, _) if x0 == 0 && x1 == 1 => {
                             None
@@ -8950,16 +8951,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_register)
+                            Some(Op::Ccmp64CondcmpReg)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_register)
+                            Some(Op::Ccmp64CondcmpReg)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_register)
+                            Some(Op::Ccmp64CondcmpReg)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_register)
+                            Some(Op::Ccmp64CondcmpReg)
                         }
                         _ => None
                     }
@@ -8985,16 +8986,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_immediate)
+                            Some(Op::Ccmp64CondcmpImm)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_immediate)
+                            Some(Op::Ccmp64CondcmpImm)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_immediate)
+                            Some(Op::Ccmp64CondcmpImm)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_integer_conditional_compare_immediate)
+                            Some(Op::Ccmp64CondcmpImm)
                         }
                         _ => None
                     }
@@ -9016,28 +9017,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_conditional_select)
+                            Some(Op::Csneg64Condsel)
                         }
                         _ => None
                     }
@@ -9074,10 +9075,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_uniform_add_sub)
+                            Some(Op::Msub64ADp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_uniform_add_sub)
+                            Some(Op::Msub64ADp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
                             None
@@ -9098,28 +9099,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_uniform_add_sub)
+                            Some(Op::Msub64ADp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_uniform_add_sub)
+                            Some(Op::Msub64ADp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_32_64)
+                            Some(Op::Umsubl64WaDp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_32_64)
+                            Some(Op::Umsubl64WaDp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_64_128hi)
+                            Some(Op::Umulh64Dp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 5 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_32_64)
+                            Some(Op::Umsubl64WaDp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 5 && x3 == 1 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_32_64)
+                            Some(Op::Umsubl64WaDp3Src)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 6 && x3 == 0 => {
-                            Some(Op::aarch64_integer_arithmetic_mul_widening_64_128hi)
+                            Some(Op::Umulh64Dp3Src)
                         }
                         _ => None
                     }
@@ -9154,16 +9155,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_vector_crypto_aes_round)
+                            Some(Op::AesdBCryptoaes)
                         }
                         (x0, x1) if x0 == 0 && x1 == 5 => {
-                            Some(Op::aarch64_vector_crypto_aes_round)
+                            Some(Op::AesdBCryptoaes)
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_vector_crypto_aes_mix)
+                            Some(Op::AesimcBCryptoaes)
                         }
                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                            Some(Op::aarch64_vector_crypto_aes_mix)
+                            Some(Op::AesimcBCryptoaes)
                         }
                         (x0, _) if x0 & 2 == 2 => {
                             None
@@ -9185,25 +9186,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha1_hash_choose)
+                            Some(Op::Sha1CQsvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha1_hash_parity)
+                            Some(Op::Sha1PQsvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha1_hash_majority)
+                            Some(Op::Sha1MQsvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha1_sched0)
+                            Some(Op::Sha1Su0VvvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha256_hash)
+                            Some(Op::Sha256H2QqvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 5 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha256_hash)
+                            Some(Op::Sha256H2QqvCryptosha3)
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_vector_crypto_sha3op_sha256_sched1)
+                            Some(Op::Sha256Su1VvvCryptosha3)
                         }
                         (x0, _) if x0 & 2 == 2 => {
                             None
@@ -9233,13 +9234,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sha2op_sha1_hash)
+                            Some(Op::Sha1HSsCryptosha2)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sha2op_sha1_sched1)
+                            Some(Op::Sha1Su1VvCryptosha2)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sha2op_sha256_sched0)
+                            Some(Op::Sha256Su0VvCryptosha2)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
                             None
@@ -9276,7 +9277,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_cpy_dup_sisd)
+                            Some(Op::DupAsisdoneOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 & 8 == 8 => {
                             None
@@ -9311,16 +9312,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp16_extended_sisd)
+                            Some(Op::FmulxAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd)
+                            Some(Op::FacgtAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 5 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_recps_fp16_sisd)
+                            Some(Op::FrecpsAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 4 => {
                             None
@@ -9329,28 +9330,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_rsqrts_fp16_sisd)
+                            Some(Op::FrsqrtsAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd)
+                            Some(Op::FacgtAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd)
+                            Some(Op::FacgtAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 7 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp16_sisd)
+                            Some(Op::FabdAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd)
+                            Some(Op::FacgtAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd)
+                            Some(Op::FacgtAsisdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 7 => {
                             None
@@ -9396,67 +9397,67 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_sisd)
+                            Some(Op::FcvtauAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_int_sisd)
+                            Some(Op::UcvtfAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_lessthan_sisd)
+                            Some(Op::FcmltAsisdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_recip_fp16_sisd)
+                            Some(Op::FrecpeAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_frecpx_fp16)
+                            Some(Op::FrecpxAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_sisd)
+                            Some(Op::FcvtauAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_int_sisd)
+                            Some(Op::UcvtfAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 14 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_est_fp16_sisd)
+                            Some(Op::FrsqrteAsisdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 31 => {
                             None
@@ -9491,10 +9492,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_sisd)
+                            Some(Op::SqrdmlshAsisdsame2Only)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_sisd)
+                            Some(Op::SqrdmlshAsisdsame2Only)
                         }
                         _ => None
                     }
@@ -9552,121 +9553,121 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_saturating_sisd)
+                            Some(Op::UsqaddAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_sat_sisd)
+                            Some(Op::SqnegAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_sisd)
+                            Some(Op::CmleAsisdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_sisd)
+                            Some(Op::CmleAsisdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_lessthan_sisd)
+                            Some(Op::CmltAsisdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_int_sisd)
+                            Some(Op::NegAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 18 => {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sat_sisd)
+                            Some(Op::UqxtnAsisdmiscN)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 22 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_tieaway_sisd)
+                            Some(Op::FcvtauAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_int_sisd)
+                            Some(Op::UcvtfAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_lessthan_sisd)
+                            Some(Op::FcmltAsisdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_recip_float_sisd)
+                            Some(Op::FrecpeAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_frecpx)
+                            Some(Op::FrecpxAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_saturating_sisd)
+                            Some(Op::UsqaddAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_sat_sisd)
+                            Some(Op::SqnegAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_sisd)
+                            Some(Op::CmleAsisdmiscZ)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_sisd)
+                            Some(Op::CmleAsisdmiscZ)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_int_sisd)
+                            Some(Op::NegAsisdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 18 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sqxtun_sisd)
+                            Some(Op::SqxtunAsisdmiscN)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sat_sisd)
+                            Some(Op::UqxtnAsisdmiscN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_xtn_sisd)
+                            Some(Op::FcvtxnAsisdmiscN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_tieaway_sisd)
+                            Some(Op::FcvtauAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_int_sisd)
+                            Some(Op::UcvtfAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_sisd)
+                            Some(Op::FcmleAsisdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 14 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd)
+                            Some(Op::FcvtzuAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_est_float_sisd)
+                            Some(Op::FrsqrteAsisdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 31 => {
                             None
@@ -9706,16 +9707,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_reduce_add_sisd)
+                            Some(Op::AddpAsisdpairOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp16_maxnm_sisd)
+                            Some(Op::FminnmpAsisdpairOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 13 => {
-                            Some(Op::aarch64_vector_reduce_fp16_add_sisd)
+                            Some(Op::FaddpAsisdpairOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp16_max_sisd)
+                            Some(Op::FminpAsisdpairOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 12 => {
                             None
@@ -9727,10 +9728,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp16_maxnm_sisd)
+                            Some(Op::FminnmpAsisdpairOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp16_max_sisd)
+                            Some(Op::FminpAsisdpairOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 12 => {
                             None
@@ -9742,19 +9743,19 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp_maxnm_sisd)
+                            Some(Op::FminnmpAsisdpairOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 13 => {
-                            Some(Op::aarch64_vector_reduce_fp_add_sisd)
+                            Some(Op::FaddpAsisdpairOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp_max_sisd)
+                            Some(Op::FminpAsisdpairOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp_maxnm_sisd)
+                            Some(Op::FminnmpAsisdpairOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp_max_sisd)
+                            Some(Op::FminpAsisdpairOnlySd)
                         }
                         _ => None
                     }
@@ -9792,13 +9793,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_dmacc_sisd)
+                            Some(Op::SqdmlslAsisddiffOnly)
                         }
                         (x0, x1) if x0 == 0 && x1 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_dmacc_sisd)
+                            Some(Op::SqdmlslAsisddiffOnly)
                         }
                         (x0, x1) if x0 == 0 && x1 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_double_sisd)
+                            Some(Op::SqdmullAsisddiffOnly)
                         }
                         (x0, x1) if x0 == 1 && x1 == 9 => {
                             None
@@ -9839,34 +9840,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_saturating_sisd)
+                            Some(Op::UqaddAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_saturating_sisd)
+                            Some(Op::UqsubAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_sisd)
+                            Some(Op::CmhsAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_sisd)
+                            Some(Op::CmhsAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 16 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
+                            Some(Op::SubAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 17 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_sisd)
+                            Some(Op::CmeqAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 20 => {
                             None
@@ -9875,7 +9876,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_sisd)
+                            Some(Op::SqrdmulhAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 23 => {
                             None
@@ -9890,10 +9891,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_extended_sisd)
+                            Some(Op::FmulxAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd)
+                            Some(Op::FacgtAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 29 => {
                             None
@@ -9902,7 +9903,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_recps_sisd)
+                            Some(Op::FrecpsAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 24 => {
                             None
@@ -9923,37 +9924,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_rsqrts_sisd)
+                            Some(Op::FrsqrtsAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_saturating_sisd)
+                            Some(Op::UqaddAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_saturating_sisd)
+                            Some(Op::UqsubAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_sisd)
+                            Some(Op::CmhsAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_sisd)
+                            Some(Op::CmhsAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_sisd)
+                            Some(Op::UqrshlAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 16 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd)
+                            Some(Op::SubAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 17 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_sisd)
+                            Some(Op::CmeqAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 20 => {
                             None
@@ -9962,7 +9963,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_sisd)
+                            Some(Op::SqrdmulhAsisdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 23 => {
                             None
@@ -9980,10 +9981,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd)
+                            Some(Op::FacgtAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd)
+                            Some(Op::FacgtAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 30 => {
                             None
@@ -9998,13 +9999,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp_sisd)
+                            Some(Op::FabdAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd)
+                            Some(Op::FacgtAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd)
+                            Some(Op::FacgtAsisdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 30 => {
                             None
@@ -10063,28 +10064,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 8 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_shift_left_sisd)
+                            Some(Op::ShlAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 12 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 14 => {
-                            Some(Op::aarch64_vector_shift_left_sat_sisd)
+                            Some(Op::UqshlAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 16 => {
                             None
@@ -10093,58 +10094,58 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 18 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_sisd)
+                            Some(Op::UqrshrnAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 19 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_sisd)
+                            Some(Op::UqrshrnAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_shift_conv_int_sisd)
+                            Some(Op::UcvtfAsisdshfC)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_shift_conv_float_sisd)
+                            Some(Op::FcvtzuAsisdshfC)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_shift_right_sisd)
+                            Some(Op::UrsraAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_shift_right_insert_sisd)
+                            Some(Op::SriAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_shift_left_insert_sisd)
+                            Some(Op::SliAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_shift_left_sat_sisd)
+                            Some(Op::UqshlAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 14 => {
-                            Some(Op::aarch64_vector_shift_left_sat_sisd)
+                            Some(Op::UqshlAsisdshfR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 16 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_nonuniform_sisd)
+                            Some(Op::SqrshrunAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 17 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_nonuniform_sisd)
+                            Some(Op::SqrshrunAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 18 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_sisd)
+                            Some(Op::UqrshrnAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 19 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_sisd)
+                            Some(Op::UqrshrnAsisdshfN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_shift_conv_int_sisd)
+                            Some(Op::UcvtfAsisdshfC)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 != 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_shift_conv_float_sisd)
+                            Some(Op::FcvtzuAsisdshfC)
                         }
                         _ => None
                     }
@@ -10194,40 +10195,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_double_sisd)
+                            Some(Op::SqdmlslAsisdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_double_sisd)
+                            Some(Op::SqdmlslAsisdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_double_sisd)
+                            Some(Op::SqdmullAsisdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_high_sisd)
+                            Some(Op::SqrdmulhAsisdelemR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_high_sisd)
+                            Some(Op::SqrdmulhAsisdelemR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 15 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp16_sisd)
+                            Some(Op::FmlsAsisdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp16_sisd)
+                            Some(Op::FmlsAsisdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp16_sisd)
+                            Some(Op::FmulxAsisdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp_sisd)
+                            Some(Op::FmlsAsisdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp_sisd)
+                            Some(Op::FmlsAsisdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp_sisd)
+                            Some(Op::FmulxAsisdelemRSd)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 3 => {
                             None
@@ -10242,10 +10243,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_high_sisd)
+                            Some(Op::SqrdmlshAsisdelemR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_high_sisd)
+                            Some(Op::SqrdmlshAsisdelemR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
                             None
@@ -10254,7 +10255,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp16_sisd)
+                            Some(Op::FmulxAsisdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 1 => {
                             None
@@ -10263,7 +10264,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp_sisd)
+                            Some(Op::FmulxAsisdelemRSd)
                         }
                         _ => None
                     }
@@ -10281,28 +10282,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_table)
+                            Some(Op::TbxAsimdtblL44)
                         }
                         (x0, _, _) if x0 & 2 == 2 => {
                             None
@@ -10322,25 +10323,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_unzip)
+                            Some(Op::Uzp2AsimdpermOnly)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_transpose)
+                            Some(Op::Trn2AsimdpermOnly)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_zip)
+                            Some(Op::Zip2AsimdpermOnly)
                         }
                         x0 if x0 == 4 => {
                             None
                         }
                         x0 if x0 == 5 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_unzip)
+                            Some(Op::Uzp2AsimdpermOnly)
                         }
                         x0 if x0 == 6 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_transpose)
+                            Some(Op::Trn2AsimdpermOnly)
                         }
                         x0 if x0 == 7 => {
-                            Some(Op::aarch64_vector_transfer_vector_permute_zip)
+                            Some(Op::Zip2AsimdpermOnly)
                         }
                         _ => None
                     }
@@ -10357,7 +10358,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_extract)
+                            Some(Op::ExtAsimdextOnly)
                         }
                         x0 if x0 & 2 == 2 => {
                             None
@@ -10377,10 +10378,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, _, x3) if x1 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_vector_transfer_vector_cpy_dup_simd)
+                            Some(Op::DupAsimdinsDvV)
                         }
                         (_, x1, _, x3) if x1 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_vector_transfer_integer_dup)
+                            Some(Op::DupAsimdinsDrR)
                         }
                         (_, x1, _, x3) if x1 == 0 && x3 == 2 => {
                             None
@@ -10398,25 +10399,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_vector_transfer_integer_move_signed)
+                            Some(Op::SmovAsimdinsXX)
                         }
                         (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 7 => {
-                            Some(Op::aarch64_vector_transfer_integer_move_unsigned)
+                            Some(Op::UmovAsimdinsXX)
                         }
                         (x0, x1, _, _) if x0 == 0 && x1 == 1 => {
                             None
                         }
                         (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_vector_transfer_integer_insert)
+                            Some(Op::InsAsimdinsIrR)
                         }
                         (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_vector_transfer_integer_move_signed)
+                            Some(Op::SmovAsimdinsXX)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 & 15 == 8 && x3 == 7 => {
-                            Some(Op::aarch64_vector_transfer_integer_move_unsigned)
+                            Some(Op::UmovAsimdinsXX)
                         }
                         (x0, x1, _, _) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_vector_transfer_vector_insert)
+                            Some(Op::InsAsimdinsIvV)
                         }
                         _ => None
                     }
@@ -10437,37 +10438,37 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (U, a, opcode) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_2008)
+                            Some(Op::FminnmpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp16_fused)
+                            Some(Op::FmlsAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_fp16)
+                            Some(Op::FaddpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp16_extended_simd)
+                            Some(Op::FmulxAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd)
+                            Some(Op::FacgtAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 5 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_1985)
+                            Some(Op::FminpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_recps_fp16_simd)
+                            Some(Op::FrecpsAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_2008)
+                            Some(Op::FminnmpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp16_fused)
+                            Some(Op::FmlsAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp16_simd)
+                            Some(Op::FabdAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
                             None
@@ -10479,55 +10480,55 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_1985)
+                            Some(Op::FminpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_rsqrts_fp16_simd)
+                            Some(Op::FrsqrtsAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_2008)
+                            Some(Op::FminnmpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_fp16)
+                            Some(Op::FaddpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp16_product)
+                            Some(Op::FmulAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd)
+                            Some(Op::FacgtAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd)
+                            Some(Op::FacgtAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_1985)
+                            Some(Op::FminpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_div_fp16)
+                            Some(Op::FdivAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_2008)
+                            Some(Op::FminnmpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp16_simd)
+                            Some(Op::FabdAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 3 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd)
+                            Some(Op::FacgtAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd)
+                            Some(Op::FacgtAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp16_1985)
+                            Some(Op::FminpAsimdsamefp16Only)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 7 => {
                             None
@@ -10568,100 +10569,100 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_simd)
+                            Some(Op::FcvtauAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_int_simd)
+                            Some(Op::UcvtfAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_simd)
+                            Some(Op::FcmleAsimdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_simd)
+                            Some(Op::FcmleAsimdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_lessthan_simd)
+                            Some(Op::FcmltAsimdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_fp16)
+                            Some(Op::FnegAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_recip_fp16_simd)
+                            Some(Op::FrecpeAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 31 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_simd)
+                            Some(Op::FcvtauAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_int_simd)
+                            Some(Op::UcvtfAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_simd)
+                            Some(Op::FcmleAsimdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_fp16_bulk_simd)
+                            Some(Op::FcmleAsimdmiscfp16Fz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 14 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_fp16)
+                            Some(Op::FnegAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 24 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_round)
+                            Some(Op::FrintiAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_est_fp16_simd)
+                            Some(Op::FrsqrteAsimdmiscfp16R)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_fp16)
+                            Some(Op::FsqrtAsimdmiscfp16R)
                         }
                         _ => None
                     }
@@ -10691,28 +10692,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, _, x3) if x1 == 0 && x3 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_dotp)
+                            Some(Op::UdotAsimdsame2D)
                         }
                         (_, x1, _, x3) if x1 == 0 && x3 & 8 == 8 => {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 == 2 && x3 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mat_mul_int_usdot)
+                            Some(Op::UsdotAsimdsame2D)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_simd)
+                            Some(Op::SqrdmlshAsimdsame2Only)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_simd)
+                            Some(Op::SqrdmlshAsimdsame2Only)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_dotp)
+                            Some(Op::UdotAsimdsame2D)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 & 12 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_complex)
+                            Some(Op::FcmlaAsimdsame2C)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 & 13 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_fp_complex)
+                            Some(Op::FcaddAsimdsame2C)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 == 0 && x3 == 13 => {
                             None
@@ -10721,7 +10722,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 == 1 && x3 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_bfdot)
+                            Some(Op::BfdotAsimdsame2D)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 2 == 2 && x3 == 13 => {
                             None
@@ -10733,7 +10734,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 == 3 && x3 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_acc_bf16_long)
+                            Some(Op::BfmlalAsimdsame2F)
                         }
                         (x0, _, _, x3) if x0 == 0 && x3 & 12 == 4 => {
                             None
@@ -10748,16 +10749,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mat_mul_int_mla)
+                            Some(Op::UmmlaAsimdsame2G)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mat_mul_int_mla)
+                            Some(Op::UmmlaAsimdsame2G)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 13 => {
-                            Some(Op::aarch64_vector_bfmmla)
+                            Some(Op::BfmmlaAsimdsame2E)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 2 && x3 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mat_mul_int_mla)
+                            Some(Op::UmmlaAsimdsame2G)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 2 && x3 == 5 => {
                             None
@@ -10792,229 +10793,229 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_rev)
+                            Some(Op::Rev32AsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_rev)
+                            Some(Op::Rev32AsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_pairwise)
+                            Some(Op::UadalpAsimdmiscP)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_saturating_simd)
+                            Some(Op::UsqaddAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_clsz)
+                            Some(Op::ClzAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cnt)
+                            Some(Op::CntAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_pairwise)
+                            Some(Op::UadalpAsimdmiscP)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_sat_simd)
+                            Some(Op::SqnegAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_simd)
+                            Some(Op::CmleAsimdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_simd)
+                            Some(Op::CmleAsimdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_lessthan_simd)
+                            Some(Op::CmltAsimdmiscZ)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_int_simd)
+                            Some(Op::NegAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 18 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_nosat)
+                            Some(Op::XtnAsimdmiscN)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 19 => {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sat_simd)
+                            Some(Op::UqxtnAsimdmiscN)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_narrow)
+                            Some(Op::FcvtnAsimdmiscN)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 23 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_widen)
+                            Some(Op::FcvtlAsimdmiscL)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_tieaway_simd)
+                            Some(Op::FcvtauAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_int_simd)
+                            Some(Op::UcvtfAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round_frint_32_64)
+                            Some(Op::Frint64XAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round_frint_32_64)
+                            Some(Op::Frint64XAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_simd)
+                            Some(Op::FcmleAsimdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_simd)
+                            Some(Op::FcmleAsimdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_lessthan_simd)
+                            Some(Op::FcmltAsimdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_float)
+                            Some(Op::FnegAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_recip_int)
+                            Some(Op::UrecpeAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_recip_float_simd)
+                            Some(Op::FrecpeAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 31 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 22 => {
-                            Some(Op::aarch64_vector_cvt_bf16_vector)
+                            Some(Op::BfcvtnAsimdmisc4S)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_rev)
+                            Some(Op::Rev32AsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 1 => {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_pairwise)
+                            Some(Op::UadalpAsimdmiscP)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_saturating_simd)
+                            Some(Op::UsqaddAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_clsz)
+                            Some(Op::ClzAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_add_pairwise)
+                            Some(Op::UadalpAsimdmiscP)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_sat_simd)
+                            Some(Op::SqnegAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_simd)
+                            Some(Op::CmleAsimdmiscZ)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_int_bulk_simd)
+                            Some(Op::CmleAsimdmiscZ)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_int_simd)
+                            Some(Op::NegAsimdmiscR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 18 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sqxtun_simd)
+                            Some(Op::SqxtunAsimdmiscN)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 19 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_shift)
+                            Some(Op::ShllAsimdmiscS)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_extract_sat_simd)
+                            Some(Op::UqxtnAsimdmiscN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_xtn_simd)
+                            Some(Op::FcvtxnAsimdmiscN)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 23 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_tieaway_simd)
+                            Some(Op::FcvtauAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_int_simd)
+                            Some(Op::UcvtfAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round_frint_32_64)
+                            Some(Op::Frint64XAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round_frint_32_64)
+                            Some(Op::Frint64XAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_not)
+                            Some(Op::NotAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_rbit)
+                            Some(Op::RbitAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 5 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_simd)
+                            Some(Op::FcmleAsimdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_cmp_float_bulk_simd)
+                            Some(Op::FcmleAsimdmiscFz)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 14 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_diff_neg_float)
+                            Some(Op::FnegAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 24 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_round)
+                            Some(Op::FrintiAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd)
+                            Some(Op::FcvtzuAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_est_int)
+                            Some(Op::UrsqrteAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt_est_float_simd)
+                            Some(Op::FrsqrteAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_unary_special_sqrt)
+                            Some(Op::FsqrtAsimdmiscR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 22 => {
                             None
@@ -11061,22 +11062,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_reduce_add_long)
+                            Some(Op::UaddlvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_reduce_int_max)
+                            Some(Op::UminvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_reduce_int_max)
+                            Some(Op::UminvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_reduce_add_simd)
+                            Some(Op::AddvAsimdallOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp16_maxnm_simd)
+                            Some(Op::FminnmvAsimdallOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp16_max_simd)
+                            Some(Op::FminvAsimdallOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 12 => {
                             None
@@ -11085,10 +11086,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp16_maxnm_simd)
+                            Some(Op::FminnmvAsimdallOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp16_max_simd)
+                            Some(Op::FminvAsimdallOnlyH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 12 => {
                             None
@@ -11097,28 +11098,28 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_vector_reduce_add_long)
+                            Some(Op::UaddlvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
-                            Some(Op::aarch64_vector_reduce_int_max)
+                            Some(Op::UminvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 26 => {
-                            Some(Op::aarch64_vector_reduce_int_max)
+                            Some(Op::UminvAsimdallOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 27 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp_maxnm_simd)
+                            Some(Op::FminnmvAsimdallOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp_max_simd)
+                            Some(Op::FminvAsimdallOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_reduce_fp_maxnm_simd)
+                            Some(Op::FminnmvAsimdallOnlySd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_reduce_fp_max_simd)
+                            Some(Op::FminvAsimdallOnlySd)
                         }
                         _ => None
                     }
@@ -11142,88 +11143,88 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_long)
+                            Some(Op::UsublAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_wide)
+                            Some(Op::UsubwAsimddiffW)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_long)
+                            Some(Op::UsublAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_wide)
+                            Some(Op::UsubwAsimddiffW)
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_narrow)
+                            Some(Op::RsubhnAsimddiffN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_diff)
+                            Some(Op::UabdlAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_narrow)
+                            Some(Op::RsubhnAsimddiffN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_diff)
+                            Some(Op::UabdlAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_accum)
+                            Some(Op::UmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_dmacc_simd)
+                            Some(Op::SqdmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_accum)
+                            Some(Op::UmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_dmacc_simd)
+                            Some(Op::SqdmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_product)
+                            Some(Op::UmullAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_double_simd)
+                            Some(Op::SqdmullAsimddiffL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_poly)
+                            Some(Op::PmullAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_long)
+                            Some(Op::UsublAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_wide)
+                            Some(Op::UsubwAsimddiffW)
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_long)
+                            Some(Op::UsublAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_wide)
+                            Some(Op::UsubwAsimddiffW)
                         }
                         (x0, x1) if x0 == 1 && x1 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_narrow)
+                            Some(Op::RsubhnAsimddiffN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_diff)
+                            Some(Op::UabdlAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_add_sub_narrow)
+                            Some(Op::RsubhnAsimddiffN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_diff)
+                            Some(Op::UabdlAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_accum)
+                            Some(Op::UmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 9 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_accum)
+                            Some(Op::UmlslAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 11 => {
                             None
                         }
                         (x0, x1) if x0 == 1 && x1 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_disparate_mul_product)
+                            Some(Op::UmullAsimddiffL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 13 => {
                             None
@@ -11244,115 +11245,115 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (U, size, opcode) {
                         (x0, _, x2) if x0 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_halving_truncating)
+                            Some(Op::UhaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_saturating_simd)
+                            Some(Op::UqaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_halving_rounding)
+                            Some(Op::UrhaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_int)
+                            Some(Op::UhsubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_saturating_simd)
+                            Some(Op::UqsubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_simd)
+                            Some(Op::CmhsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_simd)
+                            Some(Op::CmhsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_single)
+                            Some(Op::UminAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_single)
+                            Some(Op::UminAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_diff)
+                            Some(Op::UabaAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_diff)
+                            Some(Op::UabaAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 16 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_simd)
+                            Some(Op::SubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 17 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_simd)
+                            Some(Op::CmeqAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 18 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_accum)
+                            Some(Op::MlsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 19 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_product)
+                            Some(Op::PmulAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_pair)
+                            Some(Op::UminpAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 21 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_pair)
+                            Some(Op::UminpAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd)
+                            Some(Op::SqrdmulhAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 23 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_wrapping_pair)
+                            Some(Op::AddpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_2008)
+                            Some(Op::FminnmpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_fused)
+                            Some(Op::FmlsAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_fp)
+                            Some(Op::FaddpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_extended_simd)
+                            Some(Op::FmulxAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd)
+                            Some(Op::FacgtAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_1985)
+                            Some(Op::FminpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_recps_simd)
+                            Some(Op::FrecpsAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_and_orr)
+                            Some(Op::OrnAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_lower)
+                            Some(Op::FmlslAsimdsameF)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_and_orr)
+                            Some(Op::OrnAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 29 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_2008)
+                            Some(Op::FminnmpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_fused)
+                            Some(Op::FmlsAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp_simd)
+                            Some(Op::FabdAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 27 => {
                             None
@@ -11361,154 +11362,154 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_1985)
+                            Some(Op::FminpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_rsqrts_simd)
+                            Some(Op::FrsqrtsAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_and_orr)
+                            Some(Op::OrnAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_lower)
+                            Some(Op::FmlslAsimdsameF)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_and_orr)
+                            Some(Op::OrnAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 29 => {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_halving_truncating)
+                            Some(Op::UhaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_saturating_simd)
+                            Some(Op::UqaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_halving_rounding)
+                            Some(Op::UrhaddAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_int)
+                            Some(Op::UhsubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_saturating_simd)
+                            Some(Op::UqsubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_simd)
+                            Some(Op::CmhsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_int_simd)
+                            Some(Op::CmhsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_shift_simd)
+                            Some(Op::UqrshlAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_single)
+                            Some(Op::UminAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_single)
+                            Some(Op::UminAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_diff)
+                            Some(Op::UabaAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_diff)
+                            Some(Op::UabaAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 16 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_simd)
+                            Some(Op::SubAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 17 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_simd)
+                            Some(Op::CmeqAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 18 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_accum)
+                            Some(Op::MlsAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 19 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_product)
+                            Some(Op::PmulAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 20 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_pair)
+                            Some(Op::UminpAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 21 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_pair)
+                            Some(Op::UminpAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 22 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd)
+                            Some(Op::SqrdmulhAsimdsameOnly)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 23 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_2008)
+                            Some(Op::FminnmpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_add_fp)
+                            Some(Op::FaddpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 27 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_product)
+                            Some(Op::FmulAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd)
+                            Some(Op::FacgtAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd)
+                            Some(Op::FacgtAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_1985)
+                            Some(Op::FminpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 31 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_div)
+                            Some(Op::FdivAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_bsl_eor)
+                            Some(Op::BifAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_upper)
+                            Some(Op::Fmlsl2AsimdsameF)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_bsl_eor)
+                            Some(Op::BifAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 25 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 24 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_2008)
+                            Some(Op::FminnmpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 26 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_sub_fp_simd)
+                            Some(Op::FabdAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 27 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 28 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd)
+                            Some(Op::FacgtAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 29 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd)
+                            Some(Op::FacgtAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 30 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_max_min_fp_1985)
+                            Some(Op::FminpAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 31 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_bsl_eor)
+                            Some(Op::BifAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 25 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_upper)
+                            Some(Op::Fmlsl2AsimdsameF)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_uniform_logical_bsl_eor)
+                            Some(Op::BifAsimdsameOnly)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 25 => {
                             None
@@ -11535,67 +11536,67 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 9 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 9 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 12 == 8 && x3 == 1 => {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 13 == 8 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 13 == 9 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 14 == 12 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 & 14 == 12 && x3 == 1 => {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 == 14 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 == 14 && x3 == 1 => {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 == 15 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 0 && x2 == 15 && x3 == 1 => {
-                            Some(Op::aarch64_vector_fp16_movi)
+                            Some(Op::FmovAsimdimmHH)
                         }
                         (_, x1, _, x3) if x1 == 1 && x3 == 1 => {
                             None
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 9 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 9 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 13 == 8 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 13 == 9 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (_, x1, x2, x3) if x1 == 1 && x2 & 14 == 12 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 14 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 15 && x3 == 0 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 14 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 15 && x3 == 0 => {
-                            Some(Op::aarch64_vector_logical)
+                            Some(Op::FmovAsimdimmD2D)
                         }
                         _ => None
                     }
@@ -11649,94 +11650,94 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 8 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 10 => {
-                            Some(Op::aarch64_vector_shift_left_simd)
+                            Some(Op::ShlAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 12 => {
                             None
                         }
                         (x0, x1) if x0 == 0 && x1 == 14 => {
-                            Some(Op::aarch64_vector_shift_left_sat_simd)
+                            Some(Op::UqshlAsimdshfR)
                         }
                         (x0, x1) if x0 == 0 && x1 == 16 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_logical)
+                            Some(Op::RshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 17 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_logical)
+                            Some(Op::RshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 18 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_simd)
+                            Some(Op::UqrshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 19 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_simd)
+                            Some(Op::UqrshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 0 && x1 == 20 => {
-                            Some(Op::aarch64_vector_shift_left_long)
+                            Some(Op::UshllAsimdshfL)
                         }
                         (x0, x1) if x0 == 0 && x1 == 28 => {
-                            Some(Op::aarch64_vector_shift_conv_int_simd)
+                            Some(Op::UcvtfAsimdshfC)
                         }
                         (x0, x1) if x0 == 0 && x1 == 31 => {
-                            Some(Op::aarch64_vector_shift_conv_float_simd)
+                            Some(Op::FcvtzuAsimdshfC)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 4 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 6 => {
-                            Some(Op::aarch64_vector_shift_right_simd)
+                            Some(Op::UrsraAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 8 => {
-                            Some(Op::aarch64_vector_shift_right_insert_simd)
+                            Some(Op::SriAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 10 => {
-                            Some(Op::aarch64_vector_shift_left_insert_simd)
+                            Some(Op::SliAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 12 => {
-                            Some(Op::aarch64_vector_shift_left_sat_simd)
+                            Some(Op::UqshlAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 14 => {
-                            Some(Op::aarch64_vector_shift_left_sat_simd)
+                            Some(Op::UqshlAsimdshfR)
                         }
                         (x0, x1) if x0 == 1 && x1 == 16 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_nonuniform_simd)
+                            Some(Op::SqrshrunAsimdshfN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 17 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_nonuniform_simd)
+                            Some(Op::SqrshrunAsimdshfN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 18 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_simd)
+                            Some(Op::UqrshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 19 => {
-                            Some(Op::aarch64_vector_shift_right_narrow_uniform_simd)
+                            Some(Op::UqrshrnAsimdshfN)
                         }
                         (x0, x1) if x0 == 1 && x1 == 20 => {
-                            Some(Op::aarch64_vector_shift_left_long)
+                            Some(Op::UshllAsimdshfL)
                         }
                         (x0, x1) if x0 == 1 && x1 == 28 => {
-                            Some(Op::aarch64_vector_shift_conv_int_simd)
+                            Some(Op::UcvtfAsimdshfC)
                         }
                         (x0, x1) if x0 == 1 && x1 == 31 => {
-                            Some(Op::aarch64_vector_shift_conv_float_simd)
+                            Some(Op::FcvtzuAsimdshfC)
                         }
                         _ => None
                     }
@@ -11760,34 +11761,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_long)
+                            Some(Op::UmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_double_simd)
+                            Some(Op::SqdmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_long)
+                            Some(Op::UmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 7 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_double_simd)
+                            Some(Op::SqdmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_int)
+                            Some(Op::MulAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_long)
+                            Some(Op::UmullAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 11 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_double_simd)
+                            Some(Op::SqdmullAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_high_simd)
+                            Some(Op::SqrdmulhAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_high_simd)
+                            Some(Op::SqrdmulhAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 0 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_dotp)
+                            Some(Op::UdotAsimdelemD)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 0 && x2 == 0 => {
                             None
@@ -11796,16 +11797,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp16_simd)
+                            Some(Op::FmlsAsimdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp16_simd)
+                            Some(Op::FmlsAsimdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp16_simd)
+                            Some(Op::FmulxAsimdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mat_mul_int_dotp)
+                            Some(Op::UsdotAsimdelemD)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 1 => {
                             None
@@ -11814,25 +11815,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_bfdot)
+                            Some(Op::BfdotAsimdelemE)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp_simd)
+                            Some(Op::FmlsAsimdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 5 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_fp_simd)
+                            Some(Op::FmlsAsimdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 & 2 == 2 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp_simd)
+                            Some(Op::FmulxAsimdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_lower)
+                            Some(Op::FmlslAsimdelemLh)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_lower)
+                            Some(Op::FmlslAsimdelemLh)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mat_mul_int_dotp)
+                            Some(Op::UsdotAsimdelemD)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 0 => {
                             None
@@ -11841,34 +11842,34 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_bf16_long)
+                            Some(Op::BfmlalAsimdelemF)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_int)
+                            Some(Op::MlsAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 2 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_long)
+                            Some(Op::UmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 4 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_int)
+                            Some(Op::MlsAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 6 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_long)
+                            Some(Op::UmlslAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 10 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_long)
+                            Some(Op::UmullAsimdelemL)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 11 => {
                             None
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 13 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_high_simd)
+                            Some(Op::SqrdmlshAsimdelemR)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 14 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_dotp)
+                            Some(Op::UdotAsimdelemD)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 15 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_high_simd)
+                            Some(Op::SqrdmlshAsimdelemR)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 0 && x2 == 8 => {
                             None
@@ -11889,22 +11890,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp16_simd)
+                            Some(Op::FmulxAsimdelemRhH)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 & 9 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_complex)
+                            Some(Op::FcmlaAsimdelemCS)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 & 2 == 2 && x2 == 9 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_fp_simd)
+                            Some(Op::FmulxAsimdelemRSd)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 & 9 == 1 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_complex)
+                            Some(Op::FcmlaAsimdelemCS)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 8 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_upper)
+                            Some(Op::Fmlsl2AsimdelemLh)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 12 => {
-                            Some(Op::aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_upper)
+                            Some(Op::Fmlsl2AsimdelemLh)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 1 => {
                             None
@@ -11935,16 +11936,16 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match opcode {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3tt1a)
+                            Some(Op::Sm3Tt1AVvv4Crypto3Imm2)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3tt1b)
+                            Some(Op::Sm3Tt1BVvv4Crypto3Imm2)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3tt2a)
+                            Some(Op::Sm3Tt2AVvv4Crypto3Imm2)
                         }
                         x0 if x0 == 3 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3tt2b)
+                            Some(Op::Sm3Tt2BVvvCrypto3Imm2)
                         }
                         _ => None
                     }
@@ -11957,25 +11958,25 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match (O, opcode) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sha512_sha512h)
+                            Some(Op::Sha512HQqvCryptosha5123)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sha512_sha512h2)
+                            Some(Op::Sha512H2QqvCryptosha5123)
                         }
                         (x0, x1) if x0 == 0 && x1 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sha512_sha512su1)
+                            Some(Op::Sha512Su1Vvv2Cryptosha5123)
                         }
                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                            Some(Op::aarch64_vector_crypto_sha3_rax1)
+                            Some(Op::Rax1Vvv2Cryptosha5123)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3partw1)
+                            Some(Op::Sm3Partw1Vvv4Cryptosha5123)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3partw2)
+                            Some(Op::Sm3Partw2Vvv4Cryptosha5123)
                         }
                         (x0, x1) if x0 == 1 && x1 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sm4_sm4enckey)
+                            Some(Op::Sm4EkeyVvv4Cryptosha5123)
                         }
                         (x0, x1) if x0 == 1 && x1 == 3 => {
                             None
@@ -11991,13 +11992,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match Op0 {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sha3_eor3)
+                            Some(Op::Eor3Vvv16Crypto4)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sha3_bcax)
+                            Some(Op::BcaxVvv16Crypto4)
                         }
                         x0 if x0 == 2 => {
-                            Some(Op::aarch64_vector_crypto_sm3_sm3ss1)
+                            Some(Op::Sm3Ss1Vvv4Crypto4)
                         }
                         x0 if x0 == 3 => {
                             None
@@ -12012,7 +12013,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match () {
                         () => {
-                            Some(Op::aarch64_vector_crypto_sha3_xar)
+                            Some(Op::XarVvv2Crypto3Imm6)
                         }
                     }
                 }
@@ -12022,10 +12023,10 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                     let Rd = instr & 9;
                     match opcode {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch64_vector_crypto_sha512_sha512su0)
+                            Some(Op::Sha512Su0Vv2Cryptosha5122)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch64_vector_crypto_sm4_sm4enc)
+                            Some(Op::Sm4EVv4Cryptosha5122)
                         }
                         x0 if x0 & 2 == 2 => {
                             None
@@ -12071,76 +12072,76 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_fix)
+                            Some(Op::Fcvtzu64HFloat2Fix)
                         }
                         _ => None
                     }
@@ -12179,94 +12180,94 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 7 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 & 2 == 2 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 & 2 == 0 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 7 => {
                             None
@@ -12275,187 +12276,187 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 7 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 & 1 == 1 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 7 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 & 2 == 2 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 & 1 == 0 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 1 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 1 && x4 == 7 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 & 2 == 2 && x4 & 6 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 2 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 3 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 4 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 5 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 6 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 7 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 2 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 2 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 0 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 3 && x4 == 1 => {
-                            Some(Op::aarch64_float_convert_int)
+                            Some(Op::Fcvtzu64HFloat2Int)
                         }
                         _ => None
                     }
@@ -12475,64 +12476,64 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 4 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 7 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 9 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 10 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 11 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 12 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 13 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 14 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 15 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 16 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 17 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 18 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 19 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 & 60 == 20 => {
                             None
@@ -12541,64 +12542,64 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 4 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 5 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 6 => {
-                            Some(Op::aarch64_vector_cvt_bf16_scalar)
+                            Some(Op::BfcvtBsFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 7 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 9 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 10 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 11 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 12 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 13 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 14 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 15 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 16 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 17 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 18 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 19 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint_32_64)
+                            Some(Op::Frint64XDFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 & 60 == 20 => {
                             None
@@ -12610,49 +12611,49 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_unary)
+                            Some(Op::FsqrtHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 4 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 5 => {
-                            Some(Op::aarch64_float_convert_fp)
+                            Some(Op::FcvtDhFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 & 62 == 6 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 9 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 10 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 11 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 12 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 13 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 14 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 15 => {
-                            Some(Op::aarch64_float_arithmetic_round_frint)
+                            Some(Op::FrintiHFloatdp1)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 & 48 == 16 => {
                             None
@@ -12694,40 +12695,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 8 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 16 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 24 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 8 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 16 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 24 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 8 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 16 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 24 => {
-                            Some(Op::aarch64_float_compare_uncond)
+                            Some(Op::FcmpeHzFloatcmp)
                         }
                         (x0, _, _, _, _) if x0 == 1 => {
                             None
@@ -12765,13 +12766,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_float_move_fp_imm)
+                            Some(Op::FmovHFloatimm)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_float_move_fp_imm)
+                            Some(Op::FmovHFloatimm)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
-                            Some(Op::aarch64_float_move_fp_imm)
+                            Some(Op::FmovHFloatimm)
                         }
                         (x0, _, _, _) if x0 == 1 => {
                             None
@@ -12796,22 +12797,22 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 => {
-                            Some(Op::aarch64_float_compare_cond)
+                            Some(Op::FccmpeHFloatccmp)
                         }
                         (x0, _, _, _) if x0 == 1 => {
                             None
@@ -12844,85 +12845,85 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_div)
+                            Some(Op::FdivHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 4 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 5 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 6 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 7 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_div)
+                            Some(Op::FdivHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 4 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 5 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 6 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 7 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_div)
+                            Some(Op::FdivHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 2 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 3 => {
-                            Some(Op::aarch64_float_arithmetic_add_sub)
+                            Some(Op::FsubHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 4 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 5 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 6 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 7 => {
-                            Some(Op::aarch64_float_arithmetic_max_min)
+                            Some(Op::FminnmHFloatdp2)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 8 => {
-                            Some(Op::aarch64_float_arithmetic_mul_product)
+                            Some(Op::FnmulHFloatdp2)
                         }
                         (x0, _, _, _) if x0 == 1 => {
                             None
@@ -12946,13 +12947,13 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch64_float_move_fp_select)
+                            Some(Op::FcselHFloatsel)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch64_float_move_fp_select)
+                            Some(Op::FcselHFloatsel)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch64_float_move_fp_select)
+                            Some(Op::FcselHFloatsel)
                         }
                         (x0, _, _) if x0 == 1 => {
                             None
@@ -12978,40 +12979,40 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 0 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, x1, x2, x3, x4) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 1 && x4 == 1 => {
-                            Some(Op::aarch64_float_arithmetic_mul_add_sub)
+                            Some(Op::FnmsubHFloatdp3)
                         }
                         (x0, _, _, _, _) if x0 == 1 => {
                             None
@@ -13027,6 +13028,7 @@ pub fn decode_a64(instr: u32) -> Option<Op> {
 } // end of decoding A64
 #[allow(unused_variables)]
 #[allow(non_snake_case)]
+#[allow(unreachable_patterns)]
 pub fn decode_a32(instr: u32) -> Option<Op> {
     match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 5) & 39, (instr >> 4) & 1, instr & 7) {
         (x0, x1, _, _, _) if x0 != 15 && x1 & 6 == 0 => {
@@ -13045,25 +13047,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match (P, W, o1, op2) {
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRH_r_A1_A)
+                                    Some(Op::StrhRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_r_A1_A)
+                                    Some(Op::LdrdRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
-                                    Some(Op::aarch32_STRD_r_A1_A)
+                                    Some(Op::StrdRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_r_A1_A)
+                                    Some(Op::LdrhRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_r_A1_A)
+                                    Some(Op::LdrsbRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_r_A1_A)
+                                    Some(Op::LdrshRA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRHT_A2_A)
+                                    Some(Op::StrhtA2)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 2 => {
                                     None
@@ -13072,31 +13074,31 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRHT_A2_A)
+                                    Some(Op::LdrhtA2)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSBT_A2_A)
+                                    Some(Op::LdrsbtA2)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSHT_A2_A)
+                                    Some(Op::LdrshtA2)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRH_r_A1_A)
+                                    Some(Op::StrhRA1Pre)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_r_A1_A)
+                                    Some(Op::LdrdRA1Pre)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 3 => {
-                                    Some(Op::aarch32_STRD_r_A1_A)
+                                    Some(Op::StrdRA1Pre)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_r_A1_A)
+                                    Some(Op::LdrhRA1Pre)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_r_A1_A)
+                                    Some(Op::LdrsbRA1Pre)
                                 }
                                 (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_r_A1_A)
+                                    Some(Op::LdrshRA1Pre)
                                 }
                                 _ => None
                             }
@@ -13114,88 +13116,88 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm4L = instr & 7;
                             match ((P << 1) | W, o1, Rn, op2) {
                                 (_, x1, x2, x3) if x1 == 0 && x2 == 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_l_A1_A)
+                                    Some(Op::LdrdLA1)
                                 }
                                 (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_l_A1_A)
+                                    Some(Op::LdrhLA1)
                                 }
                                 (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_l_A1_A)
+                                    Some(Op::LdrsbLA1)
                                 }
                                 (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_l_A1_A)
+                                    Some(Op::LdrshLA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_i_A1_A)
+                                    Some(Op::LdrdIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRH_i_A1_A)
+                                    Some(Op::StrhIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 3 => {
-                                    Some(Op::aarch32_STRD_i_A1_A)
+                                    Some(Op::StrdIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_i_A1_A)
+                                    Some(Op::LdrhIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_i_A1_A)
+                                    Some(Op::LdrsbIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_i_A1_A)
+                                    Some(Op::LdrshIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 != 15 && x3 == 2 => {
                                     None
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRHT_A1_A)
+                                    Some(Op::StrhtA1)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 3 => {
                                     None
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRHT_A1_A)
+                                    Some(Op::LdrhtA1)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSBT_A1_A)
+                                    Some(Op::LdrsbtA1)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSHT_A1_A)
+                                    Some(Op::LdrshtA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_i_A1_A)
+                                    Some(Op::LdrdIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 2 && x1 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRH_i_A1_A)
+                                    Some(Op::StrhIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 2 && x1 == 0 && x3 == 3 => {
-                                    Some(Op::aarch32_STRD_i_A1_A)
+                                    Some(Op::StrdIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_i_A1_A)
+                                    Some(Op::LdrhIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_i_A1_A)
+                                    Some(Op::LdrsbIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_i_A1_A)
+                                    Some(Op::LdrshIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRD_i_A1_A)
+                                    Some(Op::LdrdIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 3 && x1 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_STRH_i_A1_A)
+                                    Some(Op::StrhIA1Pre)
                                 }
                                 (x0, x1, _, x3) if x0 == 3 && x1 == 0 && x3 == 3 => {
-                                    Some(Op::aarch32_STRD_i_A1_A)
+                                    Some(Op::StrdIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 1 => {
-                                    Some(Op::aarch32_LDRH_i_A1_A)
+                                    Some(Op::LdrhIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 2 => {
-                                    Some(Op::aarch32_LDRSB_i_A1_A)
+                                    Some(Op::LdrsbIA1Pre)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 3 => {
-                                    Some(Op::aarch32_LDRSH_i_A1_A)
+                                    Some(Op::LdrshIA1Pre)
                                 }
                                 _ => None
                             }
@@ -13213,34 +13215,34 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match (opc, S) {
                         (x0, _) if x0 == 0 => {
-                            Some(Op::aarch32_MUL_A1_A)
+                            Some(Op::MulsA1)
                         }
                         (x0, _) if x0 == 1 => {
-                            Some(Op::aarch32_MLA_A1_A)
+                            Some(Op::MlasA1)
                         }
                         (x0, x1) if x0 == 2 && x1 == 0 => {
-                            Some(Op::aarch32_UMAAL_A1_A)
+                            Some(Op::UmaalA1)
                         }
                         (x0, x1) if x0 == 2 && x1 == 1 => {
                             None
                         }
                         (x0, x1) if x0 == 3 && x1 == 0 => {
-                            Some(Op::aarch32_MLS_A1_A)
+                            Some(Op::MlsA1)
                         }
                         (x0, x1) if x0 == 3 && x1 == 1 => {
                             None
                         }
                         (x0, _) if x0 == 4 => {
-                            Some(Op::aarch32_UMULL_A1_A)
+                            Some(Op::UmullsA1)
                         }
                         (x0, _) if x0 == 5 => {
-                            Some(Op::aarch32_UMLAL_A1_A)
+                            Some(Op::UmlalsA1)
                         }
                         (x0, _) if x0 == 6 => {
-                            Some(Op::aarch32_SMULL_A1_A)
+                            Some(Op::SmullsA1)
                         }
                         (x0, _) if x0 == 7 => {
-                            Some(Op::aarch32_SMLAL_A1_A)
+                            Some(Op::SmlalsA1)
                         }
                         _ => None
                     }
@@ -13261,94 +13263,94 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let xRt = instr & 7;
                             match (size, L, ex, ord) {
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_STL_A1_A)
+                                    Some(Op::StlA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_STLEX_A1_A)
+                                    Some(Op::StlexA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_STREX_A1_A)
+                                    Some(Op::StrexA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_LDA_A1_A)
+                                    Some(Op::LdaA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAEX_A1_A)
+                                    Some(Op::LdaexA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDREX_A1_A)
+                                    Some(Op::LdrexA1)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_STLEXD_A1_A)
+                                    Some(Op::StlexdA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_STREXD_A1_A)
+                                    Some(Op::StrexdA1)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAEXD_A1_A)
+                                    Some(Op::LdaexdA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDREXD_A1_A)
+                                    Some(Op::LdrexdA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_STLB_A1_A)
+                                    Some(Op::StlbA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_STLEXB_A1_A)
+                                    Some(Op::StlexbA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_STREXB_A1_A)
+                                    Some(Op::StrexbA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAB_A1_A)
+                                    Some(Op::LdabA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAEXB_A1_A)
+                                    Some(Op::LdaexbA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDREXB_A1_A)
+                                    Some(Op::LdrexbA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_STLH_A1_A)
+                                    Some(Op::StlhA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_STLEXH_A1_A)
+                                    Some(Op::StlexhA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_STREXH_A1_A)
+                                    Some(Op::StrexhA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAH_A1_A)
+                                    Some(Op::LdahA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_LDAEXH_A1_A)
+                                    Some(Op::LdaexhA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_LDREXH_A1_A)
+                                    Some(Op::LdrexhA1)
                                 }
                                 _ => None
                             }
@@ -13375,7 +13377,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_BX_A1_A)
+                                    Some(Op::BxA1)
                                 }
                             }
                         }
@@ -13384,7 +13386,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_BXJ_A1_A)
+                                    Some(Op::BxjA1)
                                 }
                             }
                         }
@@ -13393,7 +13395,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_BLX_r_A1_A)
+                                    Some(Op::BlxRA1)
                                 }
                             }
                         }
@@ -13418,7 +13420,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_CLZ_A1_A)
+                                    Some(Op::ClzA1)
                                 }
                             }
                         }
@@ -13432,7 +13434,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let cond = (instr >> 28) & 7;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_ERET_A1_A)
+                                    Some(Op::EretA1)
                                 }
                             }
                         }
@@ -13443,16 +13445,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm4 = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_HLT_A1_A)
+                                    Some(Op::HltA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_BKPT_A1_A)
+                                    Some(Op::BkptA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_HVC_A1_A)
+                                    Some(Op::HvcA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_SMC_A1_AS)
+                                    Some(Op::SmcA1As)
                                 }
                                 _ => None
                             }
@@ -13467,16 +13469,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rn = instr & 7;
                             match (opc, B) {
                                 (x0, x1) if x0 & 1 == 0 && x1 == 0 => {
-                                    Some(Op::aarch32_MRS_A1_AS)
+                                    Some(Op::MrsA1As)
                                 }
                                 (x0, x1) if x0 & 1 == 0 && x1 == 1 => {
-                                    Some(Op::aarch32_MRS_br_A1_AS)
+                                    Some(Op::MrsBrA1As)
                                 }
                                 (x0, x1) if x0 & 1 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_MSR_r_A1_AS)
+                                    Some(Op::MsrRA1As)
                                 }
                                 (x0, x1) if x0 & 1 == 1 && x1 == 1 => {
-                                    Some(Op::aarch32_MSR_br_A1_AS)
+                                    Some(Op::MsrBrA1As)
                                 }
                                 _ => None
                             }
@@ -13490,22 +13492,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match (sz, C) {
                                 (x0, x1) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::aarch32_CRC32_A1_A)
+                                    Some(Op::Crc32CwA1)
                                 }
                                 (x0, _) if x0 == 3 => {
                                     None
@@ -13521,16 +13523,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_QADD_A1_A)
+                                    Some(Op::QaddA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_QSUB_A1_A)
+                                    Some(Op::QsubA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_QDADD_A1_A)
+                                    Some(Op::QdaddA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_QDSUB_A1_A)
+                                    Some(Op::QdsubA1)
                                 }
                                 _ => None
                             }
@@ -13549,25 +13551,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match (opc, M, N) {
                         (x0, _, _) if x0 == 0 => {
-                            Some(Op::aarch32_SMLABB_A1_A)
+                            Some(Op::SmlattA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_SMLAWB_A1_A)
+                            Some(Op::SmlawtA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_SMULWB_A1_A)
+                            Some(Op::SmulwtA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_SMLAWB_A1_A)
+                            Some(Op::SmlawtA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                            Some(Op::aarch32_SMULWB_A1_A)
+                            Some(Op::SmulwtA1)
                         }
                         (x0, _, _) if x0 == 2 => {
-                            Some(Op::aarch32_SMLALBB_A1_A)
+                            Some(Op::SmlalttA1)
                         }
                         (x0, _, _) if x0 == 3 => {
-                            Some(Op::aarch32_SMULBB_A1_A)
+                            Some(Op::SmulttA1)
                         }
                         _ => None
                     }
@@ -13585,46 +13587,46 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match (opc, S, Rn) {
                                 (x0, _, _) if x0 == 0 => {
-                                    Some(Op::aarch32_AND_r_A1_A)
+                                    Some(Op::AndsRA1Rrx)
                                 }
                                 (x0, _, _) if x0 == 1 => {
-                                    Some(Op::aarch32_EOR_r_A1_A)
+                                    Some(Op::EorsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 != 13 => {
-                                    Some(Op::aarch32_SUB_r_A1_A)
+                                    Some(Op::SubsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 13 => {
-                                    Some(Op::aarch32_SUB_SP_r_A1_A)
+                                    Some(Op::SubsSpRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 != 13 => {
-                                    Some(Op::aarch32_SUB_r_A1_A)
+                                    Some(Op::SubsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 13 => {
-                                    Some(Op::aarch32_SUB_SP_r_A1_A)
+                                    Some(Op::SubsSpRA1Rrx)
                                 }
                                 (x0, _, _) if x0 == 3 => {
-                                    Some(Op::aarch32_RSB_r_A1_A)
+                                    Some(Op::RsbsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 != 13 => {
-                                    Some(Op::aarch32_ADD_r_A1_A)
+                                    Some(Op::AddsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 13 => {
-                                    Some(Op::aarch32_ADD_SP_r_A1_A)
+                                    Some(Op::AddsSpRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 != 13 => {
-                                    Some(Op::aarch32_ADD_r_A1_A)
+                                    Some(Op::AddsRA1Rrx)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 == 13 => {
-                                    Some(Op::aarch32_ADD_SP_r_A1_A)
+                                    Some(Op::AddsSpRA1Rrx)
                                 }
                                 (x0, _, _) if x0 == 5 => {
-                                    Some(Op::aarch32_ADC_r_A1_A)
+                                    Some(Op::AdcsRA1Rrx)
                                 }
                                 (x0, _, _) if x0 == 6 => {
-                                    Some(Op::aarch32_SBC_r_A1_A)
+                                    Some(Op::SbcsRA1Rrx)
                                 }
                                 (x0, _, _) if x0 == 7 => {
-                                    Some(Op::aarch32_RSC_r_A1_A)
+                                    Some(Op::RscsRA1Rrx)
                                 }
                                 _ => None
                             }
@@ -13638,16 +13640,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_TST_r_A1_A)
+                                    Some(Op::TstRA1Rrx)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_TEQ_r_A1_A)
+                                    Some(Op::TeqRA1Rrx)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_CMP_r_A1_A)
+                                    Some(Op::CmpRA1Rrx)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_CMN_r_A1_A)
+                                    Some(Op::CmnRA1Rrx)
                                 }
                                 _ => None
                             }
@@ -13663,16 +13665,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_ORR_r_A1_A)
+                                    Some(Op::OrrsRA1Rrx)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_MOV_r_A1_A)
+                                    Some(Op::MovsRA1Rrx)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_BIC_r_A1_A)
+                                    Some(Op::BicsRA1Rrx)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_MVN_r_A1_A)
+                                    Some(Op::MvnsRA1Rrx)
                                 }
                                 _ => None
                             }
@@ -13693,28 +13695,28 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_AND_rr_A1_A)
+                                    Some(Op::AndsRrA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_EOR_rr_A1_A)
+                                    Some(Op::EorsRrA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_SUB_rr_A1_A)
+                                    Some(Op::SubsRrA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_RSB_rr_A1_A)
+                                    Some(Op::RsbsRrA1)
                                 }
                                 x0 if x0 == 4 => {
-                                    Some(Op::aarch32_ADD_rr_A1_A)
+                                    Some(Op::AddsRrA1)
                                 }
                                 x0 if x0 == 5 => {
-                                    Some(Op::aarch32_ADC_rr_A1_A)
+                                    Some(Op::AdcsRrA1)
                                 }
                                 x0 if x0 == 6 => {
-                                    Some(Op::aarch32_SBC_rr_A1_A)
+                                    Some(Op::SbcsRrA1)
                                 }
                                 x0 if x0 == 7 => {
-                                    Some(Op::aarch32_RSC_rr_A1_A)
+                                    Some(Op::RscsRrA1)
                                 }
                                 _ => None
                             }
@@ -13728,16 +13730,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_TST_rr_A1_A)
+                                    Some(Op::TstRrA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_TEQ_rr_A1_A)
+                                    Some(Op::TeqRrA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_CMP_rr_A1_A)
+                                    Some(Op::CmpRrA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_CMN_rr_A1_A)
+                                    Some(Op::CmnRrA1)
                                 }
                                 _ => None
                             }
@@ -13753,16 +13755,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_ORR_rr_A1_A)
+                                    Some(Op::OrrsRrA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_MOV_rr_A1_A)
+                                    Some(Op::MovsRrA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_BIC_rr_A1_A)
+                                    Some(Op::BicsRrA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_MVN_rr_A1_A)
+                                    Some(Op::MvnsRrA1)
                                 }
                                 _ => None
                             }
@@ -13781,52 +13783,52 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm12 = instr & 23;
                             match (opc, S, Rn) {
                                 (x0, _, _) if x0 == 0 => {
-                                    Some(Op::aarch32_AND_i_A1_A)
+                                    Some(Op::AndsIA1)
                                 }
                                 (x0, _, _) if x0 == 1 => {
-                                    Some(Op::aarch32_EOR_i_A1_A)
+                                    Some(Op::EorsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 & 13 != 13 => {
-                                    Some(Op::aarch32_SUB_i_A1_A)
+                                    Some(Op::SubsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 13 => {
-                                    Some(Op::aarch32_SUB_SP_i_A1_A)
+                                    Some(Op::SubsSpIA1)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 15 => {
-                                    Some(Op::aarch32_ADR_A1_A)
+                                    Some(Op::AdrA1A)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 != 13 => {
-                                    Some(Op::aarch32_SUB_i_A1_A)
+                                    Some(Op::SubsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 13 => {
-                                    Some(Op::aarch32_SUB_SP_i_A1_A)
+                                    Some(Op::SubsSpIA1)
                                 }
                                 (x0, _, _) if x0 == 3 => {
-                                    Some(Op::aarch32_RSB_i_A1_A)
+                                    Some(Op::RsbsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 & 13 != 13 => {
-                                    Some(Op::aarch32_ADD_i_A1_A)
+                                    Some(Op::AddsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 13 => {
-                                    Some(Op::aarch32_ADD_SP_i_A1_A)
+                                    Some(Op::AddsSpIA1)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 15 => {
-                                    Some(Op::aarch32_ADR_A1_A)
+                                    Some(Op::AdrA1A)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 != 13 => {
-                                    Some(Op::aarch32_ADD_i_A1_A)
+                                    Some(Op::AddsIA1)
                                 }
                                 (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 == 13 => {
-                                    Some(Op::aarch32_ADD_SP_i_A1_A)
+                                    Some(Op::AddsSpIA1)
                                 }
                                 (x0, _, _) if x0 == 5 => {
-                                    Some(Op::aarch32_ADC_i_A1_A)
+                                    Some(Op::AdcsIA1)
                                 }
                                 (x0, _, _) if x0 == 6 => {
-                                    Some(Op::aarch32_SBC_i_A1_A)
+                                    Some(Op::SbcsIA1)
                                 }
                                 (x0, _, _) if x0 == 7 => {
-                                    Some(Op::aarch32_RSC_i_A1_A)
+                                    Some(Op::RscsIA1)
                                 }
                                 _ => None
                             }
@@ -13839,10 +13841,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm12 = instr & 23;
                             match H {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_MOV_i_A2_A)
+                                    Some(Op::MovIA2)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_MOVT_A1_A)
+                                    Some(Op::MovtA1)
                                 }
                                 _ => None
                             }
@@ -13854,25 +13856,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm12 = instr & 23;
                             match ((R << 4) | imm4, imm12) {
                                 (x0, _) if x0 != 0 => {
-                                    Some(Op::aarch32_MSR_i_A1_AS)
+                                    Some(Op::MsrIA1As)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 0 => {
-                                    Some(Op::aarch32_NOP_A1_A)
+                                    Some(Op::NopA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 1 => {
-                                    Some(Op::aarch32_YIELD_A1_A)
+                                    Some(Op::YieldA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 2 => {
-                                    Some(Op::aarch32_WFE_A1_A)
+                                    Some(Op::WfeA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 3 => {
-                                    Some(Op::aarch32_WFI_A1_A)
+                                    Some(Op::WfiA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 4 => {
-                                    Some(Op::aarch32_SEV_A1_A)
+                                    Some(Op::SevA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 5 => {
-                                    Some(Op::aarch32_SEVL_A1_A)
+                                    Some(Op::SevlA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 254 == 6 => {
                                     Some(Op::Nop)
@@ -13881,19 +13883,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 16 => {
-                                    Some(Op::aarch32_ESB_A1_A)
+                                    Some(Op::EsbA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 17 => {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 18 => {
-                                    Some(Op::aarch32_TSB_A1_A)
+                                    Some(Op::TsbA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 19 => {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 20 => {
-                                    Some(Op::aarch32_CSDB_A1_A)
+                                    Some(Op::CsdbA1)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 255 == 21 => {
                                     Some(Op::Nop)
@@ -13920,7 +13922,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 240 == 240 => {
-                                    Some(Op::aarch32_DBG_A1_A)
+                                    Some(Op::DbgA1)
                                 }
                                 _ => None
                             }
@@ -13932,16 +13934,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm12 = instr & 23;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_TST_i_A1_A)
+                                    Some(Op::TstIA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_TEQ_i_A1_A)
+                                    Some(Op::TeqIA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_CMP_i_A1_A)
+                                    Some(Op::CmpIA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_CMN_i_A1_A)
+                                    Some(Op::CmnIA1)
                                 }
                                 _ => None
                             }
@@ -13955,16 +13957,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm12 = instr & 23;
                             match opc {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_ORR_i_A1_A)
+                                    Some(Op::OrrsIA1)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_MOV_i_A1_A)
+                                    Some(Op::MovsIA1)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_BIC_i_A1_A)
+                                    Some(Op::BicsIA1)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_MVN_i_A1_A)
+                                    Some(Op::MvnsIA1)
                                 }
                                 _ => None
                             }
@@ -13987,58 +13989,58 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
             let imm12 = instr & 23;
             match ((P << 1) | W, o2, o1, Rn) {
                 (x0, x1, x2, x3) if x0 != 1 && x1 == 0 && x2 == 1 && x3 == 15 => {
-                    Some(Op::aarch32_LDR_l_A1_A)
+                    Some(Op::LdrLA1)
                 }
                 (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 1 && x3 == 15 => {
-                    Some(Op::aarch32_LDRB_l_A1_A)
+                    Some(Op::LdrbLA1)
                 }
                 (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                    Some(Op::aarch32_STR_i_A1_A)
+                    Some(Op::StrIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDR_i_A1_A)
+                    Some(Op::LdrIA1Pre)
                 }
                 (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                    Some(Op::aarch32_STRB_i_A1_A)
+                    Some(Op::StrbIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDRB_i_A1_A)
+                    Some(Op::LdrbIA1Pre)
                 }
                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                    Some(Op::aarch32_STRT_A1_A)
+                    Some(Op::StrtA1)
                 }
                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                    Some(Op::aarch32_LDRT_A1_A)
+                    Some(Op::LdrtA1)
                 }
                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                    Some(Op::aarch32_STRBT_A1_A)
+                    Some(Op::StrbtA1)
                 }
                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                    Some(Op::aarch32_LDRBT_A1_A)
+                    Some(Op::LdrbtA1)
                 }
                 (x0, x1, x2, _) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                    Some(Op::aarch32_STR_i_A1_A)
+                    Some(Op::StrIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDR_i_A1_A)
+                    Some(Op::LdrIA1Pre)
                 }
                 (x0, x1, x2, _) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                    Some(Op::aarch32_STRB_i_A1_A)
+                    Some(Op::StrbIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDRB_i_A1_A)
+                    Some(Op::LdrbIA1Pre)
                 }
                 (x0, x1, x2, _) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                    Some(Op::aarch32_STR_i_A1_A)
+                    Some(Op::StrIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDR_i_A1_A)
+                    Some(Op::LdrIA1Pre)
                 }
                 (x0, x1, x2, _) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                    Some(Op::aarch32_STRB_i_A1_A)
+                    Some(Op::StrbIA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 != 15 => {
-                    Some(Op::aarch32_LDRB_i_A1_A)
+                    Some(Op::LdrbIA1Pre)
                 }
                 _ => None
             }
@@ -14057,40 +14059,40 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
             let Rm = instr & 7;
             match (P, o2, W, o1) {
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                    Some(Op::aarch32_STR_r_A1_A)
+                    Some(Op::StrRA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                    Some(Op::aarch32_LDR_r_A1_A)
+                    Some(Op::LdrRA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                    Some(Op::aarch32_STRT_A2_A)
+                    Some(Op::StrtA2)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
-                    Some(Op::aarch32_LDRT_A2_A)
+                    Some(Op::LdrtA2)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                    Some(Op::aarch32_STRB_r_A1_A)
+                    Some(Op::StrbRA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                    Some(Op::aarch32_LDRB_r_A1_A)
+                    Some(Op::LdrbRA1Pre)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                    Some(Op::aarch32_STRBT_A2_A)
+                    Some(Op::StrbtA2)
                 }
                 (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
-                    Some(Op::aarch32_LDRBT_A2_A)
+                    Some(Op::LdrbtA2)
                 }
                 (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 0 => {
-                    Some(Op::aarch32_STR_r_A1_A)
+                    Some(Op::StrRA1Pre)
                 }
                 (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 1 => {
-                    Some(Op::aarch32_LDR_r_A1_A)
+                    Some(Op::LdrRA1Pre)
                 }
                 (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 0 => {
-                    Some(Op::aarch32_STRB_r_A1_A)
+                    Some(Op::StrbRA1Pre)
                 }
                 (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 1 => {
-                    Some(Op::aarch32_LDRB_r_A1_A)
+                    Some(Op::LdrbRA1Pre)
                 }
                 _ => None
             }
@@ -14110,19 +14112,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_SADD16_A1_A)
+                            Some(Op::Sadd16A1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_SASX_A1_A)
+                            Some(Op::SasxA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_SSAX_A1_A)
+                            Some(Op::SsaxA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_SSUB16_A1_A)
+                            Some(Op::Ssub16A1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_SADD8_A1_A)
+                            Some(Op::Sadd8A1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
                             None
@@ -14131,22 +14133,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_SSUB8_A1_A)
+                            Some(Op::Ssub8A1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_QADD16_A1_A)
+                            Some(Op::Qadd16A1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_QASX_A1_A)
+                            Some(Op::QasxA1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_QSAX_A1_A)
+                            Some(Op::QsaxA1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_QSUB16_A1_A)
+                            Some(Op::Qsub16A1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_QADD8_A1_A)
+                            Some(Op::Qadd8A1)
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
                             None
@@ -14155,22 +14157,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_QSUB8_A1_A)
+                            Some(Op::Qsub8A1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_SHADD16_A1_A)
+                            Some(Op::Shadd16A1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_SHASX_A1_A)
+                            Some(Op::ShasxA1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_SHSAX_A1_A)
+                            Some(Op::ShsaxA1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_SHSUB16_A1_A)
+                            Some(Op::Shsub16A1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_SHADD8_A1_A)
+                            Some(Op::Shadd8A1)
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
                             None
@@ -14179,25 +14181,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_SHSUB8_A1_A)
+                            Some(Op::Shsub8A1)
                         }
                         (x0, _, _) if x0 == 4 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_UADD16_A1_A)
+                            Some(Op::Uadd16A1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_UASX_A1_A)
+                            Some(Op::UasxA1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_USAX_A1_A)
+                            Some(Op::UsaxA1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_USUB16_A1_A)
+                            Some(Op::Usub16A1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_UADD8_A1_A)
+                            Some(Op::Uadd8A1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 1 => {
                             None
@@ -14206,22 +14208,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_USUB8_A1_A)
+                            Some(Op::Usub8A1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_UQADD16_A1_A)
+                            Some(Op::Uqadd16A1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_UQASX_A1_A)
+                            Some(Op::UqasxA1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_UQSAX_A1_A)
+                            Some(Op::UqsaxA1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_UQSUB16_A1_A)
+                            Some(Op::Uqsub16A1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_UQADD8_A1_A)
+                            Some(Op::Uqadd8A1)
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 1 => {
                             None
@@ -14230,22 +14232,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_UQSUB8_A1_A)
+                            Some(Op::Uqsub8A1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 0 => {
-                            Some(Op::aarch32_UHADD16_A1_A)
+                            Some(Op::Uhadd16A1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 1 => {
-                            Some(Op::aarch32_UHASX_A1_A)
+                            Some(Op::UhasxA1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 2 => {
-                            Some(Op::aarch32_UHSAX_A1_A)
+                            Some(Op::UhsaxA1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 3 => {
-                            Some(Op::aarch32_UHSUB16_A1_A)
+                            Some(Op::Uhsub16A1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_UHADD8_A1_A)
+                            Some(Op::Uhadd8A1)
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 1 => {
                             None
@@ -14254,7 +14256,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 3 => {
-                            Some(Op::aarch32_UHSUB8_A1_A)
+                            Some(Op::Uhsub8A1)
                         }
                         _ => None
                     }
@@ -14266,7 +14268,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rm = instr & 7;
                     match () {
                         () => {
-                            Some(Op::aarch32_SEL_A1_A)
+                            Some(Op::SelA1)
                         }
                     }
                 }
@@ -14282,7 +14284,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rm = instr & 7;
                     match () {
                         () => {
-                            Some(Op::aarch32_PKH_A1_A)
+                            Some(Op::PkhtbA1)
                         }
                     }
                 }
@@ -14306,10 +14308,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match U {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch32_SSAT16_A1_A)
+                            Some(Op::Ssat16A1)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch32_USAT16_A1_A)
+                            Some(Op::Usat16A1)
                         }
                         _ => None
                     }
@@ -14325,16 +14327,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rm = instr & 7;
                     match (o1, o2) {
                         (x0, x1) if x0 == 0 && x1 == 0 => {
-                            Some(Op::aarch32_REV_A1_A)
+                            Some(Op::RevA1)
                         }
                         (x0, x1) if x0 == 0 && x1 == 1 => {
-                            Some(Op::aarch32_REV16_A1_A)
+                            Some(Op::Rev16A1)
                         }
                         (x0, x1) if x0 == 1 && x1 == 0 => {
-                            Some(Op::aarch32_RBIT_A1_A)
+                            Some(Op::RbitA1)
                         }
                         (x0, x1) if x0 == 1 && x1 == 1 => {
-                            Some(Op::aarch32_REVSH_A1_A)
+                            Some(Op::RevshA1)
                         }
                         _ => None
                     }
@@ -14349,10 +14351,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match U {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch32_SSAT_A1_A)
+                            Some(Op::SsatA1Asr)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch32_USAT_A1_A)
+                            Some(Op::UsatA1Asr)
                         }
                         _ => None
                     }
@@ -14370,40 +14372,40 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rm = instr & 7;
                     match (U, op, Rn) {
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 != 15 => {
-                            Some(Op::aarch32_SXTAB16_A1_A)
+                            Some(Op::Sxtab16A1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 15 => {
-                            Some(Op::aarch32_SXTB16_A1_A)
+                            Some(Op::Sxtb16A1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 != 15 => {
-                            Some(Op::aarch32_SXTAB_A1_A)
+                            Some(Op::SxtabA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 15 => {
-                            Some(Op::aarch32_SXTB_A1_A)
+                            Some(Op::SxtbA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 != 15 => {
-                            Some(Op::aarch32_SXTAH_A1_A)
+                            Some(Op::SxtahA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 15 => {
-                            Some(Op::aarch32_SXTH_A1_A)
+                            Some(Op::SxthA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 != 15 => {
-                            Some(Op::aarch32_UXTAB16_A1_A)
+                            Some(Op::Uxtab16A1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 15 => {
-                            Some(Op::aarch32_UXTB16_A1_A)
+                            Some(Op::Uxtb16A1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 != 15 => {
-                            Some(Op::aarch32_UXTAB_A1_A)
+                            Some(Op::UxtabA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 15 => {
-                            Some(Op::aarch32_UXTB_A1_A)
+                            Some(Op::UxtbA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 != 15 => {
-                            Some(Op::aarch32_UXTAH_A1_A)
+                            Some(Op::UxtahA1)
                         }
                         (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 15 => {
-                            Some(Op::aarch32_UXTH_A1_A)
+                            Some(Op::UxthA1)
                         }
                         _ => None
                     }
@@ -14418,34 +14420,34 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match (op1, Ra, op2) {
                         (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 0 => {
-                            Some(Op::aarch32_SMLAD_A1_A)
+                            Some(Op::SmladxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 1 => {
-                            Some(Op::aarch32_SMLAD_A1_A)
+                            Some(Op::SmladxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 2 => {
-                            Some(Op::aarch32_SMLSD_A1_A)
+                            Some(Op::SmlsdxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 3 => {
-                            Some(Op::aarch32_SMLSD_A1_A)
+                            Some(Op::SmlsdxA1)
                         }
                         (x0, _, x2) if x0 == 0 && x2 & 4 == 4 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 0 => {
-                            Some(Op::aarch32_SMUAD_A1_A)
+                            Some(Op::SmuadxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 1 => {
-                            Some(Op::aarch32_SMUAD_A1_A)
+                            Some(Op::SmuadxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 2 => {
-                            Some(Op::aarch32_SMUSD_A1_A)
+                            Some(Op::SmusdxA1)
                         }
                         (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 3 => {
-                            Some(Op::aarch32_SMUSD_A1_A)
+                            Some(Op::SmusdxA1)
                         }
                         (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                            Some(Op::aarch32_SDIV_A1_A)
+                            Some(Op::SdivA1)
                         }
                         (x0, _, x2) if x0 == 1 && x2 != 0 => {
                             None
@@ -14454,31 +14456,31 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 3 && x2 == 0 => {
-                            Some(Op::aarch32_UDIV_A1_A)
+                            Some(Op::UdivA1)
                         }
                         (x0, _, x2) if x0 == 3 && x2 != 0 => {
                             None
                         }
                         (x0, _, x2) if x0 == 4 && x2 == 0 => {
-                            Some(Op::aarch32_SMLALD_A1_A)
+                            Some(Op::SmlaldxA1)
                         }
                         (x0, _, x2) if x0 == 4 && x2 == 1 => {
-                            Some(Op::aarch32_SMLALD_A1_A)
+                            Some(Op::SmlaldxA1)
                         }
                         (x0, _, x2) if x0 == 4 && x2 == 2 => {
-                            Some(Op::aarch32_SMLSLD_A1_A)
+                            Some(Op::SmlsldxA1)
                         }
                         (x0, _, x2) if x0 == 4 && x2 == 3 => {
-                            Some(Op::aarch32_SMLSLD_A1_A)
+                            Some(Op::SmlsldxA1)
                         }
                         (x0, _, x2) if x0 == 4 && x2 & 4 == 4 => {
                             None
                         }
                         (x0, x1, x2) if x0 == 5 && x1 != 15 && x2 == 0 => {
-                            Some(Op::aarch32_SMMLA_A1_A)
+                            Some(Op::SmmlarA1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 != 15 && x2 == 1 => {
-                            Some(Op::aarch32_SMMLA_A1_A)
+                            Some(Op::SmmlarA1)
                         }
                         (x0, _, x2) if x0 == 5 && x2 & 6 == 2 => {
                             None
@@ -14487,16 +14489,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2) if x0 == 5 && x2 == 6 => {
-                            Some(Op::aarch32_SMMLS_A1_A)
+                            Some(Op::SmmlsrA1)
                         }
                         (x0, _, x2) if x0 == 5 && x2 == 7 => {
-                            Some(Op::aarch32_SMMLS_A1_A)
+                            Some(Op::SmmlsrA1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 15 && x2 == 0 => {
-                            Some(Op::aarch32_SMMUL_A1_A)
+                            Some(Op::SmmulrA1)
                         }
                         (x0, x1, x2) if x0 == 5 && x1 == 15 && x2 == 1 => {
-                            Some(Op::aarch32_SMMUL_A1_A)
+                            Some(Op::SmmulrA1)
                         }
                         (x0, _, _) if x0 & 6 == 6 => {
                             None
@@ -14512,10 +14514,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match Ra {
                         x0 if x0 != 15 => {
-                            Some(Op::aarch32_USADA8_A1_A)
+                            Some(Op::Usada8A1)
                         }
                         x0 if x0 == 15 => {
-                            Some(Op::aarch32_USAD8_A1_A)
+                            Some(Op::Usad8A1)
                         }
                         _ => None
                     }
@@ -14543,10 +14545,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match Rn {
                         x0 if x0 != 15 => {
-                            Some(Op::aarch32_BFI_A1_A)
+                            Some(Op::BfiA1)
                         }
                         x0 if x0 == 15 => {
-                            Some(Op::aarch32_BFC_A1_A)
+                            Some(Op::BfcA1)
                         }
                         _ => None
                     }
@@ -14569,7 +14571,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         x0 if x0 == 14 => {
-                            Some(Op::aarch32_UDF_A1_A)
+                            Some(Op::UdfA1)
                         }
                         _ => None
                     }
@@ -14589,10 +14591,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Rn = instr & 7;
                     match U {
                         x0 if x0 == 0 => {
-                            Some(Op::aarch32_SBFX_A1_A)
+                            Some(Op::SbfxA1)
                         }
                         x0 if x0 == 1 => {
-                            Some(Op::aarch32_UBFX_A1_A)
+                            Some(Op::UbfxA1)
                         }
                         _ => None
                     }
@@ -14622,31 +14624,31 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_RFE_A1_AS)
+                            Some(Op::RfeibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch32_SRS_A1_AS)
+                            Some(Op::SrsibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_RFE_A1_AS)
+                            Some(Op::RfeibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch32_SRS_A1_AS)
+                            Some(Op::SrsibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_RFE_A1_AS)
+                            Some(Op::RfeibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch32_SRS_A1_AS)
+                            Some(Op::SrsibA1As)
                         }
                         (_, _, x2, x3) if x2 == 1 && x3 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_RFE_A1_AS)
+                            Some(Op::RfeibA1As)
                         }
                         (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch32_SRS_A1_AS)
+                            Some(Op::SrsibA1As)
                         }
                         _ => None
                     }
@@ -14662,37 +14664,37 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let register_list = instr & 31;
                     match (P, U, op, L, register_list) {
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch32_STMDA_A1_A)
+                            Some(Op::StmdaA1)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_LDMDA_A1_A)
+                            Some(Op::LdmdaA1)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch32_STM_A1_A)
+                            Some(Op::StmA1)
                         }
                         (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_LDM_A1_A)
+                            Some(Op::LdmA1)
                         }
                         (_, _, x2, x3, _) if x2 == 1 && x3 == 0 => {
-                            Some(Op::aarch32_STM_u_A1_AS)
+                            Some(Op::StmUA1As)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch32_STMDB_A1_A)
+                            Some(Op::StmdbA1)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_LDMDB_A1_A)
+                            Some(Op::LdmdbA1)
                         }
                         (_, _, x2, x3, x4) if x2 == 1 && x3 == 1 && x4 & 32768 == 0 => {
-                            Some(Op::aarch32_LDM_u_A1_AS)
+                            Some(Op::LdmUA1As)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
-                            Some(Op::aarch32_STMIB_A1_A)
+                            Some(Op::StmibA1)
                         }
                         (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
-                            Some(Op::aarch32_LDMIB_A1_A)
+                            Some(Op::LdmibA1)
                         }
                         (_, _, x2, x3, x4) if x2 == 1 && x3 == 1 && x4 & 32768 == 32768 => {
-                            Some(Op::aarch32_LDM_e_A1_AS)
+                            Some(Op::LdmEA1As)
                         }
                         _ => None
                     }
@@ -14703,13 +14705,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let imm24 = instr & 47;
                     match (cond, H) {
                         (x0, x1) if x0 != 15 && x1 == 0 => {
-                            Some(Op::aarch32_B_A1_A)
+                            Some(Op::BA1)
                         }
                         (x0, x1) if x0 != 15 && x1 == 1 => {
-                            Some(Op::aarch32_BL_i_A1_A)
+                            Some(Op::BlIA1A)
                         }
                         (x0, _) if x0 == 15 => {
-                            Some(Op::aarch32_BL_i_A1_A)
+                            Some(Op::BlIA1A)
                         }
                         _ => None
                     }
@@ -14732,10 +14734,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let CRm = instr & 7;
                             match (cond, D, L) {
                                 (x0, x1, x2) if x0 != 15 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::aarch32_MCRR_T1A1_A)
+                                    Some(Op::McrrA1)
                                 }
                                 (x0, x1, x2) if x0 != 15 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::aarch32_MRRC_T1A1_A)
+                                    Some(Op::MrrcA1)
                                 }
                                 (_, x1, _) if x1 == 0 => {
                                     None
@@ -14762,7 +14764,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 != 0 && x2 == 0 && x3 == 1 && x4 == 15 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_LDC_l_T1A1_A)
+                                    Some(Op::LdcLA1)
                                 }
                                 (x0, x1, _, _, _, _, x6) if x0 != 15 && x1 != 0 && x6 == 1 => {
                                     None
@@ -14771,28 +14773,28 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 1 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_STC_T1A1_A)
+                                    Some(Op::StcA1Pre)
                                 }
                                 (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 1 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_LDC_i_T1A1_A)
+                                    Some(Op::LdcIA1Pre)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_STC_T1A1_A)
+                                    Some(Op::StcA1Pre)
                                 }
                                 (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 == 2 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_LDC_i_T1A1_A)
+                                    Some(Op::LdcIA1Pre)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 4 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_STC_T1A1_A)
+                                    Some(Op::StcA1Pre)
                                 }
                                 (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 4 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_LDC_i_T1A1_A)
+                                    Some(Op::LdcIA1Pre)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 5 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_STC_T1A1_A)
+                                    Some(Op::StcA1Pre)
                                 }
                                 (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 5 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
-                                    Some(Op::aarch32_LDC_i_T1A1_A)
+                                    Some(Op::LdcIA1Pre)
                                 }
                                 (x0, x1, _, _, _, _, _) if x0 == 15 && x1 != 0 => {
                                     None
@@ -14816,19 +14818,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Vm = instr & 7;
                             match (cc, size) {
                                 (x0, _) if x0 == 0 => {
-                                    Some(Op::aarch32_VSEL_A1_A)
+                                    Some(Op::VselgtA1D)
                                 }
                                 (x0, _) if x0 == 1 => {
-                                    Some(Op::aarch32_VSEL_A1_A)
+                                    Some(Op::VselgtA1D)
                                 }
                                 (_, x1) if x1 == 1 => {
                                     None
                                 }
                                 (x0, _) if x0 == 2 => {
-                                    Some(Op::aarch32_VSEL_A1_A)
+                                    Some(Op::VselgtA1D)
                                 }
                                 (x0, _) if x0 == 3 => {
-                                    Some(Op::aarch32_VSEL_A1_A)
+                                    Some(Op::VselgtA1D)
                                 }
                                 _ => None
                             }
@@ -14844,13 +14846,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Vm = instr & 7;
                             match (size, op) {
                                 (_, x1) if x1 == 0 => {
-                                    Some(Op::aarch32_VMAXNM_A2_A)
+                                    Some(Op::VminnmA2D)
                                 }
                                 (x0, _) if x0 == 1 => {
                                     None
                                 }
                                 (_, x1) if x1 == 1 => {
-                                    Some(Op::aarch32_VMAXNM_A2_A)
+                                    Some(Op::VminnmA2D)
                                 }
                                 _ => None
                             }
@@ -14867,10 +14869,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 0 => {
-                                    Some(Op::aarch32_VMOVX_A1_A)
+                                    Some(Op::VmovxA1)
                                 }
                                 (x0, x1) if x0 == 2 && x1 == 1 => {
-                                    Some(Op::aarch32_VINS_A1_A)
+                                    Some(Op::VinsA1)
                                 }
                                 (x0, _) if x0 == 3 => {
                                     None
@@ -14889,31 +14891,31 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Vm = instr & 7;
                             match (o1, RM, size) {
                                 (x0, x1, _) if x0 == 0 && x1 == 0 => {
-                                    Some(Op::aarch32_VRINTA_vfp_A1_A)
+                                    Some(Op::VrintmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::aarch32_VRINTA_vfp_A1_A)
+                                    Some(Op::VrintmVfpA1D)
                                 }
                                 (_, _, x2) if x2 == 1 => {
                                     None
                                 }
                                 (x0, x1, _) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::aarch32_VRINTA_vfp_A1_A)
+                                    Some(Op::VrintmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::aarch32_VRINTA_vfp_A1_A)
+                                    Some(Op::VrintmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_VCVTA_vfp_A1_A)
+                                    Some(Op::VcvtmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::aarch32_VCVTA_vfp_A1_A)
+                                    Some(Op::VcvtmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::aarch32_VCVTA_vfp_A1_A)
+                                    Some(Op::VcvtmVfpA1D)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::aarch32_VCVTA_vfp_A1_A)
+                                    Some(Op::VcvtmVfpA1D)
                                 }
                                 _ => None
                             }
@@ -14936,79 +14938,79 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 1 => {
-                                    Some(Op::aarch32_VABS_A2_A)
+                                    Some(Op::VabsA2D)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 2 && x3 == 0 => {
-                                    Some(Op::aarch32_VMOV_r_T2A2_A)
+                                    Some(Op::VmovRA2D)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
-                                    Some(Op::aarch32_VMOV_r_T2A2_A)
+                                    Some(Op::VmovRA2D)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_VNEG_A2_A)
+                                    Some(Op::VnegA2D)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_VSQRT_A1_A)
+                                    Some(Op::VsqrtA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 2 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 1 => {
                                     None
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 2 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVTB_bf16_T1A1_A)
+                                    Some(Op::VcvtbA1Bfs)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVTT_T1A1_A)
+                                    Some(Op::VcvttA1Bfs)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 2 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 2 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 3 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 3 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVTB_T1A1_A)
+                                    Some(Op::VcvttA1Hd)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 4 && x3 == 0 => {
-                                    Some(Op::aarch32_VCMP_A1_A)
+                                    Some(Op::VcmpA1A)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 4 && x3 == 1 => {
-                                    Some(Op::aarch32_VCMP_A1_A)
+                                    Some(Op::VcmpA1A)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 5 && x3 == 0 => {
-                                    Some(Op::aarch32_VCMP_A1_A)
+                                    Some(Op::VcmpA1A)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 5 && x3 == 1 => {
-                                    Some(Op::aarch32_VCMP_A1_A)
+                                    Some(Op::VcmpA1A)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 6 && x3 == 0 => {
-                                    Some(Op::aarch32_VRINTZ_vfp_A1_A)
+                                    Some(Op::VrintzVfpA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 6 && x3 == 1 => {
-                                    Some(Op::aarch32_VRINTZ_vfp_A1_A)
+                                    Some(Op::VrintzVfpA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 0 && x1 == 7 && x3 == 0 => {
-                                    Some(Op::aarch32_VRINTX_vfp_A1_A)
+                                    Some(Op::VrintxVfpA1D)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 1 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 2 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVT_ds_T1A1_A)
+                                    Some(Op::VcvtSdA1)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 3 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVT_ds_T1A1_A)
+                                    Some(Op::VcvtSdA1)
                                 }
                                 (x0, x1, _, _) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_VCVT_iv_A1_A)
+                                    Some(Op::VcvtSivA1D)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
                                     None
@@ -15020,25 +15022,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 3 && x3 == 1 => {
-                                    Some(Op::aarch32_VJCVT_A1_A)
+                                    Some(Op::VjcvtA1)
                                 }
                                 (x0, x1, _, _) if x0 == 1 && x1 & 6 == 2 => {
-                                    Some(Op::aarch32_VCVT_xv_A1_A)
+                                    Some(Op::VcvtXvA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 4 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVT_iv_A1_A)
+                                    Some(Op::VcvtSivA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 4 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVT_iv_A1_A)
+                                    Some(Op::VcvtSivA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 5 && x3 == 0 => {
-                                    Some(Op::aarch32_VCVT_iv_A1_A)
+                                    Some(Op::VcvtSivA1D)
                                 }
                                 (x0, x1, _, x3) if x0 == 1 && x1 == 5 && x3 == 1 => {
-                                    Some(Op::aarch32_VCVT_iv_A1_A)
+                                    Some(Op::VcvtSivA1D)
                                 }
                                 (x0, x1, _, _) if x0 == 1 && x1 & 6 == 6 => {
-                                    Some(Op::aarch32_VCVT_xv_A1_A)
+                                    Some(Op::VcvtXvA1D)
                                 }
                                 _ => None
                             }
@@ -15055,13 +15057,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_VMOV_i_A2_A)
+                                    Some(Op::VmovIA2D)
                                 }
                                 x0 if x0 == 2 => {
-                                    Some(Op::aarch32_VMOV_i_A2_A)
+                                    Some(Op::VmovIA2D)
                                 }
                                 x0 if x0 == 3 => {
-                                    Some(Op::aarch32_VMOV_i_A2_A)
+                                    Some(Op::VmovIA2D)
                                 }
                                 _ => None
                             }
@@ -15083,43 +15085,43 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, _, x2) if x0 == 0 && x2 == 0 => {
-                                    Some(Op::aarch32_VMLA_f_A2_A)
+                                    Some(Op::VmlsFA2D)
                                 }
                                 (x0, _, x2) if x0 == 0 && x2 == 1 => {
-                                    Some(Op::aarch32_VMLA_f_A2_A)
+                                    Some(Op::VmlsFA2D)
                                 }
                                 (x0, _, x2) if x0 == 1 && x2 == 0 => {
-                                    Some(Op::aarch32_VNMLA_A1_A)
+                                    Some(Op::VnmlaA1D)
                                 }
                                 (x0, _, x2) if x0 == 1 && x2 == 1 => {
-                                    Some(Op::aarch32_VNMLA_A1_A)
+                                    Some(Op::VnmlaA1D)
                                 }
                                 (x0, _, x2) if x0 == 2 && x2 == 0 => {
-                                    Some(Op::aarch32_VMUL_f_A2_A)
+                                    Some(Op::VmulFA2D)
                                 }
                                 (x0, _, x2) if x0 == 2 && x2 == 1 => {
-                                    Some(Op::aarch32_VNMLA_A2_A)
+                                    Some(Op::VnmulA1D)
                                 }
                                 (x0, _, x2) if x0 == 3 && x2 == 0 => {
-                                    Some(Op::aarch32_VADD_f_A2_A)
+                                    Some(Op::VaddFA2D)
                                 }
                                 (x0, _, x2) if x0 == 3 && x2 == 1 => {
-                                    Some(Op::aarch32_VSUB_f_A2_A)
+                                    Some(Op::VsubFA2D)
                                 }
                                 (x0, _, x2) if x0 == 4 && x2 == 0 => {
-                                    Some(Op::aarch32_VDIV_A1_A)
+                                    Some(Op::VdivA1D)
                                 }
                                 (x0, _, x2) if x0 == 5 && x2 == 0 => {
-                                    Some(Op::aarch32_VFNMA_A1_A)
+                                    Some(Op::VfnmaA1D)
                                 }
                                 (x0, _, x2) if x0 == 5 && x2 == 1 => {
-                                    Some(Op::aarch32_VFNMA_A1_A)
+                                    Some(Op::VfnmaA1D)
                                 }
                                 (x0, _, x2) if x0 == 6 && x2 == 0 => {
-                                    Some(Op::aarch32_VFMA_A2_A)
+                                    Some(Op::VfmsA2D)
                                 }
                                 (x0, _, x2) if x0 == 6 && x2 == 1 => {
-                                    Some(Op::aarch32_VFMA_A2_A)
+                                    Some(Op::VfmsA2D)
                                 }
                                 _ => None
                             }
@@ -15138,10 +15140,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let CRm = instr & 7;
                     match (cond, L) {
                         (x0, x1) if x0 != 15 && x1 == 0 => {
-                            Some(Op::aarch32_MCR_T1A1_A)
+                            Some(Op::McrA1)
                         }
                         (x0, x1) if x0 != 15 && x1 == 1 => {
-                            Some(Op::aarch32_MRC_T1A1_A)
+                            Some(Op::MrcA1)
                         }
                         (x0, _) if x0 == 15 => {
                             None
@@ -15159,7 +15161,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm24 = instr & 47;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_SVC_A1_A)
+                                    Some(Op::SvcA1)
                                 }
                             }
                         }
@@ -15181,13 +15183,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Vm = instr & 7;
                     match (op1, op2, op3, op4, Q, U) {
                         (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VCADD_A1_A)
+                            Some(Op::VcaddA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VCADD_A1_A)
+                            Some(Op::VcaddA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 1 => {
                             None
@@ -15205,19 +15207,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VMMLA_A1_A)
+                            Some(Op::VmmlaA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_bf16_A1_A)
+                            Some(Op::VdotA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_bf16_A1_A)
+                            Some(Op::VdotA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
                             None
@@ -15229,7 +15231,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMAL_A1_A)
+                            Some(Op::VfmslA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 2 && x2 == 0 && x3 == 1 => {
                             None
@@ -15238,25 +15240,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_MMLA_A1_A)
+                            Some(Op::VusmmlaA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
-                            Some(Op::aarch32_MMLA_A1_A)
+                            Some(Op::VusmmlaA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_A1_A)
+                            Some(Op::VudotA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VDOT_A1_A)
+                            Some(Op::VudotA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_A1_A)
+                            Some(Op::VudotA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
-                            Some(Op::aarch32_VDOT_A1_A)
+                            Some(Op::VudotA1Q)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMA_bf_A1_A)
+                            Some(Op::VfmaBfA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 1 => {
                             None
@@ -15268,7 +15270,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMAL_A1_A)
+                            Some(Op::VfmslA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 2 && x2 == 0 && x3 == 1 => {
                             None
@@ -15277,25 +15279,25 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_MMLA_A1_A)
+                            Some(Op::VusmmlaA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VUSDOT_A1_A)
+                            Some(Op::VusdotA1Q)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VUSDOT_A1_A)
+                            Some(Op::VusdotA1Q)
                         }
                         (x0, x1, _, _, _, _) if x0 == 1 && x1 == 3 => {
                             None
                         }
                         (_, x1, x2, x3, _, x5) if x1 & 2 == 2 && x2 == 0 && x3 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VCMLA_A1_A)
+                            Some(Op::VcmlaA1Q)
                         }
                         (x0, x1, _, _, _, _) if x0 == 2 && x1 == 3 => {
                             None
@@ -15321,10 +15323,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                     let Vm = instr & 7;
                     match (op1, op2, op3, op4, Q, U) {
                         (x0, _, x2, x3, _, x5) if x0 == 0 && x2 == 0 && x3 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VCMLA_idx_A1_A)
+                            Some(Op::VcmlaSA1Qs)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMAL_i_A1_A)
+                            Some(Op::VfmslSA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
                             None
@@ -15333,22 +15335,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_bf16_i_A1_A)
+                            Some(Op::VdotSA1Q)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 1 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_bf16_i_A1_A)
+                            Some(Op::VdotSA1Q)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x5 == 0 => {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMAL_i_A1_A)
+                            Some(Op::VfmslSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 1 => {
-                            Some(Op::aarch32_VFMAL_i_A1_A)
+                            Some(Op::VfmslSA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
                             None
@@ -15363,22 +15365,22 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_s_A1_A)
+                            Some(Op::VudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VDOT_s_A1_A)
+                            Some(Op::VudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_VDOT_s_A1_A)
+                            Some(Op::VudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
-                            Some(Op::aarch32_VDOT_s_A1_A)
+                            Some(Op::VudotSA1Q)
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 0 => {
                             None
                         }
                         (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_VFMA_bfs_A1_A)
+                            Some(Op::VfmaBfsA1Q)
                         }
                         (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 1 => {
                             None
@@ -15387,19 +15389,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             None
                         }
                         (x0, _, x2, x3, _, x5) if x0 == 1 && x2 == 0 && x3 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_VCMLA_idx_A1_A)
+                            Some(Op::VcmlaSA1Qs)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
-                            Some(Op::aarch32_DOT_A1_A)
+                            Some(Op::VsudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
-                            Some(Op::aarch32_DOT_A1_A)
+                            Some(Op::VsudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
-                            Some(Op::aarch32_DOT_A1_A)
+                            Some(Op::VsudotSA1Q)
                         }
                         (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
-                            Some(Op::aarch32_DOT_A1_A)
+                            Some(Op::VsudotSA1Q)
                         }
                         (x0, _, x2, x3, _, _) if x0 == 1 && x2 == 0 && x3 == 1 => {
                             None
@@ -15443,19 +15445,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VMOV_ss_T1A1_A)
+                                    Some(Op::VmovSsA1)
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VMOV_d_T1A1_A)
+                                    Some(Op::VmovDA1)
                                 }
                                 (x0, _, _, x3, _) if x0 == 1 && x3 & 2 == 2 => {
                                     None
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 2 && x3 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VMOV_ss_T1A1_A)
+                                    Some(Op::VmovSsA1)
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 3 && x3 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VMOV_d_T1A1_A)
+                                    Some(Op::VmovDA1)
                                 }
                                 _ => None
                             }
@@ -15479,55 +15481,55 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, _, x3, _, x5, _) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 2 => {
-                                    Some(Op::aarch32_VSTM_T2A2_A)
+                                    Some(Op::VstmdbA2)
                                 }
                                 (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 0 => {
-                                    Some(Op::aarch32_VSTM_T1A1_A)
+                                    Some(Op::FstmdbxA1)
                                 }
                                 (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 1 => {
-                                    Some(Op::aarch32_VSTM_T1A1_A)
+                                    Some(Op::FstmdbxA1)
                                 }
                                 (x0, x1, _, x3, _, x5, _) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 2 => {
-                                    Some(Op::aarch32_VLDM_T2A2_A)
+                                    Some(Op::VldmdbA2)
                                 }
                                 (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 0 => {
-                                    Some(Op::aarch32_VLDM_T1A1_A)
+                                    Some(Op::FldmdbxA1)
                                 }
                                 (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 1 => {
-                                    Some(Op::aarch32_VLDM_T1A1_A)
+                                    Some(Op::FldmdbxA1)
                                 }
                                 (x0, _, x2, x3, _, _, _) if x0 == 1 && x2 == 0 && x3 == 0 => {
-                                    Some(Op::aarch32_VSTR_A1_A)
+                                    Some(Op::VstrA1D)
                                 }
                                 (x0, _, x2, _, _, x5, _) if x0 == 1 && x2 == 0 && x5 == 0 => {
                                     None
                                 }
                                 (x0, _, x2, x3, x4, _, _) if x0 == 1 && x2 == 0 && x3 == 1 && x4 != 15 => {
-                                    Some(Op::aarch32_VLDR_A1_A)
+                                    Some(Op::VldrLA1D)
                                 }
                                 (x0, x1, x2, _, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x5 & 2 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2, x3, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 2 => {
-                                    Some(Op::aarch32_VSTM_T2A2_A)
+                                    Some(Op::VstmdbA2)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 0 => {
-                                    Some(Op::aarch32_VSTM_T1A1_A)
+                                    Some(Op::FstmdbxA1)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 1 => {
-                                    Some(Op::aarch32_VSTM_T1A1_A)
+                                    Some(Op::FstmdbxA1)
                                 }
                                 (x0, x1, x2, x3, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 2 => {
-                                    Some(Op::aarch32_VLDM_T2A2_A)
+                                    Some(Op::VldmdbA2)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 0 => {
-                                    Some(Op::aarch32_VLDM_T1A1_A)
+                                    Some(Op::FldmdbxA1)
                                 }
                                 (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 1 => {
-                                    Some(Op::aarch32_VLDM_T1A1_A)
+                                    Some(Op::FldmdbxA1)
                                 }
                                 (x0, _, x2, x3, x4, _, _) if x0 == 1 && x2 == 0 && x3 == 1 && x4 == 15 => {
-                                    Some(Op::aarch32_VLDR_A1_A)
+                                    Some(Op::VldrLA1D)
                                 }
                                 (x0, x1, x2, _, _, _, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
                                     None
@@ -15548,7 +15550,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let N = (instr >> 7) & 1;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_VMOV_h_A1_A)
+                                    Some(Op::VmovHA1)
                                 }
                             }
                         }
@@ -15560,7 +15562,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let N = (instr >> 7) & 1;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_VMOV_s_A1_A)
+                                    Some(Op::VmovSA1)
                                 }
                             }
                         }
@@ -15571,10 +15573,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rt = (instr >> 12) & 7;
                             match L {
                                 x0 if x0 == 0 => {
-                                    Some(Op::aarch32_VMSR_T1A1_AS)
+                                    Some(Op::VmsrA1As)
                                 }
                                 x0 if x0 == 1 => {
-                                    Some(Op::aarch32_VMRS_T1A1_AS)
+                                    Some(Op::VmrsA1As)
                                 }
                                 _ => None
                             }
@@ -15589,13 +15591,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let opc2 = (instr >> 5) & 3;
                             match (opc1, L, opc2) {
                                 (x0, x1, _) if x0 & 4 == 0 && x1 == 0 => {
-                                    Some(Op::aarch32_VMOV_rs_T1A1_A)
+                                    Some(Op::VmovRsA1)
                                 }
                                 (_, x1, _) if x1 == 1 => {
-                                    Some(Op::aarch32_VMOV_sr_T1A1_A)
+                                    Some(Op::VmovSrA1)
                                 }
                                 (x0, x1, x2) if x0 & 4 == 4 && x1 == 0 && x2 & 2 == 0 => {
-                                    Some(Op::aarch32_VDUP_r_T1A1_A)
+                                    Some(Op::VdupRA1)
                                 }
                                 (x0, x1, x2) if x0 & 4 == 4 && x1 == 0 && x2 & 2 == 2 => {
                                     None
@@ -15627,10 +15629,10 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let mode = instr & 9;
                             match (imod, M, op, mode) {
                                 (_, _, x2, x3) if x2 == 1 && x3 & 16 == 0 => {
-                                    Some(Op::aarch32_SETEND_A1_A)
+                                    Some(Op::SetendA1)
                                 }
                                 (_, _, x2, _) if x2 == 0 => {
-                                    Some(Op::aarch32_CPS_A1_AS)
+                                    Some(Op::CpsidA1Asm)
                                 }
                                 (_, _, x2, x3) if x2 == 1 && x3 & 16 == 16 => {
                                     None
@@ -15651,7 +15653,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let imm1 = (instr >> 9) & 1;
                             match () {
                                 () => {
-                                    Some(Op::aarch32_SETPAN_A1_A)
+                                    Some(Op::SetpanA1)
                                 }
                             }
                         }
@@ -15701,208 +15703,208 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Vm = instr & 7;
                             match (U, size, opc, Q, o1) {
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 12 && x4 == 1 => {
-                                    Some(Op::aarch32_VFMA_A1_A)
+                                    Some(Op::VfmsA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 13 && x4 == 0 => {
-                                    Some(Op::aarch32_VADD_f_A1_A)
+                                    Some(Op::VaddFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 13 && x4 == 1 => {
-                                    Some(Op::aarch32_VMLA_f_A1_A)
+                                    Some(Op::VmlsFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 14 && x4 == 0 => {
-                                    Some(Op::aarch32_VCEQ_r_T1A1_A)
+                                    Some(Op::VceqRT1A1A)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 15 && x4 == 0 => {
-                                    Some(Op::aarch32_VMAX_f_A1_A)
+                                    Some(Op::VminFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 15 && x4 == 1 => {
-                                    Some(Op::aarch32_VRECPS_A1_A)
+                                    Some(Op::VrecpsA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 0 && x4 == 0 => {
-                                    Some(Op::aarch32_VHADD_T1A1_A)
+                                    Some(Op::VhsubA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VAND_r_T1A1_A)
+                                    Some(Op::VandRA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VQADD_T1A1_A)
+                                    Some(Op::VqaddA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 1 && x4 == 0 => {
-                                    Some(Op::aarch32_VRHADD_T1A1_A)
+                                    Some(Op::VrhaddA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA1C_A1_A)
+                                    Some(Op::Sha1CA1)
                                 }
                                 (_, _, x2, _, x4) if x2 == 2 && x4 == 0 => {
-                                    Some(Op::aarch32_VHADD_T1A1_A)
+                                    Some(Op::VhsubA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VBIC_r_T1A1_A)
+                                    Some(Op::VbicRA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 2 && x4 == 1 => {
-                                    Some(Op::aarch32_VQSUB_T1A1_A)
+                                    Some(Op::VqsubA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 3 && x4 == 0 => {
-                                    Some(Op::aarch32_VCGT_r_T1A1_A)
+                                    Some(Op::VcgtRT1A1A)
                                 }
                                 (_, _, x2, _, x4) if x2 == 3 && x4 == 1 => {
-                                    Some(Op::aarch32_VCGE_r_T1A1_A)
+                                    Some(Op::VcgeRT1A1A)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA1P_A1_A)
+                                    Some(Op::Sha1PA1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 12 && x4 == 1 => {
-                                    Some(Op::aarch32_VFMA_A1_A)
+                                    Some(Op::VfmsA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 13 && x4 == 0 => {
-                                    Some(Op::aarch32_VSUB_f_A1_A)
+                                    Some(Op::VsubFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 13 && x4 == 1 => {
-                                    Some(Op::aarch32_VMLA_f_A1_A)
+                                    Some(Op::VmlsFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 14 && x4 == 0 => {
                                     None
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 15 && x4 == 0 => {
-                                    Some(Op::aarch32_VMAX_f_A1_A)
+                                    Some(Op::VminFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 15 && x4 == 1 => {
-                                    Some(Op::aarch32_VRSQRTS_A1_A)
+                                    Some(Op::VrsqrtsA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 4 && x4 == 0 => {
-                                    Some(Op::aarch32_VSHL_r_T1A1_A)
+                                    Some(Op::VshlRA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 0 && x2 == 8 && x4 == 0 => {
-                                    Some(Op::aarch32_VADD_i_T1A1_A)
+                                    Some(Op::VaddIA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 2 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VORR_r_T1A1_A)
+                                    Some(Op::VorrRA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 0 && x2 == 8 && x4 == 1 => {
-                                    Some(Op::aarch32_VTST_T1A1_A)
+                                    Some(Op::VtstA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 4 && x4 == 1 => {
-                                    Some(Op::aarch32_VQSHL_r_T1A1_A)
+                                    Some(Op::VqshlRA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 0 && x2 == 9 && x4 == 0 => {
-                                    Some(Op::aarch32_VMLA_i_T1A1_A)
+                                    Some(Op::VmlsIA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 5 && x4 == 0 => {
-                                    Some(Op::aarch32_VRSHL_T1A1_A)
+                                    Some(Op::VrshlA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 5 && x4 == 1 => {
-                                    Some(Op::aarch32_VQRSHL_T1A1_A)
+                                    Some(Op::VqrshlA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 0 && x2 == 11 && x4 == 0 => {
-                                    Some(Op::aarch32_VQDMULH_T1A1_A)
+                                    Some(Op::VqdmulhA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 2 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA1M_A1_A)
+                                    Some(Op::Sha1MA1)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 0 && x2 == 11 && x4 == 1 => {
-                                    Some(Op::aarch32_VPADD_i_T1A1_A)
+                                    Some(Op::VpaddIA1)
                                 }
                                 (_, _, x2, _, x4) if x2 == 6 && x4 == 0 => {
-                                    Some(Op::aarch32_VMAX_i_T1A1_A)
+                                    Some(Op::VminIA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 3 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VORN_r_T1A1_A)
+                                    Some(Op::VornRA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 6 && x4 == 1 => {
-                                    Some(Op::aarch32_VMAX_i_T1A1_A)
+                                    Some(Op::VminIA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 7 && x4 == 0 => {
-                                    Some(Op::aarch32_VABD_i_T1A1_A)
+                                    Some(Op::VabdIA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 7 && x4 == 1 => {
-                                    Some(Op::aarch32_VABA_T1A1_A)
+                                    Some(Op::VabaA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 0 && x1 == 3 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA1SU0_A1_A)
+                                    Some(Op::Sha1Su0A1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 13 && x4 == 0 => {
-                                    Some(Op::aarch32_VPADD_f_A1_A)
+                                    Some(Op::VpaddFA1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 13 && x4 == 1 => {
-                                    Some(Op::aarch32_VMUL_f_A1_A)
+                                    Some(Op::VmulFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 14 && x4 == 0 => {
-                                    Some(Op::aarch32_VCGE_r_T1A1_A)
+                                    Some(Op::VcgeRT1A1A)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 14 && x4 == 1 => {
-                                    Some(Op::aarch32_VACGE_A1_A)
+                                    Some(Op::VacgtA1Q)
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 15 && x3 == 0 && x4 == 0 => {
-                                    Some(Op::aarch32_VPMAX_f_A1_A)
+                                    Some(Op::VpminFA1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 15 && x4 == 1 => {
-                                    Some(Op::aarch32_VMAXNM_A1_A)
+                                    Some(Op::VminnmA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VEOR_T1A1_A)
+                                    Some(Op::VeorA1Q)
                                 }
                                 (_, _, x2, _, x4) if x2 == 9 && x4 == 1 => {
-                                    Some(Op::aarch32_VMUL_i_T1A1_A)
+                                    Some(Op::VmulIA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA256H_A1_A)
+                                    Some(Op::Sha256HA1)
                                 }
                                 (_, _, x2, x3, x4) if x2 == 10 && x3 == 0 && x4 == 0 => {
-                                    Some(Op::aarch32_VPMAX_i_T1A1_A)
+                                    Some(Op::VpminIA1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VBIF_T1A1_A)
+                                    Some(Op::VbifA1Q)
                                 }
                                 (_, _, x2, x3, x4) if x2 == 10 && x3 == 0 && x4 == 1 => {
-                                    Some(Op::aarch32_VPMAX_i_T1A1_A)
+                                    Some(Op::VpminIA1)
                                 }
                                 (_, _, x2, x3, _) if x2 == 10 && x3 == 1 => {
                                     None
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA256H2_A1_A)
+                                    Some(Op::Sha256H2A1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 13 && x4 == 0 => {
-                                    Some(Op::aarch32_VABD_f_A1_A)
+                                    Some(Op::VabdFA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 14 && x4 == 0 => {
-                                    Some(Op::aarch32_VCGT_r_T1A1_A)
+                                    Some(Op::VcgtRT1A1A)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 14 && x4 == 1 => {
-                                    Some(Op::aarch32_VACGE_A1_A)
+                                    Some(Op::VacgtA1Q)
                                 }
                                 (x0, x1, x2, x3, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 15 && x3 == 0 && x4 == 0 => {
-                                    Some(Op::aarch32_VPMAX_f_A1_A)
+                                    Some(Op::VpminFA1)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 15 && x4 == 1 => {
-                                    Some(Op::aarch32_VMAXNM_A1_A)
+                                    Some(Op::VminnmA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 8 && x4 == 0 => {
-                                    Some(Op::aarch32_VSUB_i_T1A1_A)
+                                    Some(Op::VsubIA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 2 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VBIF_T1A1_A)
+                                    Some(Op::VbifA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 8 && x4 == 1 => {
-                                    Some(Op::aarch32_VCEQ_r_T1A1_A)
+                                    Some(Op::VceqRT1A1A)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 9 && x4 == 0 => {
-                                    Some(Op::aarch32_VMLA_i_T1A1_A)
+                                    Some(Op::VmlsIA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 11 && x4 == 0 => {
-                                    Some(Op::aarch32_VQRDMULH_T1A1_A)
+                                    Some(Op::VqrdmulhA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 2 && x2 == 12 && x4 == 0 => {
-                                    Some(Op::aarch32_SHA256SU1_A1_A)
+                                    Some(Op::Sha256Su1A1)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 11 && x4 == 1 => {
-                                    Some(Op::aarch32_VQRDMLAH_A1_A)
+                                    Some(Op::VqrdmlahA1Q)
                                 }
                                 (x0, x1, x2, _, x4) if x0 == 1 && x1 == 3 && x2 == 1 && x4 == 1 => {
-                                    Some(Op::aarch32_VBIF_T1A1_A)
+                                    Some(Op::VbifA1Q)
                                 }
                                 (x0, _, x2, _, x4) if x0 == 1 && x2 == 12 && x4 == 1 => {
-                                    Some(Op::aarch32_VQRDMLSH_A1_A)
+                                    Some(Op::VqrdmlshA1Q)
                                 }
                                 (x0, _, x2, x3, x4) if x0 == 1 && x2 == 15 && x3 == 1 && x4 == 0 => {
                                     None
@@ -15923,7 +15925,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match () {
                                         () => {
-                                            Some(Op::aarch32_VEXT_T1A1_A)
+                                            Some(Op::VextA1Q)
                                         }
                                     }
                                 }
@@ -15938,166 +15940,166 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match (size, opc1, opc2, Q) {
                                         (_, x1, x2, _) if x1 == 0 && x2 == 0 => {
-                                            Some(Op::aarch32_VREV16_T1A1_A)
+                                            Some(Op::Vrev16A1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 1 => {
-                                            Some(Op::aarch32_VREV16_T1A1_A)
+                                            Some(Op::Vrev16A1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 2 => {
-                                            Some(Op::aarch32_VREV16_T1A1_A)
+                                            Some(Op::Vrev16A1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 3 => {
                                             None
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 & 14 == 4 => {
-                                            Some(Op::aarch32_VPADDL_T1A1_A)
+                                            Some(Op::VpaddlA1Q)
                                         }
                                         (_, x1, x2, x3) if x1 == 0 && x2 == 6 && x3 == 0 => {
-                                            Some(Op::aarch32_AESE_A1_A)
+                                            Some(Op::AeseA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 0 && x2 == 6 && x3 == 1 => {
-                                            Some(Op::aarch32_AESD_A1_A)
+                                            Some(Op::AesdA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 0 && x2 == 7 && x3 == 0 => {
-                                            Some(Op::aarch32_AESMC_A1_A)
+                                            Some(Op::AesmcA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 0 && x2 == 7 && x3 == 1 => {
-                                            Some(Op::aarch32_AESIMC_A1_A)
+                                            Some(Op::AesimcA1)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 8 => {
-                                            Some(Op::aarch32_VCLS_T1A1_A)
+                                            Some(Op::VclsA1Q)
                                         }
                                         (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                                            Some(Op::aarch32_VSWP_T1A1_A)
+                                            Some(Op::VswpA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 9 => {
-                                            Some(Op::aarch32_VCLZ_T1A1_A)
+                                            Some(Op::VclzA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 10 => {
-                                            Some(Op::aarch32_VCNT_T1A1_A)
+                                            Some(Op::VcntA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 11 => {
-                                            Some(Op::aarch32_VMVN_r_T1A1_A)
+                                            Some(Op::VmvnRA1Q)
                                         }
                                         (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 12 && x3 == 1 => {
                                             None
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 & 14 == 12 => {
-                                            Some(Op::aarch32_VPADAL_T1A1_A)
+                                            Some(Op::VpadalA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 14 => {
-                                            Some(Op::aarch32_VQABS_T1A1_A)
+                                            Some(Op::VqabsA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 0 && x2 == 15 => {
-                                            Some(Op::aarch32_VQNEG_T1A1_A)
+                                            Some(Op::VqnegA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 0 => {
-                                            Some(Op::aarch32_VCGT_i_A1_A)
+                                            Some(Op::VcgtIA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 1 => {
-                                            Some(Op::aarch32_VCGE_i_A1_A)
+                                            Some(Op::VcgeIA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 2 => {
-                                            Some(Op::aarch32_VCEQ_i_A1_A)
+                                            Some(Op::VceqIA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 3 => {
-                                            Some(Op::aarch32_VCLE_i_A1_A)
+                                            Some(Op::VcleIA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 4 => {
-                                            Some(Op::aarch32_VCLT_i_A1_A)
+                                            Some(Op::VcltIA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 6 => {
-                                            Some(Op::aarch32_VABS_A1_A)
+                                            Some(Op::VabsA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 1 && x2 & 7 == 7 => {
-                                            Some(Op::aarch32_VNEG_A1_A)
+                                            Some(Op::VnegA1Q)
                                         }
                                         (_, x1, x2, x3) if x1 == 1 && x2 == 5 && x3 == 1 => {
-                                            Some(Op::aarch32_SHA1H_A1_A)
+                                            Some(Op::Sha1HA1)
                                         }
                                         (x0, x1, x2, x3) if x0 == 1 && x1 == 2 && x2 == 12 && x3 == 1 => {
-                                            Some(Op::aarch32_VCVT_T1A1_A)
+                                            Some(Op::VcvtBfsA1)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 1 => {
-                                            Some(Op::aarch32_VTRN_T1A1_A)
+                                            Some(Op::VtrnA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 2 => {
-                                            Some(Op::aarch32_VUZP_T1A1_A)
+                                            Some(Op::VuzpA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 3 => {
-                                            Some(Op::aarch32_VZIP_T1A1_A)
+                                            Some(Op::VzipA1Q)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 4 && x3 == 0 => {
-                                            Some(Op::aarch32_VMOVN_T1A1_A)
+                                            Some(Op::VmovnA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 4 && x3 == 1 => {
-                                            Some(Op::aarch32_VQMOVN_T1A1_A)
+                                            Some(Op::VqmovnA1)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 5 => {
-                                            Some(Op::aarch32_VQMOVN_T1A1_A)
+                                            Some(Op::VqmovnA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 6 && x3 == 0 => {
-                                            Some(Op::aarch32_VSHLL_T2A2_A)
+                                            Some(Op::VshllA2)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 7 && x3 == 0 => {
-                                            Some(Op::aarch32_SHA1SU1_A1_A)
+                                            Some(Op::Sha1Su1A1)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 7 && x3 == 1 => {
-                                            Some(Op::aarch32_SHA256SU0_A1_A)
+                                            Some(Op::Sha256Su0A1)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 8 => {
-                                            Some(Op::aarch32_VRINTA_asimd_A1_A)
+                                            Some(Op::VrintpAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 9 => {
-                                            Some(Op::aarch32_VRINTX_asimd_A1_A)
+                                            Some(Op::VrintxAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 10 => {
-                                            Some(Op::aarch32_VRINTA_asimd_A1_A)
+                                            Some(Op::VrintpAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 11 => {
-                                            Some(Op::aarch32_VRINTZ_asimd_A1_A)
+                                            Some(Op::VrintzAsimdA1Q)
                                         }
                                         (x0, x1, x2, x3) if x0 == 2 && x1 == 2 && x2 == 12 && x3 == 1 => {
                                             None
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 12 && x3 == 0 => {
-                                            Some(Op::aarch32_VCVT_hs_T1A1_A)
+                                            Some(Op::VcvtShA1)
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 13 => {
-                                            Some(Op::aarch32_VRINTA_asimd_A1_A)
+                                            Some(Op::VrintpAsimdA1Q)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 14 && x3 == 0 => {
-                                            Some(Op::aarch32_VCVT_hs_T1A1_A)
+                                            Some(Op::VcvtShA1)
                                         }
                                         (_, x1, x2, x3) if x1 == 2 && x2 == 14 && x3 == 1 => {
                                             None
                                         }
                                         (_, x1, x2, _) if x1 == 2 && x2 == 15 => {
-                                            Some(Op::aarch32_VRINTA_asimd_A1_A)
+                                            Some(Op::VrintpAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 14 == 0 => {
-                                            Some(Op::aarch32_VCVTA_asimd_A1_A)
+                                            Some(Op::VcvtmAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 14 == 2 => {
-                                            Some(Op::aarch32_VCVTA_asimd_A1_A)
+                                            Some(Op::VcvtmAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 14 == 4 => {
-                                            Some(Op::aarch32_VCVTA_asimd_A1_A)
+                                            Some(Op::VcvtmAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 14 == 6 => {
-                                            Some(Op::aarch32_VCVTA_asimd_A1_A)
+                                            Some(Op::VcvtmAsimdA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 13 == 8 => {
-                                            Some(Op::aarch32_VRECPE_A1_A)
+                                            Some(Op::VrecpeA1Q)
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 13 == 9 => {
-                                            Some(Op::aarch32_VRSQRTE_A1_A)
+                                            Some(Op::VrsqrteA1Q)
                                         }
                                         (x0, x1, x2, x3) if x0 == 3 && x1 == 2 && x2 == 12 && x3 == 1 => {
                                             None
                                         }
                                         (_, x1, x2, _) if x1 == 3 && x2 & 12 == 12 => {
-                                            Some(Op::aarch32_VCVT_is_A1_A)
+                                            Some(Op::VcvtIsA1Q)
                                         }
                                         _ => None
                                     }
@@ -16113,7 +16115,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match () {
                                         () => {
-                                            Some(Op::aarch32_VTBL_T1A1_A)
+                                            Some(Op::VtbxA1)
                                         }
                                     }
                                 }
@@ -16127,7 +16129,7 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match opc {
                                         x0 if x0 == 0 => {
-                                            Some(Op::aarch32_VDUP_s_T1A1_A)
+                                            Some(Op::VdupSA1Q)
                                         }
                                         x0 if x0 == 1 => {
                                             None
@@ -16153,52 +16155,52 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match (U, opc) {
                                         (_, x1) if x1 == 0 => {
-                                            Some(Op::aarch32_VADDL_T1A1_A)
+                                            Some(Op::VaddwA1)
                                         }
                                         (_, x1) if x1 == 1 => {
-                                            Some(Op::aarch32_VADDL_T1A1_A)
+                                            Some(Op::VaddwA1)
                                         }
                                         (_, x1) if x1 == 2 => {
-                                            Some(Op::aarch32_VSUBL_T1A1_A)
+                                            Some(Op::VsubwA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 4 => {
-                                            Some(Op::aarch32_VADDHN_T1A1_A)
+                                            Some(Op::VaddhnA1)
                                         }
                                         (_, x1) if x1 == 3 => {
-                                            Some(Op::aarch32_VSUBL_T1A1_A)
+                                            Some(Op::VsubwA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 6 => {
-                                            Some(Op::aarch32_VSUBHN_T1A1_A)
+                                            Some(Op::VsubhnA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 9 => {
-                                            Some(Op::aarch32_VQDMLAL_T1A1_A)
+                                            Some(Op::VqdmlalA1)
                                         }
                                         (_, x1) if x1 == 5 => {
-                                            Some(Op::aarch32_VABA_T2A2_A)
+                                            Some(Op::VabalA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 11 => {
-                                            Some(Op::aarch32_VQDMLSL_T1A1_A)
+                                            Some(Op::VqdmlslA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 13 => {
-                                            Some(Op::aarch32_VQDMULL_T1A1_A)
+                                            Some(Op::VqdmullA1)
                                         }
                                         (_, x1) if x1 == 7 => {
-                                            Some(Op::aarch32_VABD_i_T2A2_A)
+                                            Some(Op::VabdlIA1)
                                         }
                                         (_, x1) if x1 == 8 => {
-                                            Some(Op::aarch32_VMLA_i_T2A2_A)
+                                            Some(Op::VmlslIA1)
                                         }
                                         (_, x1) if x1 == 10 => {
-                                            Some(Op::aarch32_VMLA_i_T2A2_A)
+                                            Some(Op::VmlslIA1)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 4 => {
-                                            Some(Op::aarch32_VRADDHN_T1A1_A)
+                                            Some(Op::VraddhnA1)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 6 => {
-                                            Some(Op::aarch32_VRSUBHN_T1A1_A)
+                                            Some(Op::VrsubhnA1)
                                         }
                                         (_, x1) if x1 & 13 == 12 => {
-                                            Some(Op::aarch32_VMUL_i_A2_A)
+                                            Some(Op::VmullIA1)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 9 => {
                                             None
@@ -16227,52 +16229,52 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match (Q, opc) {
                                         (_, x1) if x1 & 14 == 0 => {
-                                            Some(Op::aarch32_VMLA_s_A1_A)
+                                            Some(Op::VmlsSA1Q)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 3 => {
-                                            Some(Op::aarch32_VQDMLAL_T2A2_A)
+                                            Some(Op::VqdmlalA2)
                                         }
                                         (_, x1) if x1 == 2 => {
-                                            Some(Op::aarch32_VMLA_s_T2A2_A)
+                                            Some(Op::VmlslSA1)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 7 => {
-                                            Some(Op::aarch32_VQDMLSL_T2A2_A)
+                                            Some(Op::VqdmlslA2)
                                         }
                                         (_, x1) if x1 & 14 == 4 => {
-                                            Some(Op::aarch32_VMLA_s_A1_A)
+                                            Some(Op::VmlsSA1Q)
                                         }
                                         (x0, x1) if x0 == 0 && x1 == 11 => {
-                                            Some(Op::aarch32_VQDMULL_T2A2_A)
+                                            Some(Op::VqdmullA2)
                                         }
                                         (_, x1) if x1 == 6 => {
-                                            Some(Op::aarch32_VMLA_s_T2A2_A)
+                                            Some(Op::VmlslSA1)
                                         }
                                         (_, x1) if x1 & 14 == 8 => {
-                                            Some(Op::aarch32_VMUL_s_A1_A)
+                                            Some(Op::VmulSA1Q)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 3 => {
                                             None
                                         }
                                         (_, x1) if x1 == 10 => {
-                                            Some(Op::aarch32_VMUL_s_T2A2_A)
+                                            Some(Op::VmullSA1)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 7 => {
                                             None
                                         }
                                         (_, x1) if x1 == 12 => {
-                                            Some(Op::aarch32_VQDMULH_T2A2_A)
+                                            Some(Op::VqdmulhA2Q)
                                         }
                                         (_, x1) if x1 == 13 => {
-                                            Some(Op::aarch32_VQRDMULH_T2A2_A)
+                                            Some(Op::VqrdmulhA2Q)
                                         }
                                         (x0, x1) if x0 == 1 && x1 == 11 => {
                                             None
                                         }
                                         (_, x1) if x1 == 14 => {
-                                            Some(Op::aarch32_VQRDMLAH_A2_A)
+                                            Some(Op::VqrdmlahA2Q)
                                         }
                                         (_, x1) if x1 == 15 => {
-                                            Some(Op::aarch32_VQRDMLSH_A2_A)
+                                            Some(Op::VqrdmlshA2Q)
                                         }
                                         _ => None
                                     }
@@ -16293,37 +16295,37 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let imm4 = instr & 7;
                                     match (cmode, op) {
                                         (x0, x1) if x0 & 9 == 0 && x1 == 0 => {
-                                            Some(Op::aarch32_VMOV_i_T1A1_A)
+                                            Some(Op::VmovIT1A1A)
                                         }
                                         (x0, x1) if x0 & 9 == 0 && x1 == 1 => {
-                                            Some(Op::aarch32_VMVN_i_T1A1_A)
+                                            Some(Op::VmvnIT1A1A)
                                         }
                                         (x0, x1) if x0 & 9 == 1 && x1 == 0 => {
-                                            Some(Op::aarch32_VORR_i_T1A1_A)
+                                            Some(Op::VorrIT1A1A)
                                         }
                                         (x0, x1) if x0 & 9 == 1 && x1 == 1 => {
-                                            Some(Op::aarch32_VBIC_i_T1A1_A)
+                                            Some(Op::VbicIT1A1A)
                                         }
                                         (x0, x1) if x0 & 13 == 8 && x1 == 0 => {
-                                            Some(Op::aarch32_VMOV_i_T1A1_A)
+                                            Some(Op::VmovIT1A1A)
                                         }
                                         (x0, x1) if x0 & 13 == 8 && x1 == 1 => {
-                                            Some(Op::aarch32_VMVN_i_T1A1_A)
+                                            Some(Op::VmvnIT1A1A)
                                         }
                                         (x0, x1) if x0 & 13 == 9 && x1 == 0 => {
-                                            Some(Op::aarch32_VORR_i_T1A1_A)
+                                            Some(Op::VorrIT1A1A)
                                         }
                                         (x0, x1) if x0 & 13 == 9 && x1 == 1 => {
-                                            Some(Op::aarch32_VBIC_i_T1A1_A)
+                                            Some(Op::VbicIT1A1A)
                                         }
                                         (x0, x1) if x0 & 12 == 12 && x1 == 0 => {
-                                            Some(Op::aarch32_VMOV_i_T1A1_A)
+                                            Some(Op::VmovIT1A1A)
                                         }
                                         (x0, x1) if x0 & 14 == 12 && x1 == 1 => {
-                                            Some(Op::aarch32_VMVN_i_T1A1_A)
+                                            Some(Op::VmvnIT1A1A)
                                         }
                                         (x0, x1) if x0 == 14 && x1 == 1 => {
-                                            Some(Op::aarch32_VMOV_i_T1A1_A)
+                                            Some(Op::VmovIT1A1A)
                                         }
                                         (x0, x1) if x0 == 15 && x1 == 1 => {
                                             None
@@ -16344,58 +16346,58 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     let Vm = instr & 7;
                                     match (U, (imm3H << 1) | L, imm3L, opc, Q) {
                                         (_, x1, _, x3, _) if x1 != 0 && x3 == 0 => {
-                                            Some(Op::aarch32_VSHR_T1A1_A)
+                                            Some(Op::VshrA1Q)
                                         }
                                         (_, x1, _, x3, _) if x1 != 0 && x3 == 1 => {
-                                            Some(Op::aarch32_VSRA_T1A1_A)
+                                            Some(Op::VsraA1Q)
                                         }
                                         (_, x1, x2, x3, x4) if x1 != 0 && x2 == 0 && x3 == 10 && x4 == 0 => {
-                                            Some(Op::aarch32_VMOVL_T1A1_A)
+                                            Some(Op::VmovlA1)
                                         }
                                         (_, x1, _, x3, _) if x1 != 0 && x3 == 2 => {
-                                            Some(Op::aarch32_VRSHR_T1A1_A)
+                                            Some(Op::VrshrA1Q)
                                         }
                                         (_, x1, _, x3, _) if x1 != 0 && x3 == 3 => {
-                                            Some(Op::aarch32_VRSRA_T1A1_A)
+                                            Some(Op::VrsraA1D)
                                         }
                                         (_, x1, _, x3, _) if x1 != 0 && x3 == 7 => {
-                                            Some(Op::aarch32_VQSHL_i_T1A1_A)
+                                            Some(Op::VqshluIA1Q)
                                         }
                                         (_, x1, _, x3, x4) if x1 != 0 && x3 == 9 && x4 == 0 => {
-                                            Some(Op::aarch32_VQSHRN_T1A1_A)
+                                            Some(Op::VqshrunA1)
                                         }
                                         (_, x1, _, x3, x4) if x1 != 0 && x3 == 9 && x4 == 1 => {
-                                            Some(Op::aarch32_VQRSHRN_T1A1_A)
+                                            Some(Op::VqrshrunA1)
                                         }
                                         (_, x1, _, x3, x4) if x1 != 0 && x3 == 10 && x4 == 0 => {
-                                            Some(Op::aarch32_VSHLL_T1A1_A)
+                                            Some(Op::VshllA1)
                                         }
                                         (_, x1, _, x3, _) if x1 != 0 && x3 & 12 == 12 => {
-                                            Some(Op::aarch32_VCVT_xs_A1_A)
+                                            Some(Op::VcvtXsA1Q)
                                         }
                                         (x0, x1, _, x3, _) if x0 == 0 && x1 != 0 && x3 == 5 => {
-                                            Some(Op::aarch32_VSHL_i_T1A1_A)
+                                            Some(Op::VshlIA1Q)
                                         }
                                         (x0, x1, _, x3, x4) if x0 == 0 && x1 != 0 && x3 == 8 && x4 == 0 => {
-                                            Some(Op::aarch32_VSHRN_T1A1_A)
+                                            Some(Op::VshrnA1)
                                         }
                                         (x0, x1, _, x3, x4) if x0 == 0 && x1 != 0 && x3 == 8 && x4 == 1 => {
-                                            Some(Op::aarch32_VRSHRN_T1A1_A)
+                                            Some(Op::VrshrnA1)
                                         }
                                         (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 4 => {
-                                            Some(Op::aarch32_VSRI_T1A1_A)
+                                            Some(Op::VsriA1Q)
                                         }
                                         (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 5 => {
-                                            Some(Op::aarch32_VSLI_T1A1_A)
+                                            Some(Op::VsliA1Q)
                                         }
                                         (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 6 => {
-                                            Some(Op::aarch32_VQSHL_i_T1A1_A)
+                                            Some(Op::VqshluIA1Q)
                                         }
                                         (x0, x1, _, x3, x4) if x0 == 1 && x1 != 0 && x3 == 8 && x4 == 0 => {
-                                            Some(Op::aarch32_VQSHRN_T1A1_A)
+                                            Some(Op::VqshrunA1)
                                         }
                                         (x0, x1, _, x3, x4) if x0 == 1 && x1 != 0 && x3 == 8 && x4 == 1 => {
-                                            Some(Op::aarch32_VQRSHRN_T1A1_A)
+                                            Some(Op::VqrshrunA1)
                                         }
                                         _ => None
                                     }
@@ -16422,28 +16424,28 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, _) if x0 == 1 => {
-                                    Some(Op::aarch32_CLREX_A1_A)
+                                    Some(Op::ClrexA1)
                                 }
                                 (x0, _) if x0 & 14 == 2 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 4 && x1 & 11 != 0 => {
-                                    Some(Op::aarch32_DSB_A1_A)
+                                    Some(Op::DsbA1)
                                 }
                                 (x0, x1) if x0 == 4 && x1 == 0 => {
-                                    Some(Op::aarch32_SSBB_A1_A)
+                                    Some(Op::SsbbA1)
                                 }
                                 (x0, x1) if x0 == 4 && x1 == 4 => {
-                                    Some(Op::aarch32_PSSBB_A1_A)
+                                    Some(Op::PssbbA1)
                                 }
                                 (x0, _) if x0 == 5 => {
-                                    Some(Op::aarch32_DMB_A1_A)
+                                    Some(Op::DmbA1)
                                 }
                                 (x0, _) if x0 == 6 => {
-                                    Some(Op::aarch32_ISB_A1_A)
+                                    Some(Op::IsbA1)
                                 }
                                 (x0, _) if x0 == 7 => {
-                                    Some(Op::aarch32_SB_A1_A)
+                                    Some(Op::SbA1)
                                 }
                                 (x0, _) if x0 & 8 == 8 => {
                                     None
@@ -16465,16 +16467,16 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1, _) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::aarch32_PLI_i_A1_A)
+                                    Some(Op::PliIA1)
                                 }
                                 (x0, _, x2) if x0 == 1 && x2 == 15 => {
-                                    Some(Op::aarch32_PLD_l_A1_A)
+                                    Some(Op::PldLA1)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 != 15 => {
-                                    Some(Op::aarch32_PLD_i_A1_A)
+                                    Some(Op::PldIA1)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 != 15 => {
-                                    Some(Op::aarch32_PLD_i_A1_A)
+                                    Some(Op::PldIA1)
                                 }
                                 _ => None
                             }
@@ -16492,13 +16494,13 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     Some(Op::Nop)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 1 => {
-                                    Some(Op::aarch32_PLI_r_A1_A)
+                                    Some(Op::PliRA1Rrx)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_PLD_r_A1_A)
+                                    Some(Op::PldRA1Rrx)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::aarch32_PLD_r_A1_A)
+                                    Some(Op::PldRA1Rrx)
                                 }
                                 _ => None
                             }
@@ -16525,58 +16527,58 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match (L, itype) {
                                 (x0, x1) if x0 == 0 && x1 & 14 == 0 => {
-                                    Some(Op::aarch32_VST4_m_T1A1_A)
+                                    Some(Op::Vst4MA1Posti)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 2 => {
-                                    Some(Op::aarch32_VST1_m_T1A1_A)
+                                    Some(Op::Vst1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 3 => {
-                                    Some(Op::aarch32_VST2_m_T1A1_A)
+                                    Some(Op::Vst2MT1A1A)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 14 == 4 => {
-                                    Some(Op::aarch32_VST3_m_T1A1_A)
+                                    Some(Op::Vst3MA1Posti)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 6 => {
-                                    Some(Op::aarch32_VST1_m_T1A1_A)
+                                    Some(Op::Vst1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 7 => {
-                                    Some(Op::aarch32_VST1_m_T1A1_A)
+                                    Some(Op::Vst1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 0 && x1 & 14 == 8 => {
-                                    Some(Op::aarch32_VST2_m_T1A1_A)
+                                    Some(Op::Vst2MT1A1A)
                                 }
                                 (x0, x1) if x0 == 0 && x1 == 10 => {
-                                    Some(Op::aarch32_VST1_m_T1A1_A)
+                                    Some(Op::Vst1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 1 && x1 & 14 == 0 => {
-                                    Some(Op::aarch32_VLD4_m_T1A1_A)
+                                    Some(Op::Vld4MA1Posti)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 2 => {
-                                    Some(Op::aarch32_VLD1_m_T1A1_A)
+                                    Some(Op::Vld1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::aarch32_VLD2_m_T1A1_A)
+                                    Some(Op::Vld2MT1A1A)
                                 }
                                 (x0, x1) if x0 == 1 && x1 & 14 == 4 => {
-                                    Some(Op::aarch32_VLD3_m_T1A1_A)
+                                    Some(Op::Vld3MA1Posti)
                                 }
                                 (_, x1) if x1 == 11 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 6 => {
-                                    Some(Op::aarch32_VLD1_m_T1A1_A)
+                                    Some(Op::Vld1MT1A1A)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 7 => {
-                                    Some(Op::aarch32_VLD1_m_T1A1_A)
+                                    Some(Op::Vld1MT1A1A)
                                 }
                                 (_, x1) if x1 & 12 == 12 => {
                                     None
                                 }
                                 (x0, x1) if x0 == 1 && x1 & 14 == 8 => {
-                                    Some(Op::aarch32_VLD2_m_T1A1_A)
+                                    Some(Op::Vld2MT1A1A)
                                 }
                                 (x0, x1) if x0 == 1 && x1 == 10 => {
-                                    Some(Op::aarch32_VLD1_m_T1A1_A)
+                                    Some(Op::Vld1MT1A1A)
                                 }
                                 _ => None
                             }
@@ -16596,19 +16598,19 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                                     None
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 0 => {
-                                    Some(Op::aarch32_VLD1_a_T1A1_A)
+                                    Some(Op::Vld1AA1Posti)
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 1 => {
-                                    Some(Op::aarch32_VLD2_a_T1A1_A)
+                                    Some(Op::Vld2AA1Posti)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::aarch32_VLD3_a_T1A1_A)
+                                    Some(Op::Vld3AA1Posti)
                                 }
                                 (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 1 => {
                                     None
                                 }
                                 (x0, x1, _) if x0 == 1 && x1 == 3 => {
-                                    Some(Op::aarch32_VLD4_a_T1A1_A)
+                                    Some(Op::Vld4AA1Posti)
                                 }
                                 _ => None
                             }
@@ -16624,82 +16626,82 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
                             let Rm = instr & 7;
                             match (L, size, N, Rm) {
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::aarch32_VST1_1_T1A1_A)
+                                    Some(Op::Vst11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::aarch32_VST2_1_T1A1_A)
+                                    Some(Op::Vst21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 2 => {
-                                    Some(Op::aarch32_VST3_1_T1A1_A)
+                                    Some(Op::Vst31T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 3 => {
-                                    Some(Op::aarch32_VST4_1_T1A1_A)
+                                    Some(Op::Vst41A1Posti)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::aarch32_VST1_1_T1A1_A)
+                                    Some(Op::Vst11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::aarch32_VST2_1_T1A1_A)
+                                    Some(Op::Vst21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 2 => {
-                                    Some(Op::aarch32_VST3_1_T1A1_A)
+                                    Some(Op::Vst31T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 3 => {
-                                    Some(Op::aarch32_VST4_1_T2A2_A)
+                                    Some(Op::Vst41A2Posti)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::aarch32_VST1_1_T1A1_A)
+                                    Some(Op::Vst11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::aarch32_VST2_1_T1A1_A)
+                                    Some(Op::Vst21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 2 => {
-                                    Some(Op::aarch32_VST3_1_T1A1_A)
+                                    Some(Op::Vst31T1A1A)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 & 13 != 13 => {
-                                    Some(Op::aarch32_VST4_1_T3A3_A)
+                                    Some(Op::Vst41A3Nowb)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 == 13 => {
-                                    Some(Op::aarch32_VST4_1_T3A3_A)
+                                    Some(Op::Vst41A3Nowb)
                                 }
                                 (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 == 15 => {
-                                    Some(Op::aarch32_VST4_1_T3A3_A)
+                                    Some(Op::Vst41A3Nowb)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
-                                    Some(Op::aarch32_VLD1_1_T1A1_A)
+                                    Some(Op::Vld11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
-                                    Some(Op::aarch32_VLD2_1_T1A1_A)
+                                    Some(Op::Vld21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 2 => {
-                                    Some(Op::aarch32_VLD3_1_T1A1_A)
+                                    Some(Op::Vld31T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 3 => {
-                                    Some(Op::aarch32_VLD4_1_T1A1_A)
+                                    Some(Op::Vld41T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
-                                    Some(Op::aarch32_VLD1_1_T1A1_A)
+                                    Some(Op::Vld11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
-                                    Some(Op::aarch32_VLD2_1_T1A1_A)
+                                    Some(Op::Vld21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 2 => {
-                                    Some(Op::aarch32_VLD3_1_T1A1_A)
+                                    Some(Op::Vld31T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 3 => {
-                                    Some(Op::aarch32_VLD4_1_T1A1_A)
+                                    Some(Op::Vld41T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 0 => {
-                                    Some(Op::aarch32_VLD1_1_T1A1_A)
+                                    Some(Op::Vld11T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 1 => {
-                                    Some(Op::aarch32_VLD2_1_T1A1_A)
+                                    Some(Op::Vld21T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 2 => {
-                                    Some(Op::aarch32_VLD3_1_T1A1_A)
+                                    Some(Op::Vld31T1A1A)
                                 }
                                 (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 3 => {
-                                    Some(Op::aarch32_VLD4_1_T1A1_A)
+                                    Some(Op::Vld41T1A1A)
                                 }
                                 _ => None
                             }
@@ -16719,1661 +16721,1656 @@ pub fn decode_a32(instr: u32) -> Option<Op> {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Op {
-    aarch32_SHA1SU0_A1_A,
-    UQINCD_R_RS_X,
-    ADR_Z_AZ_D_u32_scaled,
-    INCH_R_RS__,
-    aarch64_system_barriers_ssbb,
-    aarch32_VSRA_T1A1_A,
-    aarch32_LDRH_l_A1_A,
-    UQDECD_R_RS_X,
-    aarch64_integer_pac_autdb_dp_1src,
-    aarch64_vector_arithmetic_unary_special_sqrt_est_float_simd,
-    ST1B_Z_P_BR__,
-    aarch32_VCNT_T1A1_A,
-    ANDV_R_P_Z__,
-    aarch32_BL_i_A1_A,
-    aarch64_vector_shift_conv_int_sisd,
-    SUB_Z_P_ZZ__,
-    aarch64_memory_pair_simdfp_offset,
-    MUL_Z_ZI__,
-    aarch64_float_arithmetic_mul_add_sub,
-    aarch32_VRADDHN_T1A1_A,
-    aarch32_STLEXH_A1_A,
-    aarch32_ADD_rr_A1_A,
-    aarch64_integer_tags_mcsettaganddatapairpost,
-    aarch64_vector_arithmetic_binary_uniform_max_min_fp16_1985,
-    CMPNE_P_P_ZW__,
-    aarch32_MRRC_T1A1_A,
-    FRINTA_Z_P_Z__,
-    aarch64_vector_crypto_sm3_sm3tt2b,
-    LD4B_Z_P_BI_Contiguous,
-    ZIP2_P_PP__,
-    aarch64_integer_arithmetic_mul_uniform_add_sub,
-    aarch32_VABA_T2A2_A,
-    LDFF1B_Z_P_BR_U32,
-    aarch32_LDAEXD_A1_A,
-    ORV_R_P_Z__,
-    ST3D_Z_P_BI_Contiguous,
-    aarch64_memory_pair_simdfp_no_alloc,
-    LD2H_Z_P_BI_Contiguous,
-    aarch32_VUZP_T1A1_A,
-    aarch64_vector_crypto_sha2op_sha256_sched0,
-    aarch64_memory_literal_general,
-    aarch64_vector_cvt_bf16_scalar,
-    aarch32_VORR_i_T1A1_A,
-    MOVPRFX_Z_P_Z__,
-    aarch32_VDOT_bf16_A1_A,
-    ST1W_Z_P_BZ_S_x32_scaled,
-    aarch32_STM_u_A1_AS,
-    LD3H_Z_P_BR_Contiguous,
-    aarch32_RSB_rr_A1_A,
-    aarch64_system_exceptions_debug_halt,
-    aarch32_VSWP_T1A1_A,
-    ST1B_Z_P_BZ_S_x32_unscaled,
-    aarch64_vector_shift_left_sat_simd,
-    CLASTB_V_P_Z__,
-    aarch64_vector_arithmetic_unary_special_sqrt,
-    DUP_Z_Zi__,
-    aarch64_integer_tags_mcsettagandzerodata,
-    FMULX_Z_P_ZZ__,
-    UQDECB_R_RS_UW,
-    FADD_Z_P_ZS__,
-    WHILELS_P_P_RR__,
-    CNTP_R_P_P__,
-    aarch32_STREXD_A1_A,
-    PTRUES_P_S__,
-    aarch64_vector_arithmetic_unary_special_sqrt_fp16,
-    aarch32_VZIP_T1A1_A,
-    FRINTI_Z_P_Z__,
-    UQINCD_R_RS_UW,
-    CPY_Z_P_V__,
-    REVH_Z_Z__,
-    aarch64_vector_crypto_sha512_sha512h,
-    STR_Z_BI__,
-    FMINV_V_P_Z__,
-    LDFF1W_Z_P_BR_U64,
-    aarch32_SHA256SU1_A1_A,
-    SUBR_Z_ZI__,
-    LSRR_Z_P_ZZ__,
-    aarch32_MVN_r_A1_A,
-    aarch32_USAD8_A1_A,
-    aarch32_LDREXD_A1_A,
-    aarch32_SHA1P_A1_A,
-    aarch32_VCVT_is_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_extended_sisd,
-    FMLA_Z_ZZZi_D,
-    aarch32_ESB_A1_A,
-    aarch32_UMULL_A1_A,
-    LDFF1SB_Z_P_BR_S64,
-    aarch32_LDRSBT_A2_A,
-    aarch32_SMLABB_A1_A,
-    aarch32_LDRHT_A2_A,
-    aarch32_VQRDMLSH_A2_A,
-    aarch32_PLD_r_A1_A,
-    LDFF1SH_Z_P_BZ_D_x32_scaled,
-    aarch32_SHA256H2_A1_A,
-    aarch32_SHA1SU1_A1_A,
-    BRKPA_P_P_PP__,
-    aarch64_vector_transfer_vector_insert,
-    aarch32_VMLA_s_T2A2_A,
-    aarch64_vector_arithmetic_binary_disparate_add_sub_narrow,
-    aarch32_VABS_A1_A,
-    aarch32_STRBT_A2_A,
-    aarch64_vector_arithmetic_unary_float_round,
-    LD1SB_Z_P_BI_S16,
-    PRFW_I_P_AI_D,
-    aarch64_vector_arithmetic_binary_uniform_sub_fp16_sisd,
-    aarch32_ADD_r_A1_A,
-    aarch64_memory_single_general_immediate_signed_post_idx,
-    aarch64_vector_crypto_sm3_sm3tt1a,
-    aarch32_VST4_1_T2A2_A,
-    FCVTZS_Z_P_Z_D2W,
-    LD1D_Z_P_AI_D,
-    LDFF1W_Z_P_BZ_D_64_unscaled,
-    LD1SH_Z_P_BI_S32,
-    ADDVL_R_RI__,
-    aarch32_VBIC_i_T1A1_A,
-    aarch32_VRSHL_T1A1_A,
-    aarch64_vector_arithmetic_unary_fp16_conv_int_sisd,
-    ZIP1_Z_ZZ__,
-    aarch32_VST3_m_T1A1_A,
-    PRFB_I_P_AI_D,
-    aarch64_vector_arithmetic_unary_cmp_float_bulk_sisd,
-    aarch32_UHASX_A1_A,
-    FNMLA_Z_P_ZZZ__,
-    aarch32_SB_A1_A,
-    ST1D_Z_P_BZ_D_x32_scaled,
-    aarch64_integer_tags_mcsettagpair,
-    BRKA_P_P_P__,
-    aarch32_CRC32_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_accum,
-    UABD_Z_P_ZZ__,
-    CMPHS_P_P_ZW__,
-    aarch32_VSHR_T1A1_A,
-    aarch32_VRSRA_T1A1_A,
-    FRSQRTS_Z_ZZ__,
-    LD1RQW_Z_P_BR_Contiguous,
-    aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_sisd,
-    aarch32_VQRSHL_T1A1_A,
-    LDFF1W_Z_P_BZ_D_x32_unscaled,
-    aarch32_QSUB_A1_A,
-    ST3H_Z_P_BI_Contiguous,
-    LDFF1SB_Z_P_BZ_D_64_unscaled,
-    aarch64_memory_single_general_immediate_signed_offset_lda_stl,
-    aarch32_VQRSHRN_T1A1_A,
-    aarch64_integer_flags_rmif,
-    aarch64_vector_crypto_sha3_eor3,
-    aarch32_VFMA_bf_A1_A,
-    aarch64_system_exceptions_debug_exception,
-    STNT1D_Z_P_BR_Contiguous,
-    aarch64_vector_arithmetic_binary_uniform_cmp_bitwise_simd,
-    aarch32_LDAB_A1_A,
-    CMPHS_P_P_ZI__,
-    aarch64_integer_conditional_select,
-    LDFF1D_Z_P_AI_D,
-    FCMUO_P_P_ZZ__,
-    BRKN_P_P_PP__,
-    INCB_R_RS__,
-    aarch32_STRD_i_A1_A,
-    ST1D_Z_P_BZ_D_x32_unscaled,
-    aarch32_VSUB_f_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_rsqrts_fp16_sisd,
-    aarch32_LDM_e_A1_AS,
-    aarch32_UQADD16_A1_A,
-    LD1SH_Z_P_BZ_D_64_scaled,
-    LD1RB_Z_P_BI_U16,
-    aarch64_vector_arithmetic_binary_disparate_mul_double_sisd,
-    aarch64_vector_arithmetic_unary_diff_neg_fp16,
-    aarch64_vector_arithmetic_binary_element_mat_mul_int_dotp,
-    LD1SH_Z_P_BZ_D_x32_unscaled,
-    aarch64_system_barriers_dsb,
-    aarch32_VRSUBHN_T1A1_A,
-    aarch32_LDC_i_T1A1_A,
-    CNT_Z_P_Z__,
-    aarch32_VMRS_T1A1_AS,
-    ST2B_Z_P_BR_Contiguous,
-    UDIV_Z_P_ZZ__,
-    aarch32_VRECPS_A1_A,
-    CMPNE_P_P_ZI__,
-    aarch64_float_arithmetic_add_sub,
-    FCMGT_P_P_ZZ__,
-    aarch64_vector_shift_right_narrow_nonuniform_simd,
-    aarch32_VSEL_A1_A,
-    NOT_Z_P_Z__,
-    LD1RSW_Z_P_BI_S64,
-    aarch32_VMOV_rs_T1A1_A,
-    REVW_Z_Z__,
-    ST1D_Z_P_BR__,
-    aarch64_system_monitors,
-    aarch32_UXTAB_A1_A,
-    aarch32_SEVL_A1_A,
-    aarch32_BLX_r_A1_A,
-    aarch32_B_A1_A,
-    UDIVR_Z_P_ZZ__,
-    aarch64_memory_single_simdfp_immediate_signed_pre_idx,
-    aarch32_VCVTB_bf16_T1A1_A,
-    aarch32_LDRB_i_A1_A,
-    aarch64_vector_arithmetic_binary_disparate_mul_poly,
-    FCMGT_P_P_Z0__,
-    aarch32_STRB_i_A1_A,
-    CLASTA_R_P_Z__,
-    USDOT_Z_ZZZi_S,
-    UQDECH_R_RS_X,
-    LD1H_Z_P_AI_D,
-    aarch64_integer_tags_mcsettaganddatapair,
-    aarch32_ADC_r_A1_A,
-    aarch32_ADD_SP_i_A1_A,
-    aarch64_integer_conditional_compare_register,
-    aarch32_SXTAH_A1_A,
-    aarch64_vector_crypto_sha2op_sha1_hash,
-    aarch32_VMUL_s_T2A2_A,
-    aarch32_VSHRN_T1A1_A,
-    UQINCB_R_RS_X,
-    aarch32_REV16_A1_A,
-    aarch32_VINS_A1_A,
-    aarch32_VSLI_T1A1_A,
-    aarch64_vector_arithmetic_binary_disparate_diff,
-    aarch64_float_arithmetic_div,
-    ST1W_Z_P_BR__,
-    DUPM_Z_I__,
-    aarch64_vector_arithmetic_unary_rbit,
-    aarch32_VORN_r_T1A1_A,
-    aarch32_VRINTZ_vfp_A1_A,
-    SQINCH_R_RS_X,
-    aarch32_BFC_A1_A,
-    LDFF1H_Z_P_BR_U16,
-    LD1B_Z_P_AI_D,
-    LD1H_Z_P_BZ_D_64_scaled,
-    TRN1_Z_ZZ__,
-    aarch64_vector_arithmetic_binary_uniform_div_fp16,
-    NEG_Z_P_Z__,
-    UQDECH_R_RS_UW,
-    aarch32_VMVN_i_T1A1_A,
-    aarch64_vector_arithmetic_unary_float_narrow,
-    aarch32_UHADD16_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_add_saturating_sisd,
-    aarch32_SHADD16_A1_A,
-    ST4W_Z_P_BR_Contiguous,
-    aarch32_SBC_rr_A1_A,
-    aarch64_vector_arithmetic_binary_disparate_add_sub_long,
-    CMPLE_P_P_ZI__,
-    aarch32_TST_rr_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_sisd,
-    aarch32_AND_rr_A1_A,
-    aarch64_memory_pair_simdfp_post_idx,
-    SDOT_Z_ZZZi_S,
-    ST2D_Z_P_BI_Contiguous,
-    aarch64_integer_tags_mcsettagandzeroarray,
-    aarch32_SEV_A1_A,
-    aarch32_UHSAX_A1_A,
-    LD1B_Z_P_BR_U32,
-    SQADD_Z_ZI__,
-    FMAXV_V_P_Z__,
-    aarch32_VABA_T1A1_A,
-    PRFW_I_P_BZ_D_64_scaled,
-    CMPHI_P_P_ZI__,
-    aarch64_memory_atomicops_cas_single,
-    aarch32_VRSQRTE_A1_A,
-    ASR_Z_P_ZI__,
-    aarch32_SHSUB8_A1_A,
-    aarch32_SHA1H_A1_A,
-    FDUP_Z_I__,
-    LDFF1B_Z_P_AI_D,
-    LD1B_Z_P_BI_U8,
-    aarch64_vector_arithmetic_binary_uniform_add_fp,
-    LD3W_Z_P_BR_Contiguous,
-    aarch64_vector_arithmetic_unary_special_frecpx,
-    ST1B_Z_P_BI__,
-    aarch64_integer_tags_mcsubtag,
-    aarch64_integer_pac_pacia_hint,
-    SQINCB_R_RS_SX,
-    aarch32_SMULBB_A1_A,
-    FADDV_V_P_Z__,
-    FMUL_Z_ZZi_D,
-    aarch32_UHSUB16_A1_A,
-    REVB_Z_Z__,
-    aarch64_vector_shift_left_simd,
-    LSR_Z_ZW__,
-    LD1RB_Z_P_BI_U32,
-    ST1H_Z_P_BI__,
-    aarch64_vector_crypto_sha3_rax1,
-    CMPLS_P_P_ZI__,
-    aarch32_VABD_f_A1_A,
-    ORRS_P_P_PP_Z,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp16_product,
-    ST1W_Z_P_BZ_S_x32_unscaled,
-    ORN_P_P_PP_Z,
-    ST3H_Z_P_BR_Contiguous,
-    aarch64_memory_literal_simdfp,
-    aarch64_system_barriers_dmb,
-    aarch64_float_convert_int,
-    aarch32_VDOT_bf16_i_A1_A,
-    aarch64_vector_arithmetic_unary_cmp_int_bulk_sisd,
-    aarch32_VSHL_r_T1A1_A,
-    ST2B_Z_P_BI_Contiguous,
-    CMPGE_P_P_ZW__,
-    aarch64_vector_reduce_fp16_maxnm_simd,
-    aarch64_float_move_fp_select,
-    aarch64_vector_transfer_vector_permute_transpose,
-    aarch64_integer_tags_mcinsertrandomtag,
-    aarch64_vector_arithmetic_binary_uniform_add_fp16,
-    aarch32_UDIV_A1_A,
-    BFMLALT_Z_ZZZi__,
-    aarch32_VTST_T1A1_A,
-    LD1SH_Z_P_BZ_D_x32_scaled,
-    aarch64_system_barriers_isb,
-    aarch32_VLD4_a_T1A1_A,
-    aarch32_VLD2_a_T1A1_A,
-    SQSUB_Z_ZZ__,
-    aarch32_VMLA_f_A1_A,
-    LD1RSB_Z_P_BI_S64,
-    aarch32_VPADAL_T1A1_A,
-    aarch32_EOR_rr_A1_A,
-    aarch64_vector_crypto_sm3_sm3partw2,
-    BICS_P_P_PP_Z,
-    aarch32_VQRDMULH_T2A2_A,
-    aarch64_vector_arithmetic_binary_element_mul_acc_fp16_simd,
-    ASRR_Z_P_ZZ__,
-    SQDECH_Z_ZS__,
-    LDFF1H_Z_P_BZ_S_x32_unscaled,
-    aarch32_QDSUB_A1_A,
-    SCVTF_Z_P_Z_H2FP16,
-    aarch32_QSUB16_A1_A,
-    LD1RSB_Z_P_BI_S16,
-    aarch64_vector_arithmetic_binary_uniform_add_halving_truncating,
-    aarch32_LDRSBT_A1_A,
-    aarch32_LDRT_A1_A,
-    FDIVR_Z_P_ZZ__,
-    aarch64_integer_tags_mcgettag,
-    FCVTZS_Z_P_Z_FP162W,
-    FCVT_Z_P_Z_H2D,
-    aarch32_VMUL_s_A1_A,
-    aarch32_VLD2_m_T1A1_A,
-    FSUB_Z_P_ZS__,
-    ST1D_Z_P_AI_D,
-    DECD_R_RS__,
-    aarch64_vector_arithmetic_binary_uniform_recps_sisd,
-    SXTH_Z_P_Z__,
-    CMPEQ_P_P_ZI__,
-    aarch64_integer_arithmetic_mul_widening_32_64,
-    CPY_Z_O_I__,
-    aarch64_float_convert_fix,
-    aarch64_integer_arithmetic_add_sub_immediate,
-    aarch32_VQNEG_T1A1_A,
-    aarch64_vector_arithmetic_unary_extract_sat_simd,
-    ST1W_Z_P_BZ_D_x32_scaled,
-    aarch32_UADD8_A1_A,
-    aarch64_integer_bitfield,
-    LD1RSB_Z_P_BI_S32,
-    SDIVR_Z_P_ZZ__,
-    BFMLALB_Z_ZZZ__,
-    aarch64_memory_pair_simdfp_pre_idx,
-    UMIN_Z_P_ZZ__,
-    ASR_Z_P_ZZ__,
-    FCMLT_P_P_Z0__,
-    FMAXNMV_V_P_Z__,
-    SUBR_Z_P_ZZ__,
-    aarch64_vector_crypto_sha3op_sha1_hash_parity,
-    aarch32_PLD_l_A1_A,
-    FADD_Z_ZZ__,
-    LDFF1B_Z_P_BR_U8,
-    aarch64_vector_transfer_integer_insert,
-    LD1SB_Z_P_AI_D,
-    LDNF1SB_Z_P_BI_S16,
-    FCMLA_Z_ZZZi_S,
-    aarch32_MVN_rr_A1_A,
-    TRN2_Z_ZZ__,
-    BFCVT_Z_P_Z_S2BF,
-    aarch64_integer_pac_autib_hint,
-    aarch64_branch_conditional_test,
-    aarch32_MRS_A1_AS,
-    aarch32_BKPT_A1_A,
-    LDFF1SH_Z_P_AI_D,
-    aarch32_LDRD_l_A1_A,
-    aarch32_VMOV_sr_T1A1_A,
-    FCMGE_P_P_Z0__,
-    aarch64_vector_arithmetic_binary_uniform_diff,
-    aarch64_integer_ins_ext_insert_movewide,
-    aarch32_LDRSH_r_A1_A,
-    UDOT_Z_ZZZi_S,
-    aarch32_VFMAL_A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_upper,
-    aarch64_integer_arithmetic_add_sub_shiftedreg,
-    LD1SB_Z_P_BZ_D_x32_unscaled,
-    ADD_Z_ZI__,
-    aarch64_vector_arithmetic_binary_uniform_add_fp_complex,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_lower,
-    aarch32_CMN_rr_A1_A,
-    ST4D_Z_P_BR_Contiguous,
-    LD1SH_Z_P_AI_S,
-    aarch64_vector_arithmetic_binary_uniform_logical_bsl_eor,
-    WHILELO_P_P_RR__,
-    aarch32_YIELD_A1_A,
-    FCVTZU_Z_P_Z_FP162H,
-    FSCALE_Z_P_ZZ__,
-    aarch64_vector_arithmetic_binary_element_mul_high_sisd,
-    REV_P_P__,
-    LD3D_Z_P_BR_Contiguous,
-    aarch64_integer_arithmetic_div,
-    aarch64_vector_arithmetic_unary_float_widen,
-    aarch32_ORR_rr_A1_A,
-    SQDECW_Z_ZS__,
-    aarch64_vector_arithmetic_unary_special_sqrt_est_fp16_simd,
-    aarch32_BIC_rr_A1_A,
-    LD1SH_Z_P_BI_S64,
-    UCVTF_Z_P_Z_X2D,
-    LDNF1W_Z_P_BI_U32,
-    aarch64_vector_crypto_sha3op_sha256_sched1,
-    aarch64_integer_tags_mcgettagarray,
-    aarch32_SMLALD_A1_A,
-    CLASTA_V_P_Z__,
-    aarch32_AND_r_A1_A,
-    LD1RQD_Z_P_BR_Contiguous,
-    aarch64_integer_tags_mcinserttagmask,
-    MAD_Z_P_ZZZ__,
-    aarch64_vector_arithmetic_unary_diff_neg_int_simd,
-    LDFF1SH_Z_P_BZ_D_64_unscaled,
-    CNTW_R_S__,
-    CMPNE_P_P_ZZ__,
-    ST1H_Z_P_BZ_D_64_scaled,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_sisd,
-    FADD_Z_P_ZZ__,
-    ST1H_Z_P_BR__,
-    aarch32_VNEG_A1_A,
-    LD1ROW_Z_P_BI_U32,
-    UZP2_P_PP__,
-    LSL_Z_P_ZW__,
-    aarch64_vector_arithmetic_unary_cmp_int_lessthan_simd,
-    RDFFR_P_F__,
-    aarch32_SMLSD_A1_A,
-    LSLR_Z_P_ZZ__,
-    aarch32_HVC_A1_A,
-    AND_Z_ZI__,
-    SETFFR_F__,
-    FCVT_Z_P_Z_S2D,
-    LD1SB_Z_P_BI_S32,
-    aarch32_SMMLA_A1_A,
-    ST1D_Z_P_BZ_D_64_unscaled,
-    UZP2_Z_ZZ__,
-    LD1ROD_Z_P_BI_U64,
-    UQINCD_Z_ZS__,
-    aarch32_VFMA_bfs_A1_A,
-    aarch32_VQDMLAL_T1A1_A,
-    aarch32_PLI_r_A1_A,
-    aarch64_vector_arithmetic_binary_disparate_mul_dmacc_simd,
-    LDFF1H_Z_P_BZ_D_x32_unscaled,
-    UQINCW_R_RS_X,
-    aarch64_branch_unconditional_dret,
-    aarch32_LDRSHT_A2_A,
-    CNTD_R_S__,
-    aarch64_vector_transfer_vector_permute_unzip,
-    aarch64_memory_single_general_immediate_signed_offset_normal,
-    aarch32_SHA256SU0_A1_A,
-    ORR_P_P_PP_Z,
-    aarch64_vector_arithmetic_binary_disparate_mul_dmacc_sisd,
-    SQDECD_Z_ZS__,
-    ASR_Z_ZW__,
-    FCMNE_P_P_Z0__,
-    aarch32_SUB_r_A1_A,
-    aarch32_VADDL_T1A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_acc_double_simd,
-    FMINNMV_V_P_Z__,
-    ADR_Z_AZ_SD_same_scaled,
-    SQDECD_R_RS_SX,
-    PRFW_I_P_BZ_D_x32_scaled,
-    aarch32_VCADD_A1_A,
-    aarch32_VCMLA_idx_A1_A,
-    LDNT1H_Z_P_BR_Contiguous,
-    aarch32_VSTM_T2A2_A,
-    ADR_Z_AZ_D_s32_scaled,
-    LD1SB_Z_P_BR_S64,
-    ZIP2_Z_ZZ_Q,
-    LDNT1B_Z_P_BI_Contiguous,
-    aarch64_vector_reduce_fp_maxnm_simd,
-    ST1W_Z_P_BI__,
-    FRINTP_Z_P_Z__,
-    FNEG_Z_P_Z__,
-    aarch64_system_register_system,
-    LDNF1SH_Z_P_BI_S32,
-    aarch64_vector_crypto_sha512_sha512su1,
-    aarch64_memory_single_general_immediate_signed_pac,
-    UMULH_Z_P_ZZ__,
-    aarch32_LDRD_i_A1_A,
-    SQADD_Z_ZZ__,
-    LD1D_Z_P_BR_U64,
-    BIC_P_P_PP_Z,
-    aarch32_VQSUB_T1A1_A,
-    LDFF1SB_Z_P_AI_S,
-    LD1B_Z_P_BZ_D_x32_unscaled,
-    TBL_Z_ZZ_1,
-    LD1SH_Z_P_BZ_D_64_unscaled,
-    SMIN_Z_ZI__,
-    FMLS_Z_ZZZi_H,
-    aarch32_VSQRT_A1_A,
-    STNT1B_Z_P_BI_Contiguous,
-    RBIT_Z_P_Z__,
-    aarch32_VSHL_i_T1A1_A,
-    LDFF1B_Z_P_BR_U64,
-    aarch32_VST1_1_T1A1_A,
-    AND_Z_ZZ__,
-    STR_P_BI__,
-    FMLA_Z_ZZZi_S,
-    LDFF1B_Z_P_AI_S,
-    aarch32_VMUL_i_A2_A,
-    LDNT1W_Z_P_BR_Contiguous,
-    LDFF1B_Z_P_BR_U16,
-    LD1RSH_Z_P_BI_S32,
-    LD4D_Z_P_BR_Contiguous,
-    ST1H_Z_P_AI_D,
-    aarch32_ERET_A1_A,
-    aarch32_VFMA_A1_A,
-    LDNF1H_Z_P_BI_U64,
-    FSUB_Z_ZZ__,
-    aarch64_vector_arithmetic_unary_float_conv_int_sisd,
-    aarch32_AESMC_A1_A,
-    ST4H_Z_P_BR_Contiguous,
-    aarch32_STLEXB_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_max_min_fp_1985,
-    FNMAD_Z_P_ZZZ__,
-    FCADD_Z_P_ZZ__,
-    aarch32_STL_A1_A,
-    DUP_Z_R__,
-    aarch64_vector_arithmetic_unary_cnt,
-    aarch64_integer_arithmetic_add_sub_carry,
-    aarch64_vector_arithmetic_unary_special_recip_float_sisd,
-    aarch32_REVSH_A1_A,
-    LD1RQD_Z_P_BI_U64,
-    NORS_P_P_PP_Z,
-    aarch64_vector_arithmetic_unary_float_conv_float_bulk_simd,
-    aarch64_udf,
-    LDFF1SW_Z_P_BZ_D_x32_unscaled,
-    aarch32_CLZ_A1_A,
-    aarch64_vector_crypto_sm3_sm3ss1,
-    INCW_Z_ZS__,
-    CTERMNE_RR__,
-    SMULH_Z_P_ZZ__,
-    aarch64_vector_reduce_fp16_maxnm_sisd,
-    FCVTZS_Z_P_Z_FP162X,
-    aarch32_LDRHT_A1_A,
-    UQINCB_R_RS_UW,
-    aarch32_VREV16_T1A1_A,
-    aarch32_VLDR_A1_A,
-    aarch32_MRC_T1A1_A,
-    PRFB_I_P_BZ_D_x32_scaled,
+    Sm3Tt1AVvv4Crypto3Imm2,
+    UcvtfZPZX2Fp16,
+    LsrZZw,
+    UxtahA1,
+    SbcsIA1,
+    UdivrZPZz,
+    VfmaBfsA1Q,
+    BlIA1A,
+    Ld1SwZPAiD,
+    FnmsubHFloatdp3,
+    Ldff1HZPBzD64Unscaled,
+    VtrnA1Q,
+    Ldff1ShZPAiD,
+    FmlaZZzziH,
+    Autdzb64ZDp1Src,
+    Fcvtzu64HFloat2Int,
+    AutiaspHiHints,
+    SrZZi,
+    Ldff1SwZPBzD64Scaled,
+    Ldff1SbZPBrS32,
+    Ld1RwZPBiU64,
+    Ldnf1DZPBiU64,
+    Eretab64EBranchReg,
+    Ld1HZPBrU16,
+    LdmEA1As,
+    Ldff1BZPBzD64Unscaled,
+    VzipA1Q,
+    FcvtzuAsisdmiscfp16R,
+    Ld1HZPBzDX32Scaled,
+    McrrA1,
+    Ldff1WZPBzD64Unscaled,
+    FrintaZPZ,
+    Ld4RAsisdlsoR4,
+    UqdecwRRsX,
+    Subps64SDp2Src,
+    DechRRs,
+    St4HZPBiContiguous,
+    Ldff1ShZPBzSX32Unscaled,
+    VqnegA1Q,
+    StlbA1,
+    Sadd16A1,
+    SubrZPZz,
+    Ldff1WZPBzDX32Unscaled,
+    Ssat16A1,
+    FcmltAsimdmiscFz,
+    YieldA1,
+    TblZZz1,
+    St4HZPBrContiguous,
+    UqinchZZs,
+    FrsqrteAsisdmiscR,
+    Ldff1WZPBzSX32Scaled,
+    St2HZPBiContiguous,
+    UqaddAsisdsameOnly,
+    St4WZPBiContiguous,
+    LslZPZw,
+    St1BZPAiS,
+    FcmeqPPZ0,
+    VclzA1Q,
+    Sha1HA1,
+    SmlattA1,
+    LdrsbRA1Pre,
+    Pacga64PDp2Src,
+    SsbbA1,
+    FcmltPPZ0,
+    UsdotZZzzS,
+    UqincwZZs,
+    Ldp64LdstpairOff,
+    LslZZi,
+    VqrdmlahA1Q,
+    Ld2DZPBrContiguous,
+    Ld1RodZPBrContiguous,
+    FrsqrtsAsisdsameOnly,
+    Sha512H2QqvCryptosha5123,
+    VcmlaA1Q,
+    InsrZV,
+    VrshlA1Q,
+    MlasA1,
+    Ld1HZPBrU32,
+    St3DZPBrContiguous,
+    WhilelsPPRr,
+    St1BZPBi,
+    MpgePPZi,
+    UrsraAsisdshfR,
+    UabdZPZz,
+    VcvtSivA1D,
+    FdivHFloatdp2,
+    VminnmA1Q,
+    Sha512Su1Vvv2Cryptosha5123,
+    DdplRRi,
+    Ld1WZPBiU32,
+    FnmulHFloatdp2,
+    FacgtAsisdsameOnly,
+    BrknPPPp,
+    WrffrFP,
+    Ld1RodZPBiU64,
+    Bics64LogShift,
+    HvcA1,
+    MadZPZzz,
+    FminZPZs,
+    UdfOnlyPermUndef,
+    VnegA2D,
+    Sha1Su0A1,
+    ScvtfZPZH2Fp16,
+    BitZPZ,
+    UhasxA1,
+    Ld1SwZPBzD64Unscaled,
+    XpaclriHiHints,
+    Ldff1BZPBrU64,
+    SubsIA1,
+    QdaddA1,
+    VinsA1,
+    Ld2HZPBiContiguous,
+    RsbsRA1Rrx,
+    NegAsimdmiscR,
+    LdaexA1,
+    AxflagMPstate,
+    Ldff1WZPBzSX32Unscaled,
+    St2DZPBrContiguous,
+    UqdecdRRsX,
+    MpltPPZw,
+    PrfhIPBzDX32Scaled,
+    FmulxZPZz,
+    MrsBrA1As,
+    Stnt1DZPBiContiguous,
+    LdabA1,
+    Sm3Partw2Vvv4Cryptosha5123,
+    BrkbPPP,
+    Vld1MT1A1A,
+    SqsubZZz,
+    St1HZPBzD64Scaled,
+    SqdmullAsisdelemL,
+    VmulIA1Q,
+    StlexA1,
+    CmnRA1Rrx,
+    PrfumPLdstUnscaled,
+    Ld1BZPBzD64Unscaled,
+    LdrhLA1,
+    LsrZPZi,
+    VldrLA1D,
+    QsubA1,
+    Sha1CQsvCryptosha3,
+    FexpaZZ,
+    SmmlaZZzz,
+    FnegAsimdmiscfp16R,
+    FrecpsZZz,
+    SubsRA1Rrx,
+    TermeqRr,
+    LdrdLA1,
+    MulZZi,
+    SdotZZzz,
+    Sxtb16A1,
+    MsrIA1As,
+    Ld1BZPBiU64,
+    UminZPZz,
+    DffrPF,
+    EorsRrA1,
+    Vst4MA1Posti,
+    Vst41A2Posti,
+    UmovAsimdinsXX,
+    Ubfm64MBitfield,
+    FcvtDhFloatdp1,
+    LslZPZi,
+    AesmcA1,
+    VqdmlalA1,
+    BrkpaPPPp,
+    MsrRA1As,
+    FminnmZPZs,
+    Ldff1HZPBzSX32Scaled,
+    Umulh64Dp3Src,
+    Uzp2ZZz,
+    Sha1PA1,
+    MovsRrA1,
+    St1DZPBi,
+    SelZPZz,
+    LdrhRA1Pre,
+    FrintiAsimdmiscR,
+    LastaVPZ,
+    St3HZPBiContiguous,
+    Ldff1WZPBrU64,
+    FcvtzsZPZD2W,
+    SqdecbRRsSx,
+    Ld1AsisdlsepI2I2,
+    RsubhnAsimddiffN,
+    Ldnf1SbZPBiS32,
+    NegZPZ,
+    SxtbZPZ,
+    Ldnf1ShZPBiS64,
+    VsubwA1,
+    Sha256H2A1,
+    St1DZPBzD64Scaled,
+    UxthZPZ,
+    AdcsRrA1,
+    VqdmlslA2,
+    SqinchRRsX,
+    FmlsZZzziS,
+    Ldp64LdstpairPost,
+    St1WZPAiD,
+    VmovIA2D,
+    Fcvtzu64HFloat2Fix,
+    Sha1MA1,
+    Zip2AsimdpermOnly,
+    Ld1HZPBzSX32Scaled,
+    UqdecpRPRX,
+    FaddpAsisdpairOnlySd,
+    SmlsldxA1,
+    FmaxnmvVPZ,
+    RevA1,
+    LdrDLdstImmpost,
+    SqdmlslAsisdelemL,
+    VsudotSA1Q,
+    SevlA1,
+    St1DZPAiD,
+    VcgeIA1Q,
+    Uqadd16A1,
+    NdsPPPpZ,
+    VcvtXsA1Q,
+    Ld4DZPBrContiguous,
+    FmlsAsimdsamefp16Only,
+    SqdmlslAsimdelemL,
+    FcvtauAsimdmiscfp16R,
+    MplePPZw,
+    Rax1Vvv2Cryptosha5123,
+    VaddFA1Q,
+    VeorA1Q,
+    SqrdmulhAsisdelemR,
+    FabsZPZ,
+    VmlsFA1Q,
+    UrsraAsimdshfR,
+    LdrsbIA1Pre,
+    FnmsbZPZzz,
+    Ld1RbZPBiU32,
+    FaddaVPZ,
+    LdaA1,
+    StrIA1Pre,
+    UqrshlAsisdsameOnly,
+    Ld1RswZPBiS64,
+    Sm4EkeyVvv4Cryptosha5123,
+    SqxtunAsisdmiscN,
+    Sha256Su0A1,
+    UqincwRRsUw,
+    VrshrnA1,
+    Vld2AA1Posti,
+    PyZOI,
+    SmusdxA1,
+    Ldnf1BZPBiU64,
+    FmulxAsimdelemRhH,
+    AddpAsimdsameOnly,
+    Ldff1DZPBrU64,
+    SqdechRRsSx,
+    SsatA1Asr,
+    FacgtPPZz,
+    Stg64SoffsetLdsttags,
+    FcvtzuAsimdmiscR,
+    Ssub8A1,
+    UqrshrnAsimdshfN,
+    VstrA1D,
+    St1WZPBzDX32Scaled,
+    VaddwA1,
+    St4WZPBrContiguous,
+    FcvtzsZPZS2X,
+    VshlIA1Q,
+    PrfhIPBzSX32Scaled,
+    St3WZPBiContiguous,
+    Ldnf1BZPBiU8,
+    FmovAsimdimmHH,
+    St1HZPBi,
+    Ldnf1ShZPBiS32,
+    UrecpeAsimdmiscR,
+    FmulZPZs,
+    BfmmlaZZzz,
+    SrZPZi,
+    FcpyZPI,
+    PrfhIPBrS,
+    VqshlRA1Q,
+    SrZZw,
+    Uxtb16A1,
+    Ldnf1HZPBiU64,
+    FcvtzuAsimdmiscfp16R,
+    Ldff1WZPBrU32,
+    Ld1SbZPBzDX32Unscaled,
+    UsqaddAsimdmiscR,
+    ClrexBnBarriers,
+    HltExException,
+    SelA1,
+    SubZZi,
+    PrfdIPAiS,
+    Ld1ShZPBzD64Unscaled,
+    VrintxAsimdA1Q,
+    VfmslA1Q,
+    EorZZi,
+    Pacdza64ZDp1Src,
+    VmovHA1,
+    VmovRA2D,
+    DecwZZs,
+    Ld1RshZPBiS64,
+    Stnt1BZPBiContiguous,
+    FabdAsimdsameOnly,
+    PrfwIPBzD64Scaled,
+    VmullIA1,
+    Ldff1DZPBzD64Unscaled,
+    SliAsisdshfR,
+    FrintzZPZ,
+    BfmlalbZZzz,
+    Qsub16A1,
+    FsubrZPZs,
+    PnextPPP,
+    PrfwIPBiS,
+    SdotZZzziS,
+    FcvtzuAsimdshfC,
+    Ldff1DZPBzDX32Scaled,
+    FmaxZPZz,
+    IncdZZs,
+    StlexdA1,
+    SbcsRA1Rrx,
+    Ldnt1DZPBiContiguous,
+    Usad8A1,
+    SdivrZPZz,
+    FacgePPZz,
+    UminpAsimdsameOnly,
+    SrdZPZi,
+    VqrdmulhA2Q,
+    FdivAsimdsameOnly,
+    NotAsimdmiscR,
+    VqrdmlahA2Q,
+    Trn1ZZzQ,
+    FmulxAsimdelemRSd,
+    Ld1AsisdlseR22V,
+    VshllA2,
+    EorPPPpZ,
+    Subp64SDp2Src,
+    SqincdZZs,
+    FmlaZZzziS,
+    Stgp64LdstpairPre,
+    MvnsRrA1,
+    EvZZ,
+    BfcvtBsFloatdp1,
+    SubAsisdsameOnly,
+    SxtbA1,
+    MsrSiPstate,
+    AddvAsimdallOnly,
+    FcselHFloatsel,
+    Stnt1BZPBrContiguous,
+    LdrPBi,
+    LdrtA1,
+    UrhaddAsimdsameOnly,
+    Ldff1SbZPBrS16,
+    MrsRsSystemmove,
+    CmhsAsisdsameOnly,
+    VceqRT1A1A,
     Nop,
-    aarch64_memory_exclusive_pair,
-    INDEX_Z_RI__,
-    UQDECD_Z_ZS__,
-    aarch32_VMLA_s_A1_A,
-    aarch32_SHA256H_A1_A,
-    ST1H_Z_P_AI_S,
-    aarch32_CSDB_A1_A,
-    aarch64_vector_crypto_sm4_sm4enc,
-    aarch64_memory_exclusive_single,
-    aarch64_memory_pair_general_offset,
-    TRN2_Z_ZZ_Q,
-    LD1B_Z_P_BZ_D_64_unscaled,
-    LDFF1H_Z_P_BR_U32,
-    aarch64_vector_arithmetic_binary_uniform_cmp_fp_sisd,
-    aarch64_integer_tags_mcsettag,
-    aarch64_vector_arithmetic_binary_element_mul_fp16_sisd,
-    UQDECP_R_P_R_X,
-    aarch64_vector_crypto_sm3_sm3tt1b,
-    LD1H_Z_P_AI_S,
-    PFIRST_P_P_P__,
-    INCD_R_RS__,
-    LDFF1W_Z_P_BR_U32,
-    ZIP1_P_PP__,
-    aarch32_AND_i_A1_A,
-    aarch64_vector_arithmetic_unary_diff_neg_float,
-    aarch64_memory_atomicops_swp,
-    LD4H_Z_P_BR_Contiguous,
-    DECB_R_RS__,
-    aarch64_system_sysops,
-    aarch64_vector_arithmetic_binary_element_mul_fp_simd,
-    PRFB_I_P_BI_S,
-    FMIN_Z_P_ZS__,
-    aarch32_VTBL_T1A1_A,
-    LDFF1SH_Z_P_BR_S64,
-    UQINCW_Z_ZS__,
-    UZP1_P_PP__,
-    aarch64_vector_arithmetic_binary_uniform_max_min_fp16_2008,
-    LD2B_Z_P_BR_Contiguous,
-    LDFF1H_Z_P_BR_U64,
-    aarch64_vector_arithmetic_binary_element_mul_fp_sisd,
-    aarch64_integer_tags_mcsettagandzerodatapre,
-    aarch32_SEL_A1_A,
-    LDNF1B_Z_P_BI_U32,
-    aarch64_vector_arithmetic_unary_cmp_float_bulk_simd,
-    SQDECW_R_RS_SX,
-    aarch64_system_exceptions_runtime_smc,
-    LDFF1D_Z_P_BZ_D_64_scaled,
-    LD1W_Z_P_BI_U32,
-    LDNF1SB_Z_P_BI_S64,
-    USDOT_Z_ZZZ_S,
-    aarch32_VUSDOT_A1_A,
-    aarch32_ADC_rr_A1_A,
-    aarch64_integer_pac_autda_dp_1src,
-    LD3D_Z_P_BI_Contiguous,
-    aarch32_SSAT_A1_A,
-    LD4H_Z_P_BI_Contiguous,
-    aarch32_VST4_m_T1A1_A,
-    aarch32_SRS_A1_AS,
-    FCMLA_Z_ZZZi_H,
-    aarch64_integer_arithmetic_pointer_mcsubtracttaggedaddresssetflags,
-    ST4B_Z_P_BR_Contiguous,
-    LDFF1B_Z_P_BZ_D_x32_unscaled,
-    LDFF1SB_Z_P_AI_D,
-    UQADD_Z_ZI__,
-    SUNPKHI_Z_Z__,
-    FMUL_Z_P_ZZ__,
-    aarch64_memory_single_general_immediate_signed_pre_idx,
-    UCVTF_Z_P_Z_W2S,
-    SQDECW_R_RS_X,
-    aarch32_MLS_A1_A,
-    aarch32_VMOV_i_T1A1_A,
-    aarch32_VST2_m_T1A1_A,
-    aarch32_SSUB16_A1_A,
-    aarch32_ADD_i_A1_A,
-    aarch64_integer_tags_mcsettagarray,
-    FCMEQ_P_P_ZZ__,
-    LD1H_Z_P_BR_U64,
-    LD1W_Z_P_BZ_D_64_unscaled,
-    aarch32_LDM_u_A1_AS,
-    aarch32_VPMAX_f_A1_A,
-    INCH_Z_ZS__,
-    FMIN_Z_P_ZZ__,
-    aarch32_VHADD_T1A1_A,
-    ST2W_Z_P_BI_Contiguous,
-    aarch32_UHADD8_A1_A,
-    aarch64_vector_arithmetic_binary_element_bfdot,
-    aarch64_vector_arithmetic_binary_disparate_add_sub_wide,
-    aarch64_integer_arithmetic_address_pc_rel,
-    aarch64_vector_arithmetic_binary_uniform_recps_simd,
-    SMIN_Z_P_ZZ__,
-    AND_P_P_PP_Z,
-    CMPEQ_P_P_ZZ__,
-    UCVTF_Z_P_Z_W2FP16,
-    FMINNM_Z_P_ZS__,
-    MOVPRFX_Z_Z__,
-    aarch64_vector_arithmetic_binary_uniform_recps_fp16_simd,
-    aarch64_vector_arithmetic_binary_uniform_max_min_pair,
-    aarch64_integer_tags_mcsettagpost,
-    aarch64_vector_crypto_sm3_sm3partw1,
-    aarch32_VQDMULH_T2A2_A,
-    aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_sisd,
-    WHILELE_P_P_RR__,
-    aarch64_integer_tags_mcaddtag,
-    aarch64_vector_shift_left_long,
-    aarch64_vector_arithmetic_unary_cmp_int_bulk_simd,
-    aarch32_LDRH_r_A1_A,
-    SQINCW_R_RS_X,
-    aarch32_UADD16_A1_A,
-    REV_Z_Z__,
-    PRFB_I_P_BZ_S_x32_scaled,
-    FRINTM_Z_P_Z__,
-    TRN1_Z_ZZ_Q,
-    aarch64_vector_arithmetic_binary_element_mul_acc_long,
-    aarch32_RSB_i_A1_A,
-    DECD_Z_ZS__,
-    aarch32_LDC_l_T1A1_A,
-    PUNPKLO_P_P__,
-    PRFD_I_P_BZ_S_x32_scaled,
-    aarch32_VSUBL_T1A1_A,
-    aarch64_vector_arithmetic_unary_extract_sqxtun_sisd,
-    SQDECP_R_P_R_SX,
-    LD1H_Z_P_BR_U32,
-    aarch64_vector_arithmetic_unary_fp16_round,
-    aarch32_VCGT_r_T1A1_A,
-    LD1W_Z_P_AI_S,
-    aarch32_VQRDMLAH_A1_A,
-    aarch32_DOT_A1_A,
-    LD1ROW_Z_P_BR_Contiguous,
-    aarch32_VRECPE_A1_A,
-    aarch32_QADD16_A1_A,
-    LDFF1W_Z_P_BZ_D_x32_scaled,
-    aarch32_VCVTB_T1A1_A,
-    aarch64_vector_shift_right_narrow_logical,
-    LD1SW_Z_P_BZ_D_64_unscaled,
-    aarch64_vector_arithmetic_binary_uniform_rsqrts_simd,
-    UZP1_Z_ZZ__,
-    LD3B_Z_P_BI_Contiguous,
-    aarch64_vector_crypto_sha3_bcax,
-    CMPHS_P_P_ZZ__,
-    PRFW_I_P_BI_S,
-    LDNT1B_Z_P_BR_Contiguous,
-    LD1D_Z_P_BZ_D_x32_unscaled,
-    UXTH_Z_P_Z__,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_extended_simd,
-    DECW_Z_ZS__,
-    FCMLA_Z_P_ZZZ__,
-    aarch64_vector_shift_right_insert_sisd,
-    LD4D_Z_P_BI_Contiguous,
-    aarch32_SSAX_A1_A,
-    aarch64_vector_arithmetic_unary_cmp_fp16_lessthan_simd,
-    aarch32_SMULL_A1_A,
-    aarch32_VNMLA_A2_A,
-    LD1B_Z_P_BI_U32,
-    aarch32_SHASX_A1_A,
-    aarch64_integer_arithmetic_cnt,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_fused,
-    FEXPA_Z_Z__,
-    PRFW_I_P_BR_S,
-    FCVTZU_Z_P_Z_D2W,
-    aarch64_vector_arithmetic_binary_disparate_mul_accum,
-    aarch32_EOR_i_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_acc_bf16_long,
-    aarch32_VLD1_m_T1A1_A,
-    aarch32_LDMDA_A1_A,
-    aarch64_vector_arithmetic_unary_float_conv_float_bulk_sisd,
-    aarch64_vector_fp16_movi,
-    aarch32_VST4_1_T3A3_A,
-    aarch64_vector_arithmetic_unary_diff_neg_sat_simd,
-    aarch64_vector_arithmetic_unary_clsz,
-    NANDS_P_P_PP_Z,
-    aarch32_SHADD8_A1_A,
-    aarch32_VPADD_f_A1_A,
-    DUP_Z_I__,
-    aarch64_vector_arithmetic_unary_special_frecpx_fp16,
-    FNMLS_Z_P_ZZZ__,
-    UQINCP_R_P_R_X,
-    aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_simd,
-    DECP_R_P_R__,
-    aarch32_VCLE_i_A1_A,
-    SQINCP_R_P_R_SX,
-    BFCVTNT_Z_P_Z_S2BF,
-    UQINCH_R_RS_UW,
-    CMPGT_P_P_ZW__,
-    UDOT_Z_ZZZi_D,
-    AND_Z_P_ZZ__,
-    SQINCH_Z_ZS__,
-    MLS_Z_P_ZZZ__,
-    MSB_Z_P_ZZZ__,
-    aarch32_STREXB_A1_A,
-    aarch32_ISB_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_add_halving_rounding,
-    SMAXV_R_P_Z__,
-    aarch32_LDAEX_A1_A,
-    BRKB_P_P_P__,
-    ASR_Z_ZI__,
-    LD1D_Z_P_BZ_D_x32_scaled,
-    ST1W_Z_P_AI_S,
-    aarch64_integer_tags_mcsettagandzerodatapost,
-    aarch32_VSTM_T1A1_A,
-    aarch32_SMMUL_A1_A,
-    aarch32_BFI_A1_A,
-    aarch32_VADD_f_A2_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_product,
-    FADDA_V_P_Z__,
-    LD3B_Z_P_BR_Contiguous,
-    aarch32_MOV_rr_A1_A,
-    aarch64_vector_crypto_sha3op_sha256_hash,
-    FMSB_Z_P_ZZZ__,
-    CMPLO_P_P_ZW__,
-    FMLA_Z_P_ZZZ__,
-    ST1D_Z_P_BZ_D_64_scaled,
-    aarch32_SDIV_A1_A,
-    aarch32_SETPAN_A1_A,
-    TRN1_P_PP__,
-    LDNF1SW_Z_P_BI_S64,
-    SADDV_R_P_Z__,
-    aarch32_STMDA_A1_A,
-    SEL_Z_P_ZZ__,
-    aarch64_vector_arithmetic_binary_element_mul_acc_complex,
-    aarch64_system_register_cpsr,
-    LD2D_Z_P_BI_Contiguous,
-    SQINCD_R_RS_SX,
-    FCPY_Z_P_I__,
-    aarch32_SBFX_A1_A,
-    aarch64_integer_logical_shiftedreg,
-    PRFD_I_P_BZ_D_x32_scaled,
-    aarch64_vector_arithmetic_unary_shift,
-    ANDS_P_P_PP_Z,
-    aarch32_SXTAB_A1_A,
-    aarch32_BXJ_A1_A,
-    FACGT_P_P_ZZ__,
-    LD1RQW_Z_P_BI_U32,
-    aarch32_SSUB8_A1_A,
-    LD1H_Z_P_BZ_S_x32_scaled,
-    aarch32_STLEX_A1_A,
-    aarch32_SMLAWB_A1_A,
-    CMPGE_P_P_ZI__,
-    aarch64_vector_shift_conv_int_simd,
-    LDR_P_BI__,
-    aarch32_VQSHL_i_T1A1_A,
-    SQINCD_R_RS_X,
-    aarch32_VLD3_a_T1A1_A,
-    aarch32_VPMAX_i_T1A1_A,
-    aarch64_vector_crypto_sha512_sha512h2,
-    aarch64_memory_single_simdfp_immediate_signed_post_idx,
-    aarch32_VEXT_T1A1_A,
-    aarch32_SUB_i_A1_A,
-    LD1W_Z_P_AI_D,
-    LSL_Z_P_ZZ__,
-    BRKPBS_P_P_PP__,
-    aarch64_vector_reduce_fp_max_simd,
-    aarch64_vector_transfer_vector_permute_zip,
-    RDFFRS_P_P_F__,
-    aarch32_AESIMC_A1_A,
-    aarch32_UQSUB16_A1_A,
-    aarch64_vector_reduce_fp_max_sisd,
-    LD1H_Z_P_BZ_D_x32_scaled,
-    aarch32_LDRBT_A2_A,
-    aarch64_vector_arithmetic_unary_add_saturating_simd,
-    UQDECW_Z_ZS__,
-    aarch32_SXTAB16_A1_A,
-    LDFF1SW_Z_P_BZ_D_64_unscaled,
-    LD1SH_Z_P_BR_S64,
-    CPY_Z_P_R__,
-    aarch32_VRINTZ_asimd_A1_A,
-    LDNT1W_Z_P_BI_Contiguous,
-    aarch32_LDRSB_r_A1_A,
-    aarch32_SMC_A1_AS,
-    FMAX_Z_P_ZS__,
-    aarch64_integer_pac_strip_hint,
-    aarch32_SUB_SP_r_A1_A,
-    ST1H_Z_P_BZ_S_x32_unscaled,
-    aarch32_HLT_A1_A,
-    PRFD_I_P_AI_S,
-    aarch32_VMVN_r_T1A1_A,
-    LDNF1H_Z_P_BI_U16,
-    aarch64_integer_tags_mcsettagpairandzerodatapost,
-    aarch32_BIC_i_A1_A,
-    aarch32_LDM_A1_A,
-    LD1B_Z_P_BR_U64,
-    aarch32_MCRR_T1A1_A,
-    aarch32_VNEG_A2_A,
-    aarch32_SSBB_A1_A,
-    aarch64_integer_shift_variable,
-    LASTB_R_P_Z__,
-    aarch64_vector_arithmetic_binary_uniform_add_saturating_simd,
-    aarch32_VCVT_iv_A1_A,
-    FCMEQ_P_P_Z0__,
-    aarch64_integer_arithmetic_pointer_mcsubtracttaggedaddress,
-    aarch32_PLD_i_A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_acc_int,
-    LDNF1D_Z_P_BI_U64,
-    aarch32_DMB_A1_A,
-    CLASTB_R_P_Z__,
-    UMIN_Z_ZI__,
-    aarch32_SETEND_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_cmp_fp16_simd,
-    aarch32_SBC_i_A1_A,
-    LD1W_Z_P_BZ_D_x32_scaled,
-    aarch32_LDAEXB_A1_A,
-    LD1W_Z_P_BR_U32,
-    aarch32_STREXH_A1_A,
-    aarch32_QSUB8_A1_A,
-    aarch32_VST2_1_T1A1_A,
-    LD4B_Z_P_BR_Contiguous,
-    aarch32_LDRSHT_A1_A,
-    aarch64_vector_arithmetic_unary_cmp_fp16_lessthan_sisd,
-    aarch32_UASX_A1_A,
-    aarch32_SASX_A1_A,
-    aarch64_memory_pair_general_pre_idx,
-    LDFF1SB_Z_P_BR_S16,
-    aarch32_VMOV_r_T2A2_A,
-    INCD_Z_ZS__,
-    aarch32_UMAAL_A1_A,
-    EOR_Z_ZI__,
-    aarch32_QASX_A1_A,
-    LDNF1B_Z_P_BI_U8,
-    SMAX_Z_ZI__,
-    aarch32_STRBT_A1_A,
-    aarch64_vector_reduce_add_sisd,
-    aarch32_QADD8_A1_A,
-    aarch32_VNMLA_A1_A,
-    aarch32_VSHLL_T1A1_A,
-    aarch32_VQRDMLSH_A1_A,
-    LDNT1H_Z_P_BI_Contiguous,
-    aarch64_vector_arithmetic_unary_special_sqrt_est_fp16_sisd,
-    UMAXV_R_P_Z__,
-    STNT1W_Z_P_BI_Contiguous,
-    FNMSB_Z_P_ZZZ__,
-    LD1D_Z_P_BI_U64,
-    aarch32_RSC_r_A1_A,
-    aarch64_vector_arithmetic_unary_float_conv_int_simd,
-    aarch32_VCVTA_asimd_A1_A,
-    aarch32_PKH_A1_A,
-    aarch32_VQMOVN_T1A1_A,
-    UQADD_Z_ZZ__,
-    BFMMLA_Z_ZZZ__,
-    aarch32_STRT_A1_A,
-    aarch32_VMOVL_T1A1_A,
-    aarch64_system_barriers_sb,
-    aarch64_vector_crypto_aes_mix,
-    aarch64_vector_shift_left_insert_simd,
-    PRFH_I_P_AI_S,
-    STNT1H_Z_P_BR_Contiguous,
-    aarch32_CMN_i_A1_A,
-    aarch64_integer_ins_ext_extract_immediate,
-    SMINV_R_P_Z__,
-    LD1W_Z_P_BZ_D_64_scaled,
-    aarch64_vector_arithmetic_binary_element_mul_acc_double_sisd,
-    aarch32_VCLS_T1A1_A,
-    PRFW_I_P_BZ_S_x32_scaled,
-    aarch64_vector_transfer_vector_table,
-    aarch64_vector_arithmetic_binary_uniform_sub_saturating_simd,
-    aarch64_vector_arithmetic_binary_uniform_cmp_int_simd,
-    BFDOT_Z_ZZZi__,
-    SABD_Z_P_ZZ__,
-    LD1W_Z_P_BZ_S_x32_scaled,
-    aarch32_RSC_i_A1_A,
-    CTERMEQ_RR__,
-    aarch64_float_compare_cond,
-    LD1RSH_Z_P_BI_S64,
-    aarch32_AESD_A1_A,
-    UQSUB_Z_ZZ__,
-    FMLS_Z_ZZZi_S,
-    LD1W_Z_P_BR_U64,
-    aarch64_vector_crypto_sha512_sha512su0,
-    aarch32_VCGT_i_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_shift_sisd,
-    aarch32_VMUL_f_A1_A,
-    aarch32_VCGE_r_T1A1_A,
-    aarch32_VCVT_xv_A1_A,
-    FCMNE_P_P_ZZ__,
-    aarch64_vector_arithmetic_binary_element_mul_acc_fp16_sisd,
-    aarch32_MVN_i_A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_fp16_simd,
-    PRFB_I_P_BZ_D_64_scaled,
-    aarch32_VLD1_a_T1A1_A,
-    LD1SH_Z_P_AI_D,
-    FCVTZU_Z_P_Z_D2X,
-    CMPGT_P_P_ZI__,
-    aarch64_vector_arithmetic_unary_float_xtn_sisd,
-    SQDECB_R_RS_SX,
-    CMPHI_P_P_ZW__,
-    CMPLS_P_P_ZW__,
-    STNT1B_Z_P_BR_Contiguous,
-    aarch32_VRINTA_vfp_A1_A,
-    aarch64_float_arithmetic_round_frint,
-    SDIV_Z_P_ZZ__,
-    ST1W_Z_P_BZ_D_64_unscaled,
-    LDFF1D_Z_P_BZ_D_x32_unscaled,
-    LDNF1H_Z_P_BI_U32,
-    LD1ROB_Z_P_BI_U8,
-    aarch32_VMAX_i_T1A1_A,
-    aarch64_vector_shift_right_narrow_uniform_simd,
-    PTEST__P_P__,
-    aarch64_branch_unconditional_immediate,
-    SCVTF_Z_P_Z_W2S,
-    LD2W_Z_P_BI_Contiguous,
-    aarch32_ORR_r_A1_A,
-    FMUL_Z_ZZi_S,
-    aarch32_VSUBHN_T1A1_A,
-    LD1H_Z_P_BR_U16,
-    LDNT1D_Z_P_BI_Contiguous,
-    aarch64_vector_crypto_sha2op_sha1_sched1,
-    ST3W_Z_P_BR_Contiguous,
-    ST1H_Z_P_BZ_D_x32_unscaled,
-    LDFF1H_Z_P_BZ_D_64_scaled,
-    aarch64_vector_arithmetic_unary_diff_neg_int_sisd,
-    LSL_Z_P_ZI__,
-    CLZ_Z_P_Z__,
-    aarch64_vector_transfer_integer_move_unsigned,
-    ST3B_Z_P_BR_Contiguous,
-    LSR_Z_P_ZW__,
-    LD2B_Z_P_BI_Contiguous,
-    aarch64_vector_arithmetic_unary_float_conv_float_tieaway_simd,
-    aarch32_TST_i_A1_A,
-    aarch32_VLD3_m_T1A1_A,
-    aarch64_vector_reduce_add_simd,
-    aarch32_SUB_rr_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mat_mul_int_mla,
-    FMUL_Z_ZZi_H,
-    aarch32_VQABS_T1A1_A,
-    aarch64_system_exceptions_runtime_svc,
-    aarch32_VMOVN_T1A1_A,
-    LDFF1SW_Z_P_BR_S64,
-    aarch32_STRD_r_A1_A,
-    aarch32_STLH_A1_A,
-    ADDPL_R_RI__,
-    FMAD_Z_P_ZZZ__,
-    aarch32_VPADD_i_T1A1_A,
-    LD1SB_Z_P_BZ_S_x32_unscaled,
-    aarch32_TEQ_rr_A1_A,
-    aarch32_STR_r_A1_A,
-    ST1D_Z_P_BI__,
-    LDFF1H_Z_P_AI_D,
-    SXTB_Z_P_Z__,
-    aarch64_integer_pac_pacib_dp_1src,
-    FMAXNM_Z_P_ZZ__,
-    SUB_Z_ZI__,
-    aarch64_vector_reduce_add_long,
-    FCVTZU_Z_P_Z_S2X,
-    LDNF1SH_Z_P_BI_S64,
-    UQDECD_R_RS_UW,
-    LDFF1SB_Z_P_BR_S32,
-    aarch64_integer_logical_immediate,
-    UXTW_Z_P_Z__,
-    aarch64_vector_arithmetic_binary_element_mul_acc_high_simd,
-    aarch64_vector_shift_right_insert_simd,
-    aarch64_memory_single_general_immediate_unsigned,
-    LDFF1SH_Z_P_BZ_D_64_scaled,
-    ST1W_Z_P_AI_D,
-    LD3H_Z_P_BI_Contiguous,
-    aarch32_LDRH_i_A1_A,
-    aarch64_memory_single_general_immediate_signed_offset_unpriv,
-    aarch64_vector_arithmetic_binary_uniform_rsqrts_sisd,
-    LD1ROB_Z_P_BR_Contiguous,
-    CLASTA_Z_P_ZZ__,
-    UADDV_R_P_Z__,
-    aarch32_VSUB_f_A2_A,
-    LSL_Z_ZI__,
-    CNTH_R_S__,
-    aarch32_VCMP_A1_A,
-    aarch64_vector_cvt_bf16_vector,
-    LDFF1W_Z_P_AI_D,
-    WRFFR_F_P__,
-    LDFF1H_Z_P_BZ_S_x32_scaled,
-    aarch32_VLDM_T2A2_A,
-    FDIV_Z_P_ZZ__,
-    FCVTZS_Z_P_Z_S2W,
-    LD1SB_Z_P_AI_S,
-    aarch32_VABS_A2_A,
-    FMLS_Z_P_ZZZ__,
-    aarch32_VCVTT_T1A1_A,
-    ASR_Z_P_ZW__,
-    aarch32_STM_A1_A,
-    SDOT_Z_ZZZi_D,
-    aarch64_vector_arithmetic_binary_element_mul_acc_mul_norounding_i_lower,
-    ST4W_Z_P_BI_Contiguous,
-    FMUL_Z_ZZ__,
-    aarch64_branch_conditional_compare,
-    FTSSEL_Z_ZZ__,
-    aarch32_VDUP_r_T1A1_A,
-    aarch32_VQDMLSL_T1A1_A,
-    aarch64_vector_arithmetic_unary_cmp_int_lessthan_sisd,
-    LD1H_Z_P_BI_U32,
-    aarch64_vector_arithmetic_unary_cmp_float_lessthan_simd,
-    aarch32_LDAH_A1_A,
-    FCVTZS_Z_P_Z_S2X,
-    LD1RW_Z_P_BI_U32,
-    SQDECH_R_RS_SX,
-    aarch64_vector_arithmetic_binary_disparate_mul_double_simd,
-    aarch32_VCLT_i_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_simd,
-    aarch32_RSB_r_A1_A,
-    FABD_Z_P_ZZ__,
-    SQDECP_R_P_R_X,
-    LDNF1W_Z_P_BI_U64,
-    aarch64_integer_pac_pacda_dp_1src,
-    INSR_Z_R__,
-    aarch32_LDR_r_A1_A,
-    LDNT1D_Z_P_BR_Contiguous,
-    aarch64_vector_arithmetic_binary_uniform_add_wrapping_single_sisd,
-    aarch32_SHSUB16_A1_A,
-    CMPLT_P_P_ZI__,
-    LDFF1W_Z_P_AI_S,
-    aarch64_vector_arithmetic_unary_fp16_conv_int_simd,
-    aarch32_VMSR_T1A1_AS,
-    aarch32_VTRN_T1A1_A,
-    STNT1D_Z_P_BI_Contiguous,
-    aarch32_LDMDB_A1_A,
-    LDFF1D_Z_P_BZ_D_64_unscaled,
-    aarch64_vector_arithmetic_unary_float_round_frint_32_64,
-    aarch32_UDF_A1_A,
-    CLS_Z_P_Z__,
-    aarch32_SXTB16_A1_A,
-    aarch32_UQADD8_A1_A,
-    aarch64_float_arithmetic_round_frint_32_64,
-    LD1D_Z_P_BZ_D_64_unscaled,
-    UMINV_R_P_Z__,
-    LD1SB_Z_P_BR_S16,
-    FCMGE_P_P_ZZ__,
-    aarch64_memory_single_simdfp_immediate_signed_offset_normal,
-    aarch64_vector_transfer_integer_move_signed,
-    aarch64_memory_vector_single_post_inc,
-    aarch64_integer_tags_mcsettagpairpost,
-    MLA_Z_P_ZZZ__,
-    aarch32_STRH_r_A1_A,
-    aarch64_vector_transfer_vector_extract,
-    aarch32_PSSBB_A1_A,
-    aarch64_vector_crypto_aes_round,
-    aarch32_VQSHL_r_T1A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp16_fused,
-    aarch32_VRSHR_T1A1_A,
-    aarch64_integer_pac_autia_hint,
-    LD1RQH_Z_P_BI_U16,
-    aarch32_VQDMULH_T1A1_A,
-    UQDECH_Z_ZS__,
-    LDFF1SH_Z_P_BZ_S_x32_scaled,
-    SPLICE_Z_P_ZZ_Des,
-    aarch32_STMDB_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_complex,
-    aarch32_VABD_i_T1A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_accum_simd,
-    aarch64_vector_arithmetic_unary_add_pairwise,
-    LDFF1W_Z_P_BZ_S_x32_unscaled,
-    aarch32_UBFX_A1_A,
-    UUNPKHI_Z_Z__,
-    PRFD_I_P_BR_S,
-    aarch64_system_exceptions_debug_breakpoint,
-    LD1RH_Z_P_BI_U64,
-    aarch32_SXTH_A1_A,
-    aarch32_SADD16_A1_A,
-    aarch32_VEOR_T1A1_A,
-    CMPLO_P_P_ZI__,
-    LDFF1H_Z_P_BZ_D_x32_scaled,
-    STNT1W_Z_P_BR_Contiguous,
-    SCVTF_Z_P_Z_W2FP16,
-    aarch32_VCEQ_i_A1_A,
-    STNT1H_Z_P_BI_Contiguous,
-    BRKPB_P_P_PP__,
-    aarch64_vector_arithmetic_binary_element_mul_acc_fp_sisd,
-    aarch32_VFMA_A2_A,
-    UQSUB_Z_ZI__,
-    aarch64_vector_arithmetic_binary_uniform_sub_saturating_sisd,
-    BRKAS_P_P_P_Z,
-    LDFF1W_Z_P_BZ_D_64_scaled,
-    FCVTZS_Z_P_Z_FP162H,
-    aarch64_vector_arithmetic_binary_element_mul_high_simd,
-    aarch32_SHSAX_A1_A,
-    LDFF1SH_Z_P_BR_S32,
-    CMPLE_P_P_ZW__,
-    aarch64_branch_unconditional_eret,
-    UCVTF_Z_P_Z_W2D,
-    LDNF1SB_Z_P_BI_S32,
-    aarch32_VRINTA_asimd_A1_A,
-    aarch32_VMLA_f_A2_A,
-    aarch64_integer_tags_mcsettagpre,
-    aarch32_VQDMULL_T1A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_acc_bf16_long,
-    LDFF1D_Z_P_BR_U64,
-    LDFF1SH_Z_P_AI_S,
-    DECP_Z_P_Z__,
-    LDR_Z_BI__,
-    LD4W_Z_P_BR_Contiguous,
-    ST3D_Z_P_BR_Contiguous,
-    aarch32_VDUP_s_T1A1_A,
-    ZIP2_Z_ZZ__,
-    aarch32_SMLALBB_A1_A,
-    aarch32_VMOVX_A1_A,
-    LDNF1B_Z_P_BI_U64,
-    PRFH_I_P_BZ_D_x32_scaled,
-    ST4B_Z_P_BI_Contiguous,
-    aarch32_VBIC_r_T1A1_A,
-    PRFH_I_P_AI_D,
-    aarch64_vector_arithmetic_binary_uniform_recps_fp16_sisd,
-    aarch32_SMLSLD_A1_A,
-    SQINCW_Z_ZS__,
-    aarch32_VLD4_m_T1A1_A,
-    aarch64_integer_flags_setf,
-    EOR_Z_ZZ__,
-    LD1SB_Z_P_BI_S64,
-    aarch32_VMLA_i_T2A2_A,
-    FMMLA_Z_ZZZ_S,
-    UUNPKLO_Z_Z__,
-    LD1B_Z_P_BI_U16,
-    aarch32_LDRT_A2_A,
-    aarch32_SHA1M_A1_A,
-    aarch32_ADC_i_A1_A,
-    LD1B_Z_P_BR_U8,
-    LD1SW_Z_P_BZ_D_x32_scaled,
-    FCVT_Z_P_Z_S2H,
-    LDFF1SW_Z_P_BZ_D_x32_scaled,
-    UQDECW_R_RS_X,
-    UQINCH_Z_ZS__,
-    aarch32_VSRI_T1A1_A,
-    FCVTZU_Z_P_Z_S2W,
-    aarch64_vector_arithmetic_unary_special_sqrt_est_int,
-    aarch64_vector_arithmetic_binary_uniform_sub_fp_simd,
-    aarch32_STRHT_A2_A,
-    LD1H_Z_P_BZ_D_64_unscaled,
-    aarch32_AESE_A1_A,
-    aarch64_integer_flags_xaflag,
-    aarch32_STRHT_A1_A,
-    aarch32_TST_r_A1_A,
-    FCVTZU_Z_P_Z_FP162X,
-    ST1B_Z_P_BZ_D_64_unscaled,
-    UMAX_Z_ZI__,
-    MUL_Z_P_ZZ__,
-    LD1D_Z_P_BZ_D_64_scaled,
-    aarch32_VQADD_T1A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_long,
-    LD1SW_Z_P_BR_S64,
-    LD1RB_Z_P_BI_U64,
-    aarch32_VMOV_h_A1_A,
-    aarch32_LDREXB_A1_A,
-    aarch32_VQDMLSL_T2A2_A,
-    LD1SW_Z_P_BZ_D_x32_unscaled,
-    aarch64_vector_arithmetic_unary_fp16_conv_float_tieaway_sisd,
-    aarch64_vector_arithmetic_binary_uniform_mat_mul_int_usdot,
-    aarch64_vector_arithmetic_binary_element_dotp,
-    aarch32_MSR_r_A1_AS,
-    DECW_R_RS__,
-    PRFH_I_P_BZ_S_x32_scaled,
-    LD1ROD_Z_P_BR_Contiguous,
-    TRN2_P_PP__,
-    ABS_Z_P_Z__,
-    aarch64_vector_crypto_sm3_sm3tt2a,
-    aarch32_VFMAL_i_A1_A,
-    aarch64_float_arithmetic_max_min,
-    aarch64_vector_shift_right_simd,
-    LASTA_V_P_Z__,
-    LD1SW_Z_P_BZ_D_64_scaled,
-    FRSQRTE_Z_Z__,
-    PRFB_I_P_BR_S,
-    aarch32_MOV_r_A1_A,
-    UQINCW_R_RS_UW,
-    aarch32_SMULWB_A1_A,
-    PRFH_I_P_BR_S,
-    WHILELT_P_P_RR__,
-    LD1H_Z_P_BZ_S_x32_unscaled,
-    aarch32_USUB8_A1_A,
-    LD1H_Z_P_BI_U16,
-    LD1RW_Z_P_BI_U64,
-    USMMLA_Z_ZZZ__,
-    aarch32_LDREXH_A1_A,
-    aarch32_VCGE_i_A1_A,
-    LDFF1SB_Z_P_BZ_D_x32_unscaled,
-    aarch32_SMLAD_A1_A,
-    INCW_R_RS__,
-    aarch32_VLD4_1_T1A1_A,
-    aarch32_VLD3_1_T1A1_A,
-    ADD_Z_ZZ__,
-    aarch64_vector_arithmetic_unary_add_saturating_sisd,
-    aarch32_VQDMULL_T2A2_A,
-    UZP2_Z_ZZ_Q,
-    aarch64_system_exceptions_runtime_hvc,
-    aarch32_STLB_A1_A,
-    SCVTF_Z_P_Z_X2D,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_mul_norounding_upper,
-    CNOT_Z_P_Z__,
-    aarch32_VLD1_1_T1A1_A,
-    aarch64_vector_reduce_fp_maxnm_sisd,
-    aarch32_ORR_i_A1_A,
-    aarch32_VQSHRN_T1A1_A,
-    FCVTZS_Z_P_Z_D2X,
-    aarch64_vector_arithmetic_binary_uniform_add_wrapping_pair,
-    aarch32_VCMLA_A1_A,
-    aarch64_vector_reduce_int_max,
-    aarch32_SBC_r_A1_A,
-    aarch32_CMP_rr_A1_A,
-    aarch32_VCEQ_r_T1A1_A,
-    aarch32_VRHADD_T1A1_A,
-    BRKNS_P_P_PP__,
-    aarch64_memory_atomicops_cas_pair,
-    SQINCH_R_RS_SX,
-    EORV_R_P_Z__,
-    aarch64_vector_arithmetic_unary_special_recip_fp16_simd,
-    SMAX_Z_P_ZZ__,
-    BFDOT_Z_ZZZ__,
-    LDFF1SB_Z_P_BZ_S_x32_unscaled,
-    INSR_Z_V__,
-    ST1B_Z_P_BZ_D_x32_unscaled,
-    aarch32_CLREX_A1_A,
-    aarch64_vector_arithmetic_unary_special_sqrt_est_float_sisd,
-    aarch32_VADD_f_A1_A,
-    aarch32_STREX_A1_A,
-    aarch64_vector_arithmetic_unary_extract_nosat,
-    aarch64_vector_transfer_vector_cpy_dup_simd,
-    aarch32_MUL_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp16_extended_simd,
-    SUNPKLO_Z_Z__,
-    aarch32_RFE_A1_AS,
-    aarch32_VMOV_i_A2_A,
-    aarch32_VSUB_i_T1A1_A,
-    aarch64_integer_arithmetic_mul_widening_64_128hi,
-    ST3W_Z_P_BI_Contiguous,
-    COMPACT_Z_P_Z__,
-    aarch32_VLDM_T1A1_A,
-    PUNPKHI_P_P__,
-    aarch64_vector_arithmetic_binary_uniform_rsqrts_fp16_simd,
-    LD1RD_Z_P_BI_U64,
-    UXTB_Z_P_Z__,
-    INDEX_Z_RR__,
-    aarch32_DBG_A1_A,
-    aarch32_SSAT16_A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_double_simd,
-    CMPLT_P_P_ZW__,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_dotp,
-    LD1RQH_Z_P_BR_Contiguous,
-    LD1SH_Z_P_BZ_S_x32_scaled,
-    aarch32_MSR_i_A1_AS,
-    aarch32_VAND_r_T1A1_A,
-    EOR_Z_P_ZZ__,
-    PFALSE_P__,
-    aarch64_vector_arithmetic_unary_special_recip_float_simd,
-    aarch64_vector_arithmetic_binary_element_mul_acc_fp_simd,
-    aarch32_SVC_A1_A,
-    ST4H_Z_P_BI_Contiguous,
-    aarch32_VQRDMLAH_A2_A,
-    LDFF1SW_Z_P_BZ_D_64_scaled,
-    FCVT_Z_P_Z_D2S,
-    aarch32_SADD8_A1_A,
-    aarch32_VADD_i_T1A1_A,
-    aarch32_VRSHRN_T1A1_A,
-    SXTW_Z_P_Z__,
-    aarch64_vector_arithmetic_unary_extract_sqxtun_simd,
-    aarch32_STRH_i_A1_A,
-    LSR_Z_ZI__,
-    aarch64_integer_arithmetic_add_sub_extendedreg,
-    aarch32_LDRD_r_A1_A,
-    aarch64_vector_crypto_sha3_xar,
-    aarch32_LDREX_A1_A,
-    SMMLA_Z_ZZZ__,
-    aarch32_SMUSD_A1_A,
-    FMMLA_Z_ZZZ_D,
-    aarch64_vector_arithmetic_unary_special_recip_fp16_sisd,
-    aarch32_VST1_m_T1A1_A,
-    SQDECH_R_RS_X,
-    ST1W_Z_P_BZ_D_x32_unscaled,
-    DECH_R_RS__,
-    LDFF1D_Z_P_BZ_D_x32_scaled,
-    aarch32_CMP_i_A1_A,
-    LD1RB_Z_P_BI_U8,
-    aarch32_VFNMA_A1_A,
-    ST4D_Z_P_BI_Contiguous,
-    aarch32_STRB_r_A1_A,
-    aarch64_float_arithmetic_mul_product,
-    aarch32_LDMIB_A1_A,
-    LD2D_Z_P_BR_Contiguous,
-    aarch64_integer_tags_mcsettagpairandzerodatapre,
-    aarch64_vector_arithmetic_binary_element_mul_double_sisd,
-    LD1SH_Z_P_BR_S32,
-    aarch32_MOV_i_A1_A,
-    LSR_Z_P_ZI__,
-    INDEX_Z_IR__,
-    LDFF1B_Z_P_BZ_S_x32_unscaled,
-    FCMLE_P_P_Z0__,
-    EOR_P_P_PP_Z,
-    aarch64_vector_shift_right_narrow_nonuniform_sisd,
-    aarch64_vector_transfer_vector_cpy_dup_sisd,
-    FSUB_Z_P_ZZ__,
-    aarch32_VMMLA_A1_A,
-    aarch64_integer_pac_pacia_dp_1src,
-    aarch32_VLD2_1_T1A1_A,
-    aarch32_USUB16_A1_A,
-    aarch32_MOVT_A1_A,
-    FSUBR_Z_P_ZS__,
-    SQDECP_Z_P_Z__,
-    PRFD_I_P_AI_D,
-    aarch32_DSB_A1_A,
-    ST3B_Z_P_BI_Contiguous,
-    aarch32_VDOT_s_A1_A,
-    PRFD_I_P_BI_S,
-    ST2H_Z_P_BI_Contiguous,
-    FCVT_Z_P_Z_D2H,
-    BFMLALB_Z_ZZZi__,
-    FSUBR_Z_P_ZZ__,
-    aarch64_vector_arithmetic_unary_diff_neg_sat_sisd,
-    BFMLALT_Z_ZZZ__,
-    DECH_Z_ZS__,
-    UCVTF_Z_P_Z_H2FP16,
-    aarch64_integer_pac_strip_dp_1src,
-    aarch32_LDRB_r_A1_A,
-    ST1W_Z_P_BZ_D_64_scaled,
-    aarch32_VSTR_A1_A,
-    aarch32_MMLA_A1_A,
-    aarch32_LDR_i_A1_A,
-    aarch32_VMUL_i_T1A1_A,
-    aarch32_BIC_r_A1_A,
-    aarch32_CPS_A1_AS,
-    ST2D_Z_P_BR_Contiguous,
-    aarch32_STLEXD_A1_A,
-    LD2W_Z_P_BR_Contiguous,
-    LD1W_Z_P_BI_U64,
-    FCVTZU_Z_P_Z_FP162W,
-    aarch32_QSAX_A1_A,
-    LSL_Z_ZW__,
-    aarch32_LDA_A1_A,
-    aarch32_VQRDMULH_T1A1_A,
-    aarch32_VMUL_f_A2_A,
-    PRFB_I_P_AI_S,
-    CMPGT_P_P_ZZ__,
-    ORR_Z_ZI__,
-    aarch32_SMLAL_A1_A,
-    aarch64_integer_pac_pacga_dp_2src,
-    aarch32_WFE_A1_A,
-    aarch32_SXTB_A1_A,
-    aarch64_memory_single_simdfp_register,
-    aarch64_float_move_fp_imm,
-    aarch32_ADR_A1_A,
-    FRINTX_Z_P_Z__,
-    SEL_P_P_PP__,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_bfdot,
-    aarch64_vector_shift_right_sisd,
-    aarch32_LDR_l_A1_A,
-    LD3W_Z_P_BI_Contiguous,
-    BIC_Z_P_ZZ__,
-    CMPEQ_P_P_ZW__,
-    LD1B_Z_P_BZ_S_x32_unscaled,
-    aarch64_vector_arithmetic_binary_uniform_logical_and_orr,
-    aarch32_TEQ_i_A1_A,
-    aarch64_memory_single_simdfp_immediate_unsigned,
-    LD4W_Z_P_BI_Contiguous,
-    FTSMUL_Z_ZZ__,
-    PNEXT_P_P_P__,
-    aarch64_integer_pac_pacib_hint,
-    aarch32_VSHLL_T2A2_A,
-    aarch64_vector_logical,
-    CMPGE_P_P_ZZ__,
-    LD2H_Z_P_BR_Contiguous,
-    LD1SB_Z_P_BZ_D_64_unscaled,
-    aarch32_USAX_A1_A,
-    CLASTB_Z_P_ZZ__,
-    SDOT_Z_ZZZ__,
-    aarch64_vector_arithmetic_binary_uniform_cmp_int_sisd,
-    aarch64_memory_vector_single_no_wb,
-    SQDECB_R_RS_X,
-    LD1B_Z_P_AI_S,
-    FCVT_Z_P_Z_H2S,
-    aarch32_STRT_A2_A,
-    aarch64_memory_pair_general_post_idx,
-    aarch64_vector_shift_left_insert_sisd,
-    FRECPX_Z_P_Z__,
-    aarch32_RSC_rr_A1_A,
-    aarch64_integer_crc,
-    aarch32_VST4_1_T1A1_A,
-    LD1W_Z_P_BZ_S_x32_unscaled,
-    ST2H_Z_P_BR_Contiguous,
-    LD1RQB_Z_P_BI_U8,
-    PRFH_I_P_BZ_D_64_scaled,
-    UCVTF_Z_P_Z_X2FP16,
-    aarch64_branch_conditional_cond,
-    ORNS_P_P_PP_Z,
-    aarch64_vector_arithmetic_binary_disparate_mul_product,
-    aarch32_WFI_A1_A,
-    UQINCP_R_P_R_UW,
-    aarch32_SHA1C_A1_A,
-    aarch32_VACGE_A1_A,
-    aarch64_vector_arithmetic_unary_fp16_conv_float_bulk_simd,
-    aarch64_vector_arithmetic_binary_uniform_max_min_fp_2008,
-    aarch32_VMOV_ss_T1A1_A,
-    aarch32_VCVT_hs_T1A1_A,
-    aarch32_VQDMLAL_T2A2_A,
-    aarch32_TSB_A1_A,
-    aarch64_integer_pac_autia_dp_1src,
-    aarch32_VADDHN_T1A1_A,
-    LD1SB_Z_P_BR_S32,
-    FSQRT_Z_P_Z__,
-    aarch64_float_compare_uncond,
-    LD1H_Z_P_BZ_D_x32_unscaled,
-    aarch32_VMAXNM_A1_A,
-    UMMLA_Z_ZZZ__,
-    aarch32_VCVT_T1A1_A,
-    aarch32_STR_i_A1_A,
-    aarch32_RBIT_A1_A,
-    aarch64_vector_arithmetic_unary_rev,
-    LDFF1H_Z_P_AI_S,
-    SUB_Z_ZZ__,
-    LD1RH_Z_P_BI_U16,
-    aarch64_vector_arithmetic_binary_uniform_mul_int_doubling_simd,
-    aarch32_SMMLS_A1_A,
-    aarch64_integer_tags_mcsettaganddatapairpre,
-    aarch32_UMLAL_A1_A,
-    LDFF1SH_Z_P_BZ_D_x32_unscaled,
-    aarch64_vector_arithmetic_binary_uniform_sub_fp16_simd,
-    aarch32_VMLA_i_T1A1_A,
-    FRINTN_Z_P_Z__,
-    aarch64_vector_crypto_sha3op_sha1_sched0,
-    LD1ROH_Z_P_BR_Contiguous,
-    SQINCD_Z_ZS__,
-    aarch32_VDOT_A1_A,
-    FRECPE_Z_Z__,
-    aarch64_vector_reduce_fp16_max_simd,
-    UQDECB_R_RS_X,
-    LDFF1SW_Z_P_AI_D,
-    aarch32_NOP_A1_A,
-    aarch64_vector_shift_left_sisd,
-    aarch64_integer_pac_pacdb_dp_1src,
-    aarch64_vector_reduce_fp16_max_sisd,
-    LDFF1B_Z_P_BZ_D_64_unscaled,
-    PRFW_I_P_AI_S,
-    ST2W_Z_P_BR_Contiguous,
-    INCP_R_P_R__,
-    LD1ROH_Z_P_BI_U16,
-    aarch32_SMUAD_A1_A,
-    aarch32_VMOV_s_A1_A,
-    aarch64_float_arithmetic_unary,
-    LSR_Z_P_ZZ__,
-    aarch64_vector_reduce_fp_add_sisd,
-    aarch64_integer_tags_mcsettagpairandzerodata,
-    aarch64_vector_arithmetic_unary_extract_sat_sisd,
-    aarch64_memory_vector_multiple_post_inc,
-    aarch32_MOV_i_A2_A,
-    ORR_Z_ZZ__,
-    aarch32_CMN_r_A1_A,
-    aarch32_UXTAH_A1_A,
-    aarch64_vector_shift_conv_float_sisd,
-    LD1SH_Z_P_BZ_S_x32_unscaled,
-    aarch64_integer_arithmetic_rbit,
-    aarch32_VPADDL_T1A1_A,
-    LDFF1SH_Z_P_BZ_S_x32_unscaled,
-    aarch32_REV_A1_A,
-    aarch32_STMIB_A1_A,
-    aarch32_VCVT_xs_A1_A,
-    LD1B_Z_P_BR_U16,
-    aarch64_vector_arithmetic_unary_special_recip_int,
-    aarch32_STC_T1A1_A,
-    BRKPAS_P_P_PP__,
-    aarch64_vector_arithmetic_binary_uniform_div,
-    aarch32_MRS_br_A1_AS,
-    aarch32_VABD_i_T2A2_A,
-    ST1H_Z_P_BZ_S_x32_scaled,
-    ST1H_Z_P_BZ_D_64_unscaled,
-    UZP1_Z_ZZ_Q,
-    aarch32_UXTB16_A1_A,
-    SQINCW_R_RS_SX,
-    aarch32_VRINTX_asimd_A1_A,
-    FMINNM_Z_P_ZZ__,
-    SUDOT_Z_ZZZi_S,
-    aarch32_VRSQRTS_A1_A,
-    aarch64_memory_ordered,
-    aarch32_MSR_br_A1_AS,
-    aarch32_ADD_SP_r_A1_A,
-    aarch64_integer_conditional_compare_immediate,
-    LD1H_Z_P_BI_U64,
-    FABS_Z_P_Z__,
-    UQDECW_R_RS_UW,
-    aarch32_VMOV_d_T1A1_A,
-    aarch64_system_barriers_pssbb,
-    SQINCP_Z_P_Z__,
-    aarch64_vector_crypto_sha3op_sha1_hash_majority,
-    aarch64_vector_arithmetic_unary_cmp_fp16_bulk_simd,
-    aarch64_branch_unconditional_register,
-    aarch32_MLA_A1_A,
-    aarch32_USAT16_A1_A,
-    FMUL_Z_P_ZS__,
-    aarch32_LDRSB_l_A1_A,
-    aarch32_SUB_SP_i_A1_A,
-    ST1B_Z_P_AI_D,
-    PTRUE_P_S__,
-    aarch64_vector_arithmetic_binary_uniform_shift_simd,
-    LDNF1B_Z_P_BI_U16,
-    aarch32_EOR_r_A1_A,
-    aarch64_system_hints,
-    aarch64_memory_ordered_rcpc,
-    aarch64_memory_vector_multiple_no_wb,
-    aarch32_QADD_A1_A,
-    SQINCP_R_P_R_X,
-    ORR_Z_P_ZZ__,
-    UDOT_Z_ZZZ__,
-    ST1B_Z_P_AI_S,
-    LD1W_Z_P_BZ_D_x32_unscaled,
-    aarch64_vector_shift_left_sat_sisd,
-    aarch64_memory_pair_general_no_alloc,
-    aarch64_vector_transfer_integer_dup,
-    aarch32_UQASX_A1_A,
-    aarch32_VJCVT_A1_A,
-    LDFF1W_Z_P_BZ_S_x32_scaled,
-    aarch32_VCLZ_T1A1_A,
-    aarch32_UHSUB8_A1_A,
-    ADD_Z_P_ZZ__,
-    SQSUB_Z_ZI__,
-    LASTB_V_P_Z__,
-    aarch32_VORR_r_T1A1_A,
-    aarch64_vector_shift_right_narrow_uniform_sisd,
-    aarch32_MCR_T1A1_A,
-    aarch64_vector_arithmetic_binary_uniform_sub_int,
-    aarch32_VCVT_ds_T1A1_A,
-    aarch64_vector_arithmetic_binary_element_mul_int,
-    CMPHI_P_P_ZZ__,
-    LD1RQB_Z_P_BR_Contiguous,
-    aarch64_vector_arithmetic_binary_uniform_max_min_single,
-    aarch32_VMAXNM_A2_A,
-    FMLA_Z_ZZZi_H,
-    SQDECD_R_RS_X,
-    aarch32_LDAEXH_A1_A,
-    FRECPS_Z_ZZ__,
-    aarch64_vector_arithmetic_binary_uniform_sub_fp_sisd,
-    ASRD_Z_P_ZI__,
-    aarch32_LDRSH_i_A1_A,
-    CPY_Z_P_I__,
-    aarch64_vector_arithmetic_unary_cmp_fp16_bulk_sisd,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp_product,
-    UQINCH_R_RS_X,
-    EXT_Z_ZI_Des,
-    aarch64_vector_arithmetic_unary_not,
-    aarch32_LDRB_l_A1_A,
-    INCP_Z_P_Z__,
-    FMAXNM_Z_P_ZS__,
-    aarch32_UXTH_A1_A,
-    EORS_P_P_PP_Z,
-    aarch64_vector_shift_conv_float_simd,
-    UQINCP_Z_P_Z__,
-    aarch64_vector_arithmetic_binary_element_mul_acc_high_sisd,
-    aarch64_vector_reduce_fp16_add_sisd,
-    FMAX_Z_P_ZZ__,
-    aarch32_VBIF_T1A1_A,
-    aarch32_VRINTX_vfp_A1_A,
-    FACGE_P_P_ZZ__,
-    aarch32_VMAX_f_A1_A,
-    aarch32_PLI_i_A1_A,
-    aarch64_integer_pac_autib_dp_1src,
-    NAND_P_P_PP_Z,
-    aarch64_vector_arithmetic_binary_uniform_cmp_fp16_sisd,
-    INDEX_Z_II__,
-    ZIP1_Z_ZZ_Q,
-    aarch64_integer_arithmetic_rev,
-    SQINCB_R_RS_X,
-    aarch64_vector_arithmetic_unary_float_conv_float_tieaway_sisd,
-    NOR_P_P_PP_Z,
-    FTMAD_Z_ZZI__,
-    LDFF1H_Z_P_BZ_D_64_unscaled,
-    aarch32_UQSUB8_A1_A,
-    aarch32_LDRSH_l_A1_A,
-    aarch32_VST3_1_T1A1_A,
-    PRFH_I_P_BI_S,
-    aarch64_vector_bfmmla,
-    PRFD_I_P_BZ_D_64_scaled,
-    RDVL_R_I__,
-    aarch32_BX_A1_A,
-    aarch64_vector_arithmetic_binary_uniform_mul_fp16_extended_sisd,
-    ST1H_Z_P_BZ_D_x32_scaled,
-    aarch64_vector_arithmetic_binary_uniform_cmp_fp_simd,
-    UMAX_Z_P_ZZ__,
-    aarch64_float_convert_fp,
-    aarch32_UXTAB16_A1_A,
-    aarch32_VDIV_A1_A,
-    SCVTF_Z_P_Z_X2S,
-    aarch32_LDRSB_i_A1_A,
-    aarch64_integer_flags_axflag,
-    aarch64_memory_single_general_register,
-    FRINTZ_Z_P_Z__,
-    aarch64_memory_atomicops_ld,
-    aarch32_USADA8_A1_A,
-    aarch32_CMP_r_A1_A,
-    aarch32_UQSAX_A1_A,
-    LD1RH_Z_P_BI_U32,
-    aarch64_vector_arithmetic_unary_cmp_float_lessthan_sisd,
-    aarch32_VCVTA_vfp_A1_A,
-    SCVTF_Z_P_Z_X2FP16,
-    LD1SW_Z_P_AI_D,
-    aarch32_QDADD_A1_A,
-    LD1SW_Z_P_BI_S64,
-    LASTA_R_P_Z__,
-    UQDECP_R_P_R_UW,
-    FMLS_Z_ZZZi_D,
-    aarch64_vector_crypto_sha3op_sha1_hash_choose,
-    aarch32_TEQ_r_A1_A,
-    LD1B_Z_P_BI_U64,
-    aarch32_UXTB_A1_A,
-    UQDECP_Z_P_Z__,
-    aarch32_LDRBT_A1_A,
-    aarch64_integer_flags_cfinv,
-    RDFFR_P_P_F__,
-    BIC_Z_ZZ__,
-    aarch32_USAT_A1_A,
-    CNTB_R_S__,
-    aarch64_vector_crypto_sm4_sm4enckey,
-    aarch64_vector_arithmetic_unary_float_xtn_simd,
-    aarch64_integer_tags_mcsettagpairpre,
-    SCVTF_Z_P_Z_W2D,
-    BRKBS_P_P_P_Z,
-    UCVTF_Z_P_Z_X2S,
+    Ld1DZPBiU64,
+    NandPPPpZ,
+    AndsRA1Rrx,
+    PrfhIPAiD,
+    Ldff1SbZPBzSX32Unscaled,
+    Ld4BZPBiContiguous,
+    VqrdmulhA1Q,
+    DdZZi,
+    FcvtzuZPZS2W,
+    IncwRRs,
+    VudotA1Q,
+    SqdecpRPRSx,
+    SqrdmlshAsimdelemR,
+    AutibspHiHints,
+    UqincwRRsX,
+    FcvtzuAsisdshfC,
+    St1WZPBzSX32Scaled,
+    VorrIT1A1A,
+    BxjA1,
+    PrfbIPBzSX32Scaled,
+    LdrdRA1Pre,
+    StrZBi,
+    St1WZPBr,
+    Ld1RqwZPBrContiguous,
+    Subs64SAddsubImm,
+    Ld3BZPBrContiguous,
+    PrfhIPAiS,
+    BfcA1,
+    St1HZPAiD,
+    Ldff1ShZPBzDX32Scaled,
+    VextA1Q,
+    VrintxVfpA1D,
+    SubsRrA1,
+    Ldff1HZPBzDX32Scaled,
+    Trn1PPp,
+    FcvtzuZPZFp162X,
+    FminnmpAsimdsamefp16Only,
+    FmulZZziH,
+    VqrshrunA1,
+    Ld1ShZPBzD64Scaled,
+    Rev32AsimdmiscR,
+    TermneRr,
+    FmlsZZzziD,
+    VaddFA2D,
+    CmpIA1,
+    Ldff1HZPAiD,
+    Vld3MA1Posti,
+    FrecpeAsisdmiscR,
+    UqaddZZi,
+    RmifOnlyRmif,
+    AddsSpIA1,
+    DecpZPZ,
+    RfeibA1As,
+    FsqrtAsimdmiscfp16R,
+    FrintiAsimdmiscfp16R,
+    FcmuoPPZz,
+    Ld1WZPBzSX32Scaled,
+    LdmibA1,
+    FrintpZPZ,
+    UqdecdRRsUw,
+    CsdbA1,
+    Setf16OnlySetf,
+    IncbRRs,
+    Ldff1WZPBzDX32Scaled,
+    UxtbZPZ,
+    FmlaZZzziD,
+    UqdechRRsX,
+    Ldnt1HZPBiContiguous,
+    FcvtZPZD2S,
+    SqdecpRPRX,
+    Ldff1DZPBzDX32Unscaled,
+    VsubIA1Q,
+    UrsqrteAsimdmiscR,
+    Ld2WZPBrContiguous,
+    PmulAsimdsameOnly,
+    IsbA1,
+    UqsubZZz,
+    SqinchZZs,
+    FldmdbxA1,
+    Ld1RqdZPBrContiguous,
+    VqsubA1Q,
+    VrsraA1D,
+    BlxRA1,
+    DrZAzDS32Scaled,
+    Vst11T1A1A,
+    MpeqPPZz,
+    UcvtfZPZX2D,
+    Stnt1DZPBrContiguous,
+    LdmdaA1,
+    SriAsimdshfR,
+    MphiPPZi,
+    MphiPPZw,
+    FsubHFloatdp2,
+    SetpanA1,
+    VmovxA1,
+    LdaexhA1,
+    DupmZI,
+    Xpacd64ZDp1Src,
+    SmaxZZi,
+    FccmpeHFloatccmp,
+    UdotAsimdsame2D,
+    MrsA1As,
+    BfiA1,
+    FnegAsimdmiscR,
+    Ld1RhZPBiU32,
+    VbifA1Q,
+    Ldnf1HZPBiU32,
+    PyZPV,
+    UdotZZzziS,
+    UqdecbRRsUw,
+    Cls64Dp1Src,
+    IndexZRi,
+    St1HZPBzSX32Unscaled,
+    UqdecdZZs,
+    UxtbA1,
+    UcvtfZPZH2Fp16,
+    SbOnlyBarriers,
+    OrrPPPpZ,
+    SmaxZPZz,
+    FcmlePPZ0,
+    UasxA1,
+    SmlalsA1,
+    StrhtA2,
+    BlOnlyBranchImm,
+    VmmlaA1Q,
+    Ld1HZPBiU16,
+    SrsibA1As,
+    Sha256Su1A1,
+    VmovDA1,
+    FrintmZPZ,
+    VsubFA2D,
+    MpnePPZz,
+    LdmUA1As,
+    UxthA1,
+    St1DZPBzDX32Unscaled,
+    Ldff1ShZPAiS,
+    SqinchRRsSx,
+    LdcLA1,
+    VusmmlaA1Q,
+    Ldff1BZPAiS,
+    BicsRA1Rrx,
+    Ld3WZPBrContiguous,
+    TsbA1,
+    Ld4DZPBiContiguous,
+    St1WZPBzD64Scaled,
+    FcmlaAsimdelemCS,
+    CmpRrA1,
+    Ld1HZPBzD64Unscaled,
+    Ld1RohZPBiU16,
+    Ldff1SwZPAiD,
+    Ld1RbZPBiU8,
+    Stzg64SpostLdsttags,
+    SqdecdRRsX,
+    VrhaddA1Q,
+    Uxtab16A1,
+    IndexZIr,
+    SrZPZw,
+    St1BZPBr,
+    FrecpeAsimdmiscR,
+    UcvtfZPZX2S,
+    Ld3DZPBrContiguous,
+    AdcsIA1,
+    VqdmullA2,
+    SxtabA1,
+    PrfbIPAiS,
+    St1WZPBzD64Unscaled,
+    WfeA1,
+    VandRA1Q,
+    CmltAsimdmiscZ,
+    SqrshrunAsimdshfN,
+    StmUA1As,
+    EorsIA1,
+    NtZPZ,
+    UqincpRPRX,
+    SdivZPZz,
+    Rev64Dp1Src,
+    Sha1HSsCryptosha2,
+    MplePPZi,
+    FcvtauAsisdmiscfp16R,
+    Sadd8A1,
+    SqrdmulhAsisdsameOnly,
+    FcmleAsimdmiscFz,
+    Autdza64ZDp1Src,
+    SqxtunAsimdmiscN,
+    Ld1BZPAiD,
+    Stg64SpreLdsttags,
+    ShllAsimdmiscS,
+    MphsPPZw,
+    MovIA2,
+    UdfA1,
+    FcvtzsZPZFp162H,
+    Lduminal64Memop,
+    FrecpeAsimdmiscfp16R,
+    SmlaldxA1,
+    Ld1HZPBzD64Scaled,
+    FcvtzuZPZD2W,
+    TbxAsimdtblL44,
+    Ldff1ShZPBrS32,
+    Ldff1BZPAiD,
+    BfmlalbZZzzi,
+    UmaalA1,
+    VhsubA1Q,
+    BsZPZ,
+    SubrZZi,
+    LslrZPZz,
+    Stz2G64SpreLdsttags,
+    VfmslSA1Q,
+    LdrshtA1,
+    UminZZi,
+    StrexA1,
+    FmlsAsimdsameOnly,
+    PrfdIPBzDX32Scaled,
+    Ld1WZPBrU32,
+    FmovHFloatimm,
+    UcvtfZPZW2S,
+    UdotZZzz,
+    Shadd8A1,
+    BfcvtntZPZS2Bf,
+    PrfdIPBrS,
+    VsubFA1Q,
+    StrexhA1,
+    Sha1Su1A1,
+    DmbA1,
+    PrfdIPAiD,
+    VrsqrtsA1Q,
+    St1HZPBzDX32Scaled,
+    FcvtzuZPZFp162W,
+    FcvtnAsimdmiscN,
+    FcvtzuZPZFp162H,
+    WfiA1,
+    BcaxVvv16Crypto4,
+    SqrdmlshAsimdsame2Only,
+    VqdmulhA1Q,
+    FrecpsAsimdsameOnly,
+    AddsSpRA1Rrx,
+    UqdechRRsUw,
+    UqincdZZs,
+    BrkpbPPPp,
+    UmullsA1,
+    Ld1WZPBrU64,
+    FmovAsimdimmD2D,
+    FnmlaZPZzz,
+    SvcExException,
+    UminAsimdsameOnly,
+    DecwRRs,
+    Sha1Su1VvCryptosha2,
+    QdsubA1,
+    StrtA1,
+    VrsqrteA1Q,
+    VrecpeA1Q,
+    FmulxAsisdsamefp16Only,
+    StmdbA1,
+    UdotAsimdelemD,
+    DrZAzSdSameScaled,
+    Cbnz64Compbranch,
+    UshllAsimdshfL,
+    Ldgm64BulkLdsttags,
+    EsbA1,
+    ClzA1,
+    ShlAsimdshfR,
+    ClzAsimdmiscR,
+    IndexZRr,
+    St2BZPBiContiguous,
+    Frint64XAsimdmiscR,
+    PrfmPLdstRegoff,
+    Fmlsl2AsimdelemLh,
+    Qsub8A1,
+    Fmlsl2AsimdsameF,
+    FrecpeZZ,
+    FminvVPZ,
+    EorsPPPpZ,
+    UdivZPZz,
+    SqincdRRsX,
+    Stgm64BulkLdsttags,
+    UmlalsA1,
+    Subg64AddsubImmtags,
+    UxtwZPZ,
+    AdrA1A,
+    VqrdmlshA2Q,
+    VselgtA1D,
+    SminZPZz,
+    TbnzOnlyTestbranch,
+    FcmpeHzFloatcmp,
+    LsrZZi,
+    VcmlaSA1Qs,
+    SpliceZPZzDes,
+    LdrshIA1Pre,
+    BrkpbsPPPp,
+    UqshlAsimdshfR,
+    Ld1SbZPBrS32,
+    Ld1SbZPBrS64,
+    FrintiHFloatdp1,
+    VqdmullA1,
+    MvnsIA1,
+    FmulxAsimdsameOnly,
+    FminZPZz,
+    VshrA1Q,
+    DecbRRs,
+    Gmi64GDp2Src,
+    SqrshrunAsisdshfN,
+    Ld1HZPBiU32,
+    FminvAsimdallOnlySd,
+    FsqrtZPZ,
+    UxtabA1,
+    LdaexdA1,
+    InsAsimdinsIrR,
+    VmlslSA1,
+    UdotZZzziD,
+    MlaZPZzz,
+    DupZI,
+    FcmltAsisdmiscfp16Fz,
+    FcmleAsisdmiscFz,
+    Ld1RbZPBiU64,
+    VcntA1Q,
+    VmlslIA1,
+    AddsRA1Rrx,
+    Ldff1HZPBzD64Scaled,
+    IncwZZs,
+    UqincpRPRUw,
+    MvnsRA1Rrx,
+    FcmltAsimdmiscfp16Fz,
+    Ld1RobZPBrContiguous,
+    UsdotAsimdelemD,
+    VaddIA1Q,
+    Ld1BZPBrU64,
+    Ld1RhZPBiU64,
+    FtmadZZzi,
+    XaflagMPstate,
+    CmnRrA1,
+    FrsqrtsAsisdsamefp16Only,
+    UqinchRRsUw,
+    UqdecpZPZ,
+    VnmulA1D,
+    Uqsub16A1,
+    FaddZPZs,
+    VdotSA1Q,
+    Rbit64Dp1Src,
+    Ldnf1BZPBiU32,
+    Ld1RqhZPBrContiguous,
+    OrrsRrA1,
+    NthRS,
+    FcaddAsimdsame2C,
+    VbicRA1Q,
+    FsubZPZs,
+    Sha512Su0Vv2Cryptosha5122,
+    VabsA2D,
+    Ld1SbZPBzD64Unscaled,
+    CfinvMPstate,
+    FmsbZPZzz,
+    Vst3MA1Posti,
+    NdZZi,
+    FrecpxZPZ,
+    FminnmpAsisdpairOnlySd,
+    FmlslAsimdsameF,
+    LsZPZ,
+    StrhtA1,
+    Ld1ShZPBrS64,
+    CmeqAsisdsameOnly,
+    Ldnf1SbZPBiS64,
+    VpaddFA1,
+    UqasxA1,
+    SubAsimdsameOnly,
+    St4DZPBrContiguous,
+    UsubwAsimddiffW,
+    SmovAsimdinsXX,
+    BrkExException,
+    VqabsA1Q,
+    Zip1ZZzQ,
+    LdrLA1,
+    StlexbA1,
+    PrfwIPBrS,
+    LastaZPZz,
+    Uzp1ZZz,
+    SbcsRrA1,
+    LdrexbA1,
+    SsaxA1,
+    Ld1RqwZPBiU32,
+    FmulxAsimdsamefp16Only,
+    FabdAsisdsamefp16Only,
+    Ld1RqbZPBiU8,
+    FcvtZPZD2H,
+    LastaRPZ,
+    VtstA1Q,
+    St1BZPBzDX32Unscaled,
+    Ldff1ShZPBzSX32Scaled,
+    MulsA1,
+    Stg64SpostLdsttags,
+    Ssub16A1,
+    CmpRA1Rrx,
+    UaddlvAsimdallOnly,
+    Ld1DZPBzDX32Unscaled,
+    Paciza64ZDp1Src,
+    LsrrZPZz,
+    MulAsimdelemR,
+    BfdotZZzz,
+    XtnAsimdmiscN,
+    ShsaxA1,
+    UcvtfAsimdmiscR,
+    SyslRcSysteminstrs,
+    VabdFA1Q,
+    VshlRA1Q,
+    UqincbRRsUw,
+    Ld1BZPBiU32,
+    SmulwtA1,
+    PrfhIPBiS,
+    FtsmulZZz,
+    FacgtAsisdsamefp16Only,
+    VqshluIA1Q,
+    CntAsimdmiscR,
+    CmeqAsimdsameOnly,
+    Ld1RobZPBiU8,
+    RscsIA1,
+    OrnPPPpZ,
+    LdrZBi,
+    Ldff1HZPAiS,
+    Ld1ShZPAiD,
+    Autiza64ZDp1Src,
+    LdrIA1Pre,
+    Sha1Su0VvvCryptosha3,
+    VaddhnA1,
+    Ldapr64LMemop,
+    FrsqrteAsimdmiscfp16R,
+    FaddvVPZ,
+    SqincbRRsSx,
+    UhsaxA1,
+    Crc32CwA1,
+    Ld1BZPBrU32,
+    PrfbIPBzD64Scaled,
+    Ld4BZPBrContiguous,
+    Ldff1HZPBzDX32Unscaled,
+    Ld1RsbZPBiS64,
+    LdaxpLp64Ldstexcl,
+    MrrcA1,
+    PunpkloPP,
+    DdZPZz,
+    FminnmHFloatdp2,
+    StcA1Pre,
+    Umsubl64WaDp3Src,
+    NtdRS,
+    BOnlyCondbranch,
+    NtwRS,
+    LslZZw,
+    SunpkhiZZ,
+    VmovSrA1,
+    Vld21T1A1A,
+    BrkbsPPPZ,
+    LdrDLdstImmpre,
+    AndsRrA1,
+    FcmlaZPZzz,
+    SqincwZZs,
+    Swpal64Memop,
+    LdaxrLr64Ldstexcl,
+    LdrsbtA2,
+    Zip1ZZz,
+    AeseA1,
+    Ldff1HZPBzSX32Unscaled,
+    BxA1,
+    VfnmaA1D,
+    FcvtxnAsimdmiscN,
+    Ld1RowZPBrContiguous,
+    Sm4EVv4Cryptosha5122,
+    BrkaPPP,
+    Ld1ShZPBiS32,
+    SbA1,
+    FminnmvVPZ,
+    Ldff1BZPBzSX32Unscaled,
+    Trn2ZZz,
+    SudotZZzziS,
+    UqdechZZs,
+    MsrBrA1As,
+    SdivA1,
+    SelPPPp,
+    FcvtzsZPZD2X,
+    Ldff1ShZPBrS64,
+    McrA1,
+    VminnmA2D,
+    FrintnZPZ,
+    FmlslAsimdelemLh,
+    FcvtZPZH2D,
+    Stnt1HZPBrContiguous,
+    VmovIT1A1A,
+    VrshrA1Q,
+    FnmlsZPZzz,
+    UmmlaZZzz,
+    DsbA1,
+    Ld1BZPBiU8,
+    OrvRPZ,
+    VusdotA1Q,
+    Ldff1DZPBzD64Scaled,
+    UqsubZZi,
+    ScvtfZPZW2S,
+    FcaddZPZz,
+    VsubhnA1,
+    FabdAsisdsameOnly,
+    FrsqrteAsimdmiscR,
+    UqdecpRPRUw,
+    St4BZPBiContiguous,
+    Vst2MT1A1A,
+    St2G64SoffsetLdsttags,
+    St1WZPBzDX32Unscaled,
+    FacgtAsimdsameOnly,
+    SabdZPZz,
+    Sbcs64AddsubCarry,
+    AddsRrA1,
+    FnmadZPZzz,
+    PtruesPS,
+    FcmlaZZzziS,
+    FmulxAsisdsameOnly,
+    SxthA1,
+    Zip1PPp,
+    PmullAsimddiffL,
+    SaddvRPZ,
+    EorZZz,
+    EvbZZ,
+    DupZR,
+    Ldp64LdstpairPre,
+    SbfxA1,
+    VabsA1Q,
+    Ld3WZPBiContiguous,
+    Ld1BZPBrU16,
+    Ld1HZPAiS,
+    UqaddAsimdsameOnly,
+    IncpZPZ,
+    EorZPZz,
+    BrknsPPPp,
+    St1HZPBzSX32Scaled,
+    Ldtr64LdstUnpriv,
+    Irg64IDp2Src,
+    SubsSpIA1,
+    SqdmullAsimddiffL,
+    FminpAsisdpairOnlySd,
+    Ld1ShZPAiS,
+    VpadalA1Q,
+    BtiHbHints,
+    SmmulrA1,
+    PyZPR,
+    DsbBoBarriers,
+    VshrnA1,
+    DffrsPPF,
+    VfmsA1Q,
+    LdrbRA1Pre,
+    OrrsIA1,
+    FcvtZPZS2D,
+    Ld1ShZPBrS32,
+    Rorv64Dp2Src,
+    UsublAsimddiffL,
+    IncpRPR,
+    Ld1ShZPBiS64,
+    Ld1BZPBzDX32Unscaled,
+    MlsAsimdsameOnly,
+    St1HZPAiS,
+    VraddhnA1,
+    ScvtfZPZX2Fp16,
+    SqdecbRRsX,
+    DupAsimdinsDrR,
+    MsbZPZzz,
+    BfmmlaAsimdsame2E,
+    NorPPPpZ,
+    Ldnf1WZPBiU64,
+    AddpAsisdpairOnly,
+    Sha256H2QqvCryptosha3,
+    LdrhIA1Pre,
+    VsliA1Q,
+    PrfbIPAiD,
+    MphsPPZi,
+    Zip2PPp,
+    Ld1BZPAiS,
+    Uzp1ZZzQ,
+    FcmgtPPZz,
+    SasxA1,
+    InchZZs,
+    FcmgtPPZ0,
+    FcvtauAsisdmiscR,
+    VfmaBfA1Q,
+    IsbBiBarriers,
+    LdrbtA2,
+    FrintiZPZ,
+    Uqadd8A1,
+    Usat16A1,
+    BkptA1,
+    MploPPZi,
+    PrfmPLoadlit,
+    Ld3HZPBrContiguous,
+    PtruePS,
+    Frint64XDFloatdp1,
+    VmovnA1,
+    VswpA1Q,
+    Rev16A1,
+    PldRA1Rrx,
+    Subs64SAddsubExt,
+    FdivrZPZz,
+    LdrshRA1Pre,
+    Ldnf1SbZPBiS16,
+    SqdmullAsisddiffOnly,
+    NegAsisdmiscR,
+    Ldff1HZPBrU16,
+    LdrhtA2,
+    Vld41T1A1A,
+    UqdecwRRsUw,
+    RshrnAsimdshfN,
+    AddsIA1,
+    SqdecpZPZ,
+    SqdecwRRsSx,
+    Ld1DZPBzD64Scaled,
+    St4BZPBrContiguous,
+    Sha1CA1,
+    St3WZPBrContiguous,
+    VcaddA1Q,
+    Ldnt1HZPBrContiguous,
+    LdrshLA1,
+    ScvtfZPZX2S,
+    Ldnp64LdstnapairOffs,
+    Uadd8A1,
+    VrintzVfpA1D,
+    UhsubAsimdsameOnly,
+    UqincpZPZ,
+    NdZZz,
+    Ld1WZPBzD64Scaled,
+    PtestPP,
+    Ld2WZPBiContiguous,
+    LdrDLdstRegoff,
+    SqdechZZs,
+    UqshlAsisdshfR,
+    FrsqrtsZZz,
+    UqxtnAsisdmiscN,
+    St3BZPBrContiguous,
+    Sha1PQsvCryptosha3,
+    SqdecdZZs,
+    Ldff1SbZPBzDX32Unscaled,
+    VmulFA2D,
+    LdcIA1Pre,
+    FmulAsimdsameOnly,
+    VabaA1Q,
+    SvcA1,
+    DupZZi,
+    LdpQLdstpairPre,
+    VdupSA1Q,
+    OrrZZi,
+    SmmlarA1,
+    BfdotAsimdelemE,
+    OrrZPZz,
+    BfmlalAsimdelemF,
+    SmcExException,
+    Sm3Tt2BVvvCrypto3Imm2,
+    LsrZPZz,
+    Dcps3DcException,
+    StrexbA1,
+    BicsRrA1,
+    LdrbLA1,
+    Pacizb64ZDp1Src,
+    SevA1,
+    FmulZZz,
+    UmaxvRPZ,
+    VcvtmAsimdA1Q,
+    FcmlaZZzziH,
+    SxthZPZ,
+    Stgp64LdstpairPost,
+    EvPP,
+    FminnmpAsisdpairOnlyH,
+    Ld1HZPBrU64,
+    Ld1DZPBzDX32Scaled,
+    SqsubZZi,
+    UminvAsimdallOnly,
+    StlhA1,
+    St1WZPBi,
+    Drps64EBranchReg,
+    SqincbRRsX,
+    Ld1SbZPBiS32,
+    LastbVPZ,
+    DecpRPR,
+    DbgA1,
+    FdupZI,
+    Ld1SwZPBzDX32Scaled,
+    RscsRA1Rrx,
+    LslZPZz,
+    WhileloPPRr,
+    UmlslAsimddiffL,
+    LdrexA1,
+    Ld1RshZPBiS32,
+    FcvtZPZH2S,
+    MpgePPZw,
+    VnmlaA1D,
+    FrecpxAsisdmiscR,
+    St1HZPBzD64Unscaled,
+    StrtA2,
+    FminpAsisdpairOnlyH,
+    UqaddZZz,
+    UsatA1Asr,
+    LdpQLdstpairPost,
+    Ld1DZPBrU64,
+    LdrexdA1,
+    FminnmvAsimdallOnlySd,
+    StrRA1Pre,
+    PrfmPLdstPos,
+    VrecpsA1Q,
+    VcgtIA1Q,
+    FmlsAsisdelemRhH,
+    MlsA1,
+    DdZZz,
+    Ld1RsbZPBiS16,
+    Uhsub8A1,
+    FmaxvVPZ,
+    VmovRsA1,
+    MplsPPZw,
+    FsubZZz,
+    FmaxZPZs,
+    UmaxZPZz,
+    NopA1,
+    PrfdIPBiS,
+    QsaxA1,
+    Qadd8A1,
+    BfcvtZPZS2Bf,
+    VcleIA1Q,
+    VceqIA1Q,
+    InchRRs,
+    Ldff1SbZPBrS64,
+    NdvRPZ,
+    FmulAsimdsamefp16Only,
+    CaspalCp64Ldstexcl,
+    Ld1SwZPBzD64Scaled,
+    DffrPPF,
+    FcmleAsisdmiscfp16Fz,
+    StrdIA1Pre,
+    MplsPPZi,
+    Ldnf1WZPBiU32,
+    St4DZPBiContiguous,
+    VmovSA1,
+    VtbxA1,
+    VmvnIT1A1A,
+    Sha256Su0VvCryptosha2,
+    Ldnt1WZPBrContiguous,
+    FrsqrtsAsimdsamefp16Only,
+    Ld1RqhZPBiU16,
+    BfcvtnAsimdmisc4S,
+    Uhadd8A1,
+    FmmlaZZzzD,
+    AesdBCryptoaes,
+    BfdotAsimdsame2D,
+    FrecpsAsimdsamefp16Only,
+    Ldnt1BZPBiContiguous,
+    DecdZZs,
+    MovprfxZZ,
+    Ld1WZPBzDX32Unscaled,
+    FcvtzuAsisdmiscR,
+    TstRA1Rrx,
+    LdurDLdstUnscaled,
+    SqnegAsimdmiscR,
+    Stgp64LdstpairOff,
+    St1HZPBr,
+    Ldff1SwZPBzDX32Scaled,
+    UmlslAsimdelemL,
+    Ldnf1BZPBiU16,
+    BrkpasPPPp,
+    Uzp1PPp,
+    PrfbIPBiS,
+    St1BZPAiD,
+    St2DZPBiContiguous,
+    Zip2ZZzQ,
+    UmullAsimdelemL,
+    LdrhtA1,
+    PssbbOnlyBarriers,
+    MpgePPZz,
+    Ld1BZPBiU16,
+    LdrQLoadlit,
+    St1DZPBzD64Unscaled,
+    ShlAsisdshfR,
+    SqincdRRsSx,
+    LdmA1,
+    Uadd16A1,
+    VjcvtA1,
+    FmlsAsisdelemRSd,
+    Msub64ADp3Src,
+    UcvtfAsimdmiscfp16R,
+    UunpkhiZZ,
+    Ld1DZPBzD64Unscaled,
+    FcmgePPZz,
+    Shsub16A1,
+    FsqrtAsimdmiscR,
+    VqdmlalA2,
+    StrbtA2,
+    MphiPPZz,
+    VrintmVfpA1D,
+    SqincpRPRSx,
+    MphsPPZz,
+    NtpRPP,
+    SmlawtA1,
+    UsmmlaZZzz,
+    Addg64AddsubImmtags,
+    BicZZz,
+    Vld31T1A1A,
+    Ld4WZPBrContiguous,
+    Stnt1WZPBiContiguous,
+    VdotA1Q,
+    AesdA1,
+    BA1,
+    PliIA1,
+    UqrshrnAsisdshfN,
+    RbitA1,
+    Usub16A1,
+    Sm3Tt1BVvv4Crypto3Imm2,
+    Subs64AddsubShift,
+    UcvtfZPZW2D,
+    VcvtSdA1,
+    Ld1HZPAiD,
+    VcvtShA1,
+    Ldrab64WLdstPac,
+    LdahA1,
+    UqdecbRRsX,
+    StrPBi,
+    St2G64SpreLdsttags,
+    ExtZZiDes,
+    VshllA1,
+    MovtA1,
+    UmulhZPZz,
+    PkhtbA1,
+    SmuadxA1,
+    Stzgm64BulkLdsttags,
+    UqincdRRsUw,
+    CmhsAsimdsameOnly,
+    Ld3HZPBiContiguous,
+    SubZPZz,
+    SmaxvRPZ,
+    FcvtzsZPZFp162X,
+    FrsqrteZZ,
+    LdrdIA1Pre,
+    Pacdzb64ZDp1Src,
+    Ld2DZPBiContiguous,
+    PyZPI,
+    Stzg64SpreLdsttags,
+    FcvtxnAsisdmiscN,
+    FaddpAsisdpairOnlyH,
+    Ld4HZPBiContiguous,
+    MpltPPZi,
+    PrfwIPAiS,
+    EorvRPZ,
+    St2G64SpostLdsttags,
+    UsqaddAsisdmiscR,
+    SqdecwRRsX,
+    UbfxA1,
+    UqdecwZZs,
+    CasalC64Ldstexcl,
+    FmmlaZZzzS,
+    MlsZPZzz,
+    Vld11T1A1A,
+    NandsPPPpZ,
+    UaddvRPZ,
+    StrbtA1,
+    MovprfxZPZ,
+    Ld1WZPBzD64Unscaled,
+    SetffrF,
+    Ldff1BZPBrU8,
+    MpnePPZi,
+    PssbbA1,
+    SrrZPZz,
+    FnegZPZ,
+    OrrsPPPpZ,
+    Ld4HZPBrContiguous,
+    FstmdbxA1,
+    BicZPZz,
+    FcvtauAsimdmiscR,
+    SminZZi,
+    UqincdRRsX,
+    FacgtAsimdsamefp16Only,
+    UqrshlAsimdsameOnly,
+    Ldr64LdstImmpre,
+    Stz2G64SoffsetLdsttags,
+    DecdRRs,
+    Ld1BZPBzSX32Unscaled,
+    Csneg64Condsel,
+    LdrbIA1Pre,
+    St1WZPAiS,
+    VcvtXvA1D,
+    NdPPPpZ,
+    FrecpxAsisdmiscfp16R,
+    DupAsisdoneOnly,
+    HvcExException,
+    Uzp2PPp,
+    OrrZZz,
+    StrexdA1,
+    FmulZPZz,
+    Ld1HZPBzSX32Unscaled,
+    SminvRPZ,
+    FmlsZZzziH,
+    RscsRrA1,
+    LdnpQLdstnapairOffs,
+    VrintpAsimdA1Q,
+    Ld1RhZPBiU16,
+    PliRA1Rrx,
+    VcgeRT1A1A,
+    FaddZZz,
+    Uzp2AsimdpermOnly,
+    UabdlAsimddiffL,
+    NotZPZ,
+    Sm3Ss1Vvv4Crypto4,
+    AesimcA1,
+    Ldff1BZPBrU16,
+    VabdlIA1,
+    FrsqrteAsisdmiscfp16R,
+    SqrdmlshAsisdelemR,
+    Ld1RowZPBiU32,
+    FcmnePPZz,
+    Ld1SbZPBrS16,
+    PrfdIPBzD64Scaled,
+    OmpactZPZ,
+    Stnt1HZPBiContiguous,
+    Ccmp64CondcmpImm,
+    VldmdbA2,
+    VcvttA1Hd,
+    Ld1RqbZPBrContiguous,
+    Ldff1WZPAiS,
+    LdarLr64Ldstexcl,
+    FmulZZziD,
+    Ld1WZPBzSX32Unscaled,
+    VdupRA1,
+    Ldnf1HZPBiU16,
+    VmsrA1As,
+    HltA1,
+    LastbZPZz,
+    Ld4WZPBiContiguous,
+    SmlsdxA1,
+    VcvtmVfpA1D,
+    ClrexA1,
+    TstRrA1,
+    Ld1SwZPBiS64,
+    ShasxA1,
+    Ldr64LdstImmpost,
+    AndsIA1,
+    ExtAsimdextOnly,
+    EorsRA1Rrx,
+    LzZPZ,
+    VmullSA1,
+    DrZAzDU32Scaled,
+    LdrsbtA1,
+    Ldff1SbZPAiS,
+    Vld4AA1Posti,
+    ScvtfZPZW2Fp16,
+    Ld1HZPBzDX32Unscaled,
+    Vld3AA1Posti,
+    DvlRI,
+    St3HZPBrContiguous,
+    WhilelePPRr,
+    CmltAsisdmiscZ,
+    FcvtlAsimdmiscL,
+    UqsaxA1,
+    StmdaA1,
+    PunpkhiPP,
+    FabdZPZz,
+    SmcA1As,
+    ScvtfZPZW2D,
+    VcmpA1A,
+    LdrsbLA1,
+    PrfdIPBzSX32Scaled,
+    Ldff1HZPBrU32,
+    FdivZPZz,
+    VqaddA1Q,
+    Usub8A1,
+    LsrZPZw,
+    Ldff1BZPBrU32,
+    Stnt1WZPBrContiguous,
+    VcvtBfsA1,
+    VrsubhnA1,
+    FmlsAsimdelemRSd,
+    UabaAsimdsameOnly,
+    VudotSA1Q,
+    FscaleZPZz,
+    VpminIA1,
+    VmovlA1,
+    EvwZZ,
+    Ldff1SbZPAiD,
+    VminIA1Q,
+    BifAsimdsameOnly,
+    St1DZPBr,
+    OrnsPPPpZ,
+    Shsub8A1,
+    Trn2AsimdpermOnly,
+    SubZZz,
+    SqaddZZi,
+    FminpAsimdsameOnly,
+    VcvttA1Bfs,
+    Movk64Movewide,
+    RsbsRrA1,
+    SxtwZPZ,
+    AesimcBCryptoaes,
+    TstIA1,
+    IncdRRs,
+    FaddpAsimdsameOnly,
+    VnegA1Q,
+    ScvtfZPZX2D,
+    DdvlRRi,
+    SqaddZZz,
+    FmulZZziS,
+    Ld1WZPAiD,
+    Ld1ShZPBzDX32Scaled,
+    VpaddIA1,
+    PacibspHiHints,
+    VpaddlA1Q,
+    VsqrtA1D,
+    VmlsFA2D,
+    Sha1MQsvCryptosha3,
+    UmaxZZi,
+    Vst1MT1A1A,
+    UqsubAsisdsameOnly,
+    LdrDLdstPos,
+    Ld1DZPAiD,
+    FminvAsimdallOnlyH,
+    NorsPPPpZ,
+    TeqRA1Rrx,
+    UcvtfAsimdshfC,
+    VmulFA1Q,
+    FrintxZPZ,
+    NtbRS,
+    Ld1RwZPBiU32,
+    UcvtfAsisdmiscR,
+    SqincpRPRX,
+    Ld1RbZPBiU16,
+    StrbRA1Pre,
+    UdivA1,
+    Ld1SbZPBiS64,
+    FrecpeAsisdmiscfp16R,
+    DupAsimdinsDvV,
+    FcvtzuZPZS2X,
+    Ldff1ShZPBzD64Scaled,
+    VstmdbA2,
+    Ld1SbZPBiS16,
+    Ldff1DZPAiD,
+    SmullsA1,
+    Ld1RsbZPBiS32,
+    Ld1HZPBiU64,
+    FrecpsAsisdsameOnly,
+    PrfwIPAiD,
+    PfalseP,
+    FcvtzsZPZFp162W,
+    VbicIT1A1A,
+    PfirstPPP,
+    SmlalttA1,
+    CmleAsisdmiscZ,
+    Ld2HZPBrContiguous,
+    St1BZPBzD64Unscaled,
+    FmulxAsisdelemRhH,
+    UmmlaAsimdsame2G,
+    Ldff1ShZPBzDX32Unscaled,
+    StrhIA1Pre,
+    UcvtfAsisdmiscfp16R,
+    VabdIA1Q,
+    EretA1,
+    VmlsIA1Q,
+    SqrdmulhAsimdsameOnly,
+    Ldff1ShZPBzD64Unscaled,
+    WhileltPPRr,
+    Ld1WZPBiU64,
+    BicsPPPpZ,
+    FabdAsimdsamefp16Only,
+    Ld3DZPBiContiguous,
+    CmnIA1,
+    SxtahA1,
+    UhaddAsimdsameOnly,
+    PrfbIPBzDX32Scaled,
+    MpgtPPZz,
+    SmulhZPZz,
+    St3BZPBiContiguous,
+    SmulttA1,
+    VmrsA1As,
+    VpminFA1,
+    Vrev16A1Q,
+    UqincbRRsX,
+    CpsidA1Asm,
+    St2HZPBrContiguous,
+    TeqRrA1,
+    Stzg64SoffsetLdsttags,
+    VcvtIsA1Q,
+    Uqsub8A1,
+    BicPPPpZ,
+    LdrbtA1,
+    FaddZPZz,
+    SqdmullAsimdelemL,
+    PldIA1,
+    VacgtA1Q,
+    Trn2PPp,
+    FminnmpAsimdsameOnly,
+    Ld3BZPBiContiguous,
+    LdrRA1Pre,
+    UmullAsimddiffL,
+    PrfbIPBrS,
+    StrhRA1Pre,
+    FaddpAsimdsamefp16Only,
+    PrfhIPBzD64Scaled,
+    Ldff1HZPBrU64,
+    MovsIA1,
+    SqdechRRsX,
+    PrfwIPBzSX32Scaled,
+    Ldg64LoffsetLdsttags,
+    Ldff1SwZPBrS64,
+    UqsubAsimdsameOnly,
+    Vst21T1A1A,
+    VcgtRT1A1A,
+    FsubZPZz,
+    Eor3Vvv16Crypto4,
+    Ld1SwZPBrS64,
+    Ldff1SbZPBzD64Unscaled,
+    Ldnf1SwZPBiS64,
+    StlA1,
+    Sha256HA1,
+    FcvtZPZS2H,
+    Vst41A3Nowb,
+    MlsAsimdelemR,
+    FminnmZPZz,
+    Vld1AA1Posti,
+    Ldff1WZPBzD64Scaled,
+    St2WZPBrContiguous,
+    OrnAsimdsameOnly,
+    FsubrZPZz,
+    Ldnt1BZPBrContiguous,
+    Stz2G64SpostLdsttags,
+    SmmlsrA1,
+    PrfwIPBzDX32Scaled,
+    Uhadd16A1,
+    Ld2BZPBrContiguous,
+    FtsselZZz,
+    Sdiv64Dp2Src,
+    CmleAsimdmiscZ,
+    VfmsA2D,
+    St1HZPBzDX32Unscaled,
+    StlexhA1,
+    BicsIA1,
+    Trn2ZZzQ,
+    RevshA1,
+    FcmgePPZ0,
+    Ld1WZPAiS,
+    UadalpAsimdmiscP,
+    FmlsAsimdelemRhH,
+    Blrab64PBranchReg,
+    VmvnRA1Q,
+    VcvtbA1Bfs,
+    PaciaspHiHints,
+    VornRA1Q,
+    Ld4RAsisdlsopR4I,
+    FcmeqPPZz,
+    VorrRA1Q,
+    MrcA1,
+    Ldff1SwZPBzDX32Unscaled,
+    Ld1RdZPBiU64,
+    EvhZZ,
+    Ldff1BZPBzDX32Unscaled,
+    StrbIA1Pre,
+    FrsqrtsAsimdsameOnly,
+    InsrZR,
+    SqnegAsisdmiscR,
+    UcvtfAsisdshfC,
+    MploPPZw,
+    FcmlaAsimdsame2C,
+    MulZPZz,
+    VdivA1D,
+    Trn1ZZz,
+    Ldff1WZPAiD,
+    Sm3Partw1Vvv4Cryptosha5123,
+    SqincwRRsX,
+    UsaxA1,
+    LdmdbA1,
+    FsqrtHFloatdp1,
+    Vst41A1Posti,
+    VqdmulhA2Q,
+    Ldapur64LdapstlUnscaled,
+    FcvtzuZPZD2X,
+    VqrdmlshA1Q,
+    Ld1WZPBzDX32Scaled,
+    UunpkloZZ,
+    SqrdmlshAsisdsame2Only,
+    Ld1ShZPBzSX32Scaled,
+    UqxtnAsimdmiscN,
+    Ld1ShZPBzDX32Unscaled,
+    LdrshtA2,
+    Ld1SbZPAiS,
+    VqshrunA1,
+    UqinchRRsX,
+    MpeqPPZi,
+    BfmlaltZZzzi,
+    FrecpsAsisdsamefp16Only,
+    Sxtab16A1,
+    FmaxnmZPZz,
+    FcmltAsisdmiscFz,
+    MpnePPZw,
+    RbitAsimdmiscR,
+    Sha512HQqvCryptosha5123,
+    VclsA1Q,
+    VsraA1Q,
+    Ld1SwZPBzDX32Unscaled,
+    SunpkloZZ,
+    Shadd16A1,
+    FminnmvAsimdallOnlyH,
+    FmlsZPZzz,
+    FcmnePPZ0,
+    SqdmlslAsisddiffOnly,
+    UsdotZZzziS,
+    UminvRPZ,
+    SsbbOnlyBarriers,
+    InsAsimdinsIvV,
+    SetendA1,
+    St1WZPBzSX32Unscaled,
+    LdaexbA1,
+    Autizb64ZDp1Src,
+    VabalA1,
+    SliAsimdshfR,
+    Sha256Su1VvvCryptosha3,
+    Crc32Cx64CDp2Src,
+    Ldnt1WZPBiContiguous,
+    FcvtzsZPZS2W,
+    Sm3Tt2AVvv4Crypto3Imm2,
+    VrintzAsimdA1Q,
+    VsriA1Q,
+    FminpAsimdsamefp16Only,
+    UcvtfZPZW2Fp16,
+    Ldff1SwZPBzD64Unscaled,
+    BfmlalAsimdsame2F,
+    MpgtPPZw,
+    Ldnt1DZPBrContiguous,
+    SqrdmulhAsimdelemR,
+    VqrshlA1Q,
+    Ld1RqdZPBiU64,
+    Uhsub16A1,
+    BrkasPPPZ,
+    BfdotZZzzi,
+    Vld2MT1A1A,
+    LdrexhA1,
+    Ccmp64CondcmpReg,
+    FdivAsimdsamefp16Only,
+    SqdmlslAsimddiffL,
+    Extr64Extract,
+    FmadZPZzz,
+    SqincpZPZ,
+    Ld1BZPBrU8,
+    UsdotAsimdsame2D,
+    LdpQLdstpairOff,
+    St2BZPBrContiguous,
+    VcltIA1Q,
+    VminFA1Q,
+    VuzpA1Q,
+    OrrsRA1Rrx,
+    QaddA1,
+    Ld1RohZPBrContiguous,
+    SmladxA1,
+    VmlsSA1Q,
+    LastbRPZ,
+    StmA1,
+    XarVvv2Crypto3Imm6,
+    MpeqPPZw,
+    Ld1SbZPBzSX32Unscaled,
+    AdcsRA1Rrx,
+    St3DZPBiContiguous,
+    RsbsIA1,
+    IndexZIi,
+    Ands64SLogImm,
+    MovsRA1Rrx,
+    DechZZs,
+    SdotZZzziD,
+    VmulSA1Q,
+    Vst31T1A1A,
+    St1DZPBzDX32Scaled,
+    FcmleAsimdmiscfp16Fz,
+    Usada8A1,
+    SqincwRRsSx,
+    SriAsisdshfR,
+    FmulxAsisdelemRSd,
+    SqdecwZZs,
+    VqmovnA1,
+    SqdecdRRsSx,
+    NdZPZz,
+    St1BZPBzSX32Unscaled,
+    Ld1SbZPAiD,
+    Vld4MA1Posti,
+    VqdmlslA1,
+    VmovSsA1,
+    St2WZPBiContiguous,
+    StrdRA1Pre,
+    TeqIA1,
+    Zip2ZZz,
+    Ld2BZPBiContiguous,
+    PldLA1,
+    FmaxnmZPZs,
+    MpgtPPZi,
+    DmbBoBarriers,
+    LdrtA2,
+    Qadd16A1,
+    Ld1ShZPBzSX32Unscaled,
+    StmibA1,
+    QasxA1,
+    SubsSpRA1Rrx,
+    Uzp2ZZzQ,
+    FmlaZPZzz,
+    SrZPZz,
+    AdrpOnlyPcreladdr,
+    BfmlaltZZzz,
 }
 
 
 #[cfg(test)]
 mod tests {
-    use super::{decode_a64, decode_a32, Op};
+    use super::{decode_a32, Op};
 
     #[test]
     fn test() {
-        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::aarch32_MOV_i_A1_A);
+        assert_eq!(decode_a32(0xe3a00001).unwrap(), Op::MovsIA1);
     }
 }
