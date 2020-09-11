@@ -5,6 +5,7 @@ TAB = "    "
 class Decoder(NopDecodeListener):
     def __init__(self):
         self.tabs = 0
+        self.field_sizes = {}
 
     def after_listen_case(self, fields):
         if len(fields) != 0:
@@ -13,7 +14,7 @@ class Decoder(NopDecodeListener):
         print(f"{TAB * self.tabs}}}")
 
     def after_listen_decode(self, name):
-        if name == "A64":
+        if name == "A64" or name == "A32":
             self.tabs -= 1
             print("} // end of decoding " + name)
 
@@ -25,6 +26,9 @@ class Decoder(NopDecodeListener):
         def f(field):
             if field.name:
                 return field.name
+            elif field.concat_names:
+                shift = self.field_sizes[field.concat_names[1]]
+                return f"({field.concat_names[0]} << {shift}) | {field.concat_names[1]}"
             else:
                 mask = (field.run << 1) - 1
                 start = field.start
@@ -53,6 +57,7 @@ class Decoder(NopDecodeListener):
 
     def listen_field(self, name, start, run):
         mask = (run << 1) - 1
+        self.field_sizes[name] = run
         if start == 0:
             print(f"{TAB * self.tabs}let {name} = instr & {mask};")
         else:
@@ -69,6 +74,10 @@ class Decoder(NopDecodeListener):
 
     def listen_unused(self):
         print(f"{TAB * self.tabs}println!(\"unused\");")
+        return True
+
+    def listen_unpredictable(self):
+        print(f"{TAB * self.tabs}println!(\"unpredictable\");")
         return True
 
     def listen_when(self, values):
@@ -114,10 +123,11 @@ parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", Decoder())
 print("""
 #[cfg(test)]
 mod tests {
-    use super::decode_a64;
+    use super::{decode_a64, decode_a32};
 
     #[test]
     fn test() {
         decode_a64(0xe3a00001);
+        decode_a32(0xe3a00001);
     }
 }""")

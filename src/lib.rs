@@ -13,13 +13,16 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (_, _, x2, _) if x2 != 0 => {
+                    println!("unpredictable");
                 }
                 (x0, _, _, _) if x0 != 0 => {
+                    println!("unpredictable");
                 }
                 _ => unreachable!()
             }
         }
         (_, x1, _) if x1 == 3 => {
+            println!("unpredictable");
         }
         (_, x1, _) if x1 & 30 == 4 => {
             match ((instr >> 29) & 5, (instr >> 25) & 7, (instr >> 23) & 3, (instr >> 22) & 1, (instr >> 17) & 9, (instr >> 16) & 1, (instr >> 10) & 11, instr & 19) {
@@ -399,6 +402,7 @@ pub fn decode_a64(instr: u32) {
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 0 && x2 & 2 == 0 && x4 & 16 == 0 && x6 & 56 == 40 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 19) & 3, (instr >> 16) & 5, (instr >> 13) & 5, instr & 25) {
                         (_, _, _, x3, _, _, _) if x3 & 2 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _) if x3 == 2 => {
                             let size = (instr >> 22) & 3;
@@ -505,6 +509,7 @@ pub fn decode_a64(instr: u32) {
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 0 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 56 == 8 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 13) & 5, (instr >> 12) & 1, (instr >> 10) & 3, instr & 19) {
                         (_, _, _, _, _, x5, _, _) if x5 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, _) if x5 == 1 && x6 == 0 => {
                             let opc = (instr >> 22) & 3;
@@ -528,6 +533,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, x6, _) if x5 == 1 && x6 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -629,11 +635,13 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, _, x6, _) if x6 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 0 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 56 == 24 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 0 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 56 == 32 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 13) & 5, (instr >> 12) & 1, instr & 23) {
@@ -863,6 +871,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, x6, _) if x3 == 0 && x6 == 5 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, x6, _) if x3 == 1 && x6 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -930,8 +939,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, x6, _) if x3 == 1 && x6 & 3 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, _, x6, _) if x6 & 6 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, _, x6, _) if x6 & 6 == 6 => {
                             let size = (instr >> 22) & 3;
@@ -1073,6 +1084,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _) if x3 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1097,6 +1109,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, x4, _) if x4 & 6 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, _) if x4 == 6 => {
                             let size = (instr >> 22) & 3;
@@ -1110,6 +1123,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, x4, _) if x4 == 7 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1137,22 +1151,31 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 0 && x4 & 1 == 0 && x5 == 0 && x7 == 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 0 && x4 & 1 == 0 && x5 == 0 && x7 == 1 && x8 & 1 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 0 && x4 & 1 == 1 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, _, x8, _) if x3 == 0 && x4 & 1 == 1 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, x8, _) if x3 == 0 && x5 == 1 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, _, x8, _) if x3 == 0 && x5 == 1 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, x7, x8, _) if x3 == 0 && x7 == 0 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, _, x8, _) if x3 == 1 && x8 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 2 && x4 & 2 == 0 && x7 == 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 2 && x4 & 2 == 0 && x7 == 1 && x8 == 2 => {
                             let size = (instr >> 22) & 3;
@@ -1177,8 +1200,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 2 && x4 & 2 == 0 && x7 == 1 && x8 & 1 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 2 && x4 == 2 && x5 == 0 && x7 == 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 2 && x4 == 2 && x5 == 0 && x7 == 1 && x8 == 2 => {
                             let size = (instr >> 22) & 3;
@@ -1191,16 +1216,22 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 2 && x4 == 2 && x5 == 0 && x7 == 1 && x8 & 1 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 2 && x4 == 3 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, _, x8, _) if x3 == 2 && x4 == 3 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 2 && x4 & 2 == 2 && x5 == 1 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, _, x8, _) if x3 == 2 && x4 & 2 == 2 && x5 == 1 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 3 && x4 == 0 && x5 == 0 && x7 == 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 3 && x4 == 0 && x5 == 0 && x7 == 1 && x8 == 2 => {
                             let size = (instr >> 22) & 3;
@@ -1213,16 +1244,22 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 3 && x4 == 0 && x5 == 0 && x7 == 1 && x8 & 1 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, x8, _) if x3 == 3 && x4 & 2 == 0 && x5 == 1 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, _, x8, _) if x3 == 3 && x4 & 2 == 0 && x5 == 1 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, x8, _) if x3 == 3 && x4 != 0 && x7 == 1 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, _, x8, _) if x3 == 3 && x4 != 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, x7, x8, _) if x3 & 2 == 2 && x7 == 0 && x8 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, _, _, x7, x8, _) if x7 == 0 && x8 == 0 => {
                             let imm2 = (instr >> 22) & 3;
@@ -1266,10 +1303,13 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, x3, _, x5, _, x7, _) if x1 == 1 && x3 & 30 == 16 && x5 == 0 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, x3, _, x5, _, x7, _) if x1 == 2 && x3 & 30 == 16 && x5 == 0 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, x3, _, x5, _, x7, _) if x1 == 3 && x3 & 30 == 16 && x5 == 0 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 16 == 0 && x5 & 1 == 0 && x7 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -1304,6 +1344,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 16 == 0 && x5 & 1 == 1 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 == 20 && x5 == 0 && x7 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -1316,20 +1357,28 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 == 21 && x5 == 0 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 26 == 16 && x5 == 8 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 26 == 16 && x5 & 7 == 4 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 26 == 16 && x5 & 3 == 2 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, x7, _) if x3 & 26 == 16 && x5 & 1 == 1 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, x7, _) if x3 & 26 == 18 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, x7, _) if x3 & 24 == 24 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, _, _, x7, _) if x7 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1444,6 +1493,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, _, _, x7, _) if x3 == 0 && x4 & 6 == 2 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, x7, _) if x3 == 0 && x4 == 4 && x5 == 0 && x7 == 1 => {
                             let size = (instr >> 22) & 3;
@@ -1457,6 +1507,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, x5, _, x7, _) if x3 == 0 && x4 == 4 && x5 == 1 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, _) if x3 == 0 && x4 == 4 && x7 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -1502,16 +1553,22 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, x5, _, x7, _) if x3 == 0 && x4 == 6 && x5 == 0 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, _, _) if x3 == 0 && x4 == 6 && x5 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, _, _) if x3 == 0 && x4 == 7 && x5 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, x5, _, _, _) if x3 == 0 && x4 == 7 && x5 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, _) if x3 == 0 && x4 & 3 == 1 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, _) if x3 == 1 && x4 == 0 && x7 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, _, x7, _) if x3 == 1 && x4 == 0 && x7 == 1 => {
                             let size = (instr >> 22) & 3;
@@ -1530,6 +1587,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, _, _, _, _) if x3 == 1 && x4 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1560,6 +1618,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, _, _) if x1 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1826,6 +1885,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, _, x6, _) if x6 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -1848,18 +1908,25 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, x4, _, _, x7, _, x9, _) if x1 == 0 && x4 == 8 && x7 == 0 && x9 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, x7, _, _, _) if x1 == 0 && x4 & 7 == 0 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _, _, _) if x1 == 0 && x4 & 4 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _, _, _) if x1 == 0 && x4 & 2 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _, _, _) if x1 == 0 && x4 & 1 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, x7, _, _, _) if x1 == 1 && x4 == 0 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _, _, _) if x1 == 1 && x4 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, _, _, x7, _, _, _) if x4 == 0 && x7 == 0 => {
                             let B = (instr >> 23) & 1;
@@ -1924,12 +1991,16 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, x6, _, x8, _) if x3 == 4 && x6 & 1 == 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, x6, _, x8, _) if x3 & 11 == 2 && x6 & 1 == 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, x6, _, x8, _) if x3 & 9 == 1 && x6 & 1 == 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, x6, _, x8, _) if x3 & 8 == 0 && x6 & 1 == 1 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 8 && x5 == 0 && x6 == 0 && x8 == 0 => {
                             let op = (instr >> 23) & 1;
@@ -1950,6 +2021,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 8 && x5 == 0 && x6 != 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, x7, x8, _) if x3 == 8 && x5 == 4 && x6 == 2 && x7 == 0 && x8 == 0 => {
                             let op = (instr >> 23) & 1;
@@ -1969,6 +2041,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, x7, x8, _) if x3 == 8 && x5 == 4 && x6 == 2 && x7 != 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 8 && x5 == 6 && x6 == 0 && x8 == 0 => {
                             let op = (instr >> 23) & 1;
@@ -1989,6 +2062,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 9 && x5 == 0 && x6 & 2 == 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 9 && x5 == 0 && x6 == 2 && x8 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -2001,8 +2075,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 9 && x5 == 0 && x6 == 3 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 == 9 && x5 == 4 && x6 == 2 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, x7, x8, _) if x3 == 9 && x5 == 6 && x6 == 0 && x7 == 0 && x8 == 0 => {
                             let op = (instr >> 23) & 1;
@@ -2022,8 +2098,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, x7, x8, _) if x3 == 9 && x5 == 6 && x6 == 0 && x7 != 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, _, x8, _) if x3 & 14 == 8 && x5 == 2 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 & 14 == 8 && x5 == 4 && x6 & 2 == 0 && x8 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -2041,16 +2119,22 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 & 14 == 8 && x5 == 4 && x6 == 3 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, x6, _, x8, _) if x3 & 14 == 8 && x5 == 6 && x6 != 0 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _, _, x8, _) if x3 & 14 == 8 && x5 & 1 == 1 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, _, x8, _) if x3 & 14 == 12 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, _, x8, _) if x3 & 10 == 10 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, _, _, _, x8, _) if x8 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -2105,13 +2189,16 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, x6, _, x8) if x5 == 1 && x6 == 0 && x8 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, _, _) if x5 == 1 && x6 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 1 && x2 & 2 == 2 && x4 & 16 == 16 && x6 & 48 == 16 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 1 && x2 & 2 == 2 && x4 & 16 == 16 && x6 & 48 == 48 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 19) & 3, (instr >> 17) & 3, (instr >> 16) & 1, (instr >> 14) & 3, instr & 27) {
@@ -2431,25 +2518,34 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, x4, _, x6, x7, x8) if x3 == 1 && x4 == 0 && x6 == 0 && x7 & 8 == 8 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, x6, x7, x8) if x3 == 1 && x4 == 0 && x6 == 0 && x7 & 4 == 4 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, x6, x7, x8) if x3 == 1 && x4 == 0 && x6 == 0 && x7 & 2 == 2 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, x4, _, x6, x7, x8) if x3 == 1 && x4 == 0 && x6 == 0 && x7 & 1 == 1 && x8 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, _, x6, _, x8) if x4 == 0 && x6 == 0 && x8 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, _, x6, _, _) if x4 == 0 && x6 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, _, _, _, _) if x4 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 1 && x2 & 2 == 2 && x4 & 28 == 20 && x6 & 56 == 40 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 1 && x2 & 2 == 2 && x4 & 24 == 24 && x6 & 48 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 2 && x2 & 2 == 0 && x4 & 16 == 0 && x6 & 32 == 0 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 15) & 1, (instr >> 14) & 1, (instr >> 11) & 5, (instr >> 10) & 1, instr & 19) {
@@ -2470,12 +2566,16 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, x6, _, _) if x5 == 0 && x6 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, _, _) if x5 == 1 && x6 & 4 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, _, _) if x5 == 1 && x6 & 6 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, _, _) if x5 == 1 && x6 == 6 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, x6, x7, _) if x5 == 1 && x6 == 7 && x7 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -2496,11 +2596,13 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, x6, x7, _) if x5 == 1 && x6 == 7 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 2 && x2 & 2 == 0 && x4 & 16 == 0 && x6 & 32 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, _, _) if x0 == 2 && x2 & 2 == 0 && x4 & 16 == 16 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 13) & 5, (instr >> 11) & 3, instr & 21) {
@@ -2530,8 +2632,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, x4, x5, _) if x4 == 0 && x5 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, x5, _) if x4 == 0 && x5 == 2 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, x4, x5, _) if x4 == 0 && x5 == 3 => {
                             let size = (instr >> 22) & 3;
@@ -2556,17 +2660,21 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, x4, _, _) if x4 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 2 && x2 & 2 == 2 && x4 & 16 == 0 && x6 & 32 == 0 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 2 && x2 & 2 == 2 && x4 & 16 == 0 && x6 & 48 == 32 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 14) & 3, (instr >> 10) & 7, instr & 19) {
                         (_, _, _, _, _, x5, _) if x5 & 12 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, _) if x5 & 14 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, _) if x5 == 6 => {
                             let uns = (instr >> 22) & 3;
@@ -2590,15 +2698,19 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, _) if x5 == 7 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, _) if x5 & 8 == 8 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 2 && x2 & 2 == 2 && x4 & 16 == 0 && x6 & 48 == 48 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, _, _) if x0 == 2 && x2 & 2 == 2 && x4 & 16 == 16 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 0 && x6 & 32 == 0 => {
                     let size = (instr >> 22) & 3;
@@ -2614,6 +2726,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 26 == 2 && x6 & 32 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 == 0 && x6 & 56 == 32 => {
                     let size = (instr >> 22) & 3;
@@ -2628,12 +2741,16 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 == 0 && x6 & 56 == 40 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 == 0 && x6 & 48 == 48 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 == 1 && x6 & 32 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 30 == 4 && x6 & 56 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 30 == 4 && x6 & 56 == 40 => {
                     let opc = (instr >> 22) & 3;
@@ -2661,10 +2778,13 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 30 == 4 && x6 & 48 == 48 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 24 == 8 && x6 & 32 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 22 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 62 == 0 => {
                     let size = (instr >> 22) & 3;
@@ -2732,8 +2852,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 == 9 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 60 == 12 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 52 == 16 => {
                     match ((instr >> 24) & 15, (instr >> 23) & 1, (instr >> 22) & 1, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 14) & 3, (instr >> 13) & 1, (instr >> 12) & 1, (instr >> 10) & 3, instr & 19) {
@@ -2754,8 +2876,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, _, _, x6, _, x8, _) if x1 == 0 && x6 == 0 && x8 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, _, _, x6, _, _, _) if x1 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, _, _, _, _, _, _) if x1 == 1 => {
                             let o2 = (instr >> 22) & 1;
@@ -2786,6 +2910,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 52 == 20 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 54 == 32 => {
                     match ((instr >> 24) & 15, (instr >> 23) & 1, (instr >> 22) & 1, (instr >> 21) & 1, (instr >> 16) & 9, (instr >> 14) & 3, (instr >> 13) & 1, (instr >> 11) & 3, (instr >> 10) & 1, instr & 19) {
@@ -2805,8 +2930,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, _, _, x6, _, x8, _) if x1 == 0 && x6 == 0 && x8 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, _, _, x6, _, _, _) if x1 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, _, _, _, _, _, _) if x1 == 1 => {
                             let o2 = (instr >> 22) & 1;
@@ -2835,10 +2962,13 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 52 == 36 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 56 == 48 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 == 56 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 == 57 => {
                     let opc = (instr >> 22) & 3;
@@ -2862,8 +2992,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 62 == 58 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 0 && x4 & 16 == 16 && x6 & 60 == 60 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 2 && x4 & 16 == 0 && x6 & 16 == 16 => {
                     let size = (instr >> 22) & 3;
@@ -3002,6 +3134,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, x6, _, _) if x3 == 2 && x6 != 0 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, _, _, x7, _) if x3 == 3 && x7 == 0 => {
                             let size = (instr >> 22) & 3;
@@ -3038,6 +3171,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, _, x7, _) if x3 == 3 && x7 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -3305,6 +3439,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 2 && x4 & 28 == 4 && x6 & 60 == 8 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _) if x0 == 3 && x2 & 2 == 2 && x4 & 28 == 4 && x6 & 60 == 12 => {
                     match ((instr >> 24) & 15, (instr >> 22) & 3, (instr >> 19) & 5, (instr >> 16) & 5, (instr >> 12) & 7, (instr >> 10) & 3, instr & 19) {
@@ -3330,6 +3465,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, _) if x5 != 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -3370,6 +3506,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, _, _) if x3 == 1 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -3473,6 +3610,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 0 && x2 & 1 == 1 && x4 & 4 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, _, _) if x1 == 1 && x2 & 1 == 1 && x4 & 4 == 0 => {
                             let xs = (instr >> 22) & 1;
@@ -3531,6 +3669,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 3 && x2 & 2 == 0 && x4 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, _, _) if x1 == 3 && x2 & 2 == 0 && x4 == 2 => {
                             let imm9h = (instr >> 16) & 11;
@@ -3544,6 +3683,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, x2, _, x4, _, _, _) if x1 == 3 && x2 & 2 == 0 && x4 & 5 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 3 && x2 & 2 == 2 && x4 & 4 == 0 && x6 == 0 => {
                             let imm6 = (instr >> 16) & 11;
@@ -3568,6 +3708,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 3 && x2 & 2 == 2 && x4 & 4 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, _, _) if x1 != 3 && x2 & 1 == 0 && x4 & 4 == 0 => {
                             let opc = (instr >> 23) & 3;
@@ -3616,6 +3757,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, x2, _, x4, _, _, _) if x2 == 0 && x4 & 6 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, _, x2, _, x4, _, x6, _) if x2 == 0 && x4 == 6 && x6 == 0 => {
                             let msz = (instr >> 23) & 3;
@@ -3662,6 +3804,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, x2, _, x4, _, x6, _) if x2 == 0 && x4 & 6 == 6 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, x2, _, x4, _, _, _) if x2 == 1 && x4 & 4 == 4 => {
                             let msz = (instr >> 23) & 3;
@@ -4010,6 +4153,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, _) if x3 == 1 && x5 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, x3, _, x5, _) if x3 == 1 && x5 == 5 => {
                             let dtype = (instr >> 21) & 7;
@@ -4070,6 +4214,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, x3, _, x5, _) if x3 == 1 && x5 == 7 => {
+                            println!("unpredictable");
                         }
                         (_, _, _, _, _, x5, _) if x5 == 0 => {
                             let msz = (instr >> 23) & 3;
@@ -4226,6 +4371,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, _) if x5 == 4 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -4233,6 +4379,7 @@ pub fn decode_a64(instr: u32) {
                 (x0, _, _, _, _, _, _, _) if x0 == 6 => {
                     match ((instr >> 25) & 13, (instr >> 23) & 3, (instr >> 21) & 3, (instr >> 16) & 9, (instr >> 13) & 5, (instr >> 5) & 15, (instr >> 4) & 1, instr & 7) {
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 0 && x2 == 1 && x4 & 4 == 0 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 0 && x2 == 3 && x4 & 4 == 4 && x6 == 0 => {
                             let Zm = (instr >> 16) & 9;
@@ -4257,6 +4404,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, x2, _, _, _, x6, _) if x1 == 0 && x2 == 3 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, x2, _, x4, _, x6, _) if x1 == 0 && x2 & 1 == 1 && x4 & 4 == 0 && x6 == 0 => {
                             let xs = (instr >> 22) & 1;
@@ -4373,8 +4521,10 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, x2, _, x4, _, _, _) if x2 == 0 && x4 & 6 == 4 => {
+                            println!("unpredictable");
                         }
                         (_, _, x2, _, x4, _, _, _) if x2 == 0 && x4 == 6 => {
+                            println!("unpredictable");
                         }
                         (_, _, x2, _, x4, _, x6, _) if x2 == 0 && x4 == 7 && x6 == 0 => {
                             let msz = (instr >> 23) & 3;
@@ -4399,6 +4549,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, x2, _, x4, _, x6, _) if x2 == 0 && x4 == 7 && x6 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, _, x2, _, x4, _, _, _) if x2 == 1 && x4 & 4 == 4 => {
                             let msz = (instr >> 23) & 3;
@@ -4578,8 +4729,10 @@ pub fn decode_a64(instr: u32) {
                 (x0, _, _, _, _, _, x6, _) if x0 == 7 && x6 & 40 == 0 => {
                     match ((instr >> 25) & 13, (instr >> 22) & 5, (instr >> 16) & 11, (instr >> 15) & 1, (instr >> 14) & 1, (instr >> 13) & 1, (instr >> 5) & 15, (instr >> 4) & 1, instr & 7) {
                         (_, x1, _, _, x4, _, _, _, _) if x1 & 4 == 0 && x4 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _) if x1 & 6 == 4 && x4 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, x7, _) if x1 == 6 && x4 == 0 && x7 == 0 => {
                             let imm9h = (instr >> 16) & 11;
@@ -4593,6 +4746,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, x4, _, _, x7, _) if x1 == 6 && x4 == 0 && x7 == 1 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _) if x1 == 6 && x4 == 1 => {
                             let imm9h = (instr >> 16) & 11;
@@ -4606,6 +4760,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, x1, _, _, x4, _, _, _, _) if x1 == 7 && x4 == 0 => {
+                            println!("unpredictable");
                         }
                         (_, x1, _, _, x4, _, _, _, _) if x1 != 6 && x4 == 1 => {
                             let opc = (instr >> 22) & 5;
@@ -4708,6 +4863,7 @@ pub fn decode_a64(instr: u32) {
                             }
                         }
                         (_, _, _, _, _, x5, _, _) if x5 == 0 => {
+                            println!("unpredictable");
                         }
                         _ => unreachable!()
                     }
@@ -5003,6 +5159,7 @@ pub fn decode_a64(instr: u32) {
             }
         }
         (_, x1, _) if x1 & 30 == 6 => {
+            println!("unpredictable");
         }
         (_, x1, _) if x1 & 28 == 16 => {
             match ((instr >> 29) & 5, (instr >> 26) & 5, (instr >> 23) & 5, instr & 45) {
@@ -6036,6 +6193,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 2 == 0 && x6 & 32 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 == 2 && x6 & 31 == 0 => {
                     let Q = (instr >> 30) & 1;
@@ -6599,14 +6757,19 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 1 == 0 && x6 & 16 == 16 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 1 == 0 && x6 & 8 == 8 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 1 == 0 && x6 & 4 == 4 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 1 == 0 && x6 & 2 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 & 11 == 0 && x2 == 1 && x4 & 1 == 0 && x6 & 1 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, x6, _, _, _) if x0 == 13 && x2 == 0 && x4 & 2 == 2 && x6 & 32 == 32 => {
                     let opc = (instr >> 22) & 3;
@@ -6673,6 +6836,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, _, _, _, _, _, _) if x0 & 11 == 8 && x2 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _, _, _, _, _) if x0 & 3 == 0 && x2 == 0 && x4 & 2 == 0 => {
                     let size = (instr >> 30) & 3;
@@ -8966,8 +9130,10 @@ pub fn decode_a64(instr: u32) {
         (_, x1, _) if x1 & 14 == 14 => {
             match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 23) & 3, (instr >> 19) & 7, (instr >> 10) & 17, instr & 19) {
                 (x0, _, x2, x3, x4, _) if x0 == 0 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 2 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 4 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
                     let size = (instr >> 22) & 3;
@@ -9046,6 +9212,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 5 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 35 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 5 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
                     let size = (instr >> 22) & 3;
@@ -9084,10 +9251,13 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 6 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 7 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 33 == 0 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 == 7 && x2 & 2 == 0 && x3 & 7 == 5 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 == 0 && x3 & 12 == 0 && x4 & 33 == 1 => {
                     let op = (instr >> 29) & 1;
@@ -9121,8 +9291,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 == 1 && x3 & 12 == 0 && x4 & 33 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 == 7 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 12 == 8 && x4 & 49 == 1 => {
                     let U = (instr >> 29) & 1;
@@ -9187,6 +9359,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 12 == 8 && x4 & 49 == 17 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 == 15 && x4 & 387 == 2 => {
                     let U = (instr >> 29) & 1;
@@ -9292,6 +9465,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 33 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 33 == 33 => {
                     let U = (instr >> 29) & 1;
@@ -9586,8 +9760,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 259 == 258 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 131 == 130 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 13 == 5 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 3 == 0 => {
                     let U = (instr >> 29) & 1;
@@ -9974,6 +10150,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _) if x0 & 13 == 5 && x2 == 3 && x4 & 1 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _) if x0 & 13 == 5 && x2 & 2 == 2 && x4 & 1 == 0 => {
                     let U = (instr >> 29) & 1;
@@ -10245,8 +10422,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 == 1 && x3 & 12 == 0 && x4 & 33 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 == 7 && x4 & 387 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 12 == 8 && x4 & 49 == 1 => {
                     let Q = (instr >> 30) & 1;
@@ -10357,6 +10536,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 12 == 8 && x4 & 49 == 17 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 == 15 && x4 & 387 == 2 => {
                     let Q = (instr >> 30) & 1;
@@ -10487,6 +10667,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 33 == 32 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 4 == 0 && x4 & 33 == 33 => {
                     let Q = (instr >> 30) & 1;
@@ -10943,8 +11124,10 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 259 == 258 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 131 == 130 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, x4, _) if x0 & 9 == 0 && x2 & 2 == 0 && x3 & 4 == 4 && x4 & 3 == 0 => {
                     let Q = (instr >> 30) & 1;
@@ -11559,6 +11742,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, x4, _) if x0 & 9 == 0 && x2 == 3 && x4 & 1 == 1 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, _, x4, _) if x0 & 9 == 0 && x2 & 2 == 2 && x4 & 1 == 0 => {
                     let Q = (instr >> 30) & 1;
@@ -11850,6 +12034,7 @@ pub fn decode_a64(instr: u32) {
                     }
                 }
                 (x0, _, x2, _, _, _) if x0 & 9 == 8 && x2 & 2 == 2 => {
+                    println!("unpredictable");
                 }
                 (x0, _, x2, x3, _, _) if x0 & 5 == 1 && x2 & 2 == 0 && x3 & 4 == 0 => {
                     let sf = (instr >> 31) & 1;
@@ -12840,13 +13025,3691 @@ pub fn decode_a64(instr: u32) {
         _ => unreachable!()
     }
 } // end of decoding A64
+#[allow(unused_variables)]
+#[allow(non_snake_case)]
+pub fn decode_a32(instr: u32) {
+    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 5) & 39, (instr >> 4) & 1, instr & 7) {
+        (x0, x1, _, _, _) if x0 != 15 && x1 & 6 == 0 => {
+            match ((instr >> 28) & 7, (instr >> 26) & 3, (instr >> 25) & 1, (instr >> 20) & 9, (instr >> 8) & 23, (instr >> 7) & 1, (instr >> 5) & 3, (instr >> 4) & 1, instr & 7) {
+                (_, _, x2, _, _, x5, x6, x7, _) if x2 == 0 && x5 == 1 && x6 != 0 && x7 == 1 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 23) & 3, (instr >> 22) & 1, (instr >> 8) & 27, (instr >> 7) & 1, (instr >> 5) & 3, (instr >> 4) & 1, instr & 7) {
+                        (_, _, _, x3, _, _, _, _, _) if x3 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let P = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let W = (instr >> 21) & 1;
+                            let o1 = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let op2 = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match (P, W, o1, op2) {
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRH_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 3 => {
+                                    println!("encoding: aarch32_STRD_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_r_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRHT_A2_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 2 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 3 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRHT_A2_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSBT_A2_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSHT_A2_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRH_r_A1_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_r_A1_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 0 && x3 == 3 => {
+                                    println!("encoding: aarch32_STRD_r_A1_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_r_A1_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_r_A1_A");
+                                }
+                                (x0, _, x2, x3) if x0 == 1 && x2 == 1 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_r_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, _, x3, _, _, _, _, _) if x3 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let P = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let W = (instr >> 21) & 1;
+                            let o1 = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let imm4H = (instr >> 8) & 7;
+                            let op2 = (instr >> 5) & 3;
+                            let imm4L = instr & 7;
+                            match ((P << 1) | W, o1, Rn, op2) {
+                                (_, x1, x2, x3) if x1 == 0 && x2 == 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_l_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_l_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_l_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 15 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_l_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRH_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 3 => {
+                                    println!("encoding: aarch32_STRD_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 != 15 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 != 15 && x3 == 2 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRHT_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 3 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRHT_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSBT_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSHT_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 2 && x1 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRH_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 2 && x1 == 0 && x3 == 3 => {
+                                    println!("encoding: aarch32_STRD_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 != 15 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRD_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 3 && x1 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_STRH_i_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 3 && x1 == 0 && x3 == 3 => {
+                                    println!("encoding: aarch32_STRD_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDRH_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 2 => {
+                                    println!("encoding: aarch32_LDRSB_i_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 != 15 && x3 == 3 => {
+                                    println!("encoding: aarch32_LDRSH_i_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, x5, x6, x7, _) if x2 == 0 && x3 & 16 == 0 && x5 == 1 && x6 == 0 && x7 == 1 => {
+                    let cond = (instr >> 28) & 7;
+                    let opc = (instr >> 21) & 5;
+                    let S = (instr >> 20) & 1;
+                    let RdHi = (instr >> 16) & 7;
+                    let RdLo = (instr >> 12) & 7;
+                    let Rm = (instr >> 8) & 7;
+                    let Rn = instr & 7;
+                    match (opc, S) {
+                        (x0, _) if x0 == 0 => {
+                            println!("encoding: aarch32_MUL_A1_A");
+                        }
+                        (x0, _) if x0 == 1 => {
+                            println!("encoding: aarch32_MLA_A1_A");
+                        }
+                        (x0, x1) if x0 == 2 && x1 == 0 => {
+                            println!("encoding: aarch32_UMAAL_A1_A");
+                        }
+                        (x0, x1) if x0 == 2 && x1 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1) if x0 == 3 && x1 == 0 => {
+                            println!("encoding: aarch32_MLS_A1_A");
+                        }
+                        (x0, x1) if x0 == 3 && x1 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, _) if x0 == 4 => {
+                            println!("encoding: aarch32_UMULL_A1_A");
+                        }
+                        (x0, _) if x0 == 5 => {
+                            println!("encoding: aarch32_UMLAL_A1_A");
+                        }
+                        (x0, _) if x0 == 6 => {
+                            println!("encoding: aarch32_SMULL_A1_A");
+                        }
+                        (x0, _) if x0 == 7 => {
+                            println!("encoding: aarch32_SMLAL_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, x5, x6, x7, _) if x2 == 0 && x3 & 16 == 16 && x5 == 1 && x6 == 0 && x7 == 1 => {
+                    match ((instr >> 28) & 7, (instr >> 24) & 7, (instr >> 23) & 1, (instr >> 12) & 21, (instr >> 10) & 3, (instr >> 8) & 3, (instr >> 4) & 7, instr & 7) {
+                        (_, _, x2, _, _, _, _, _) if x2 == 0 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, _, _) if x2 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let size = (instr >> 21) & 3;
+                            let L = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let xRd = (instr >> 12) & 7;
+                            let ex = (instr >> 9) & 1;
+                            let ord = (instr >> 8) & 1;
+                            let xRt = instr & 7;
+                            match (size, L, ex, ord) {
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_STL_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLEX_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_STREX_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDA_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAEX_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDREX_A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLEXD_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_STREXD_A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAEXD_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDREXD_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLEXB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_STREXB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAEXB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDREXB_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLH_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_STLEXH_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_STREXH_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAH_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_LDAEXH_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_LDREXH_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, x5, _, _, _) if x2 == 0 && x3 & 25 == 16 && x5 == 0 => {
+                    match ((instr >> 28) & 7, (instr >> 23) & 9, (instr >> 21) & 3, (instr >> 20) & 1, (instr >> 8) & 23, (instr >> 7) & 1, (instr >> 4) & 5, instr & 7) {
+                        (_, _, x2, _, _, _, x6, _) if x2 == 0 && x6 == 1 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 0 && x6 == 2 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 0 && x6 == 3 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 0 && x6 == 6 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 1 && x6 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let Rm = instr & 7;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_BX_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 1 && x6 == 2 => {
+                            let cond = (instr >> 28) & 7;
+                            let Rm = instr & 7;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_BXJ_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 1 && x6 == 3 => {
+                            let cond = (instr >> 28) & 7;
+                            let Rm = instr & 7;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_BLX_r_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 1 && x6 == 6 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 2 && x6 == 1 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 2 && x6 == 2 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 2 && x6 == 3 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 2 && x6 == 6 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 3 && x6 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let Rm = instr & 7;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_CLZ_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 3 && x6 == 2 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 3 && x6 == 3 => {
+                            println!("unpredictable");
+                        }
+                        (_, _, x2, _, _, _, x6, _) if x2 == 3 && x6 == 6 => {
+                            let cond = (instr >> 28) & 7;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_ERET_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, _, _, _, _, x6, _) if x6 == 7 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let imm12 = (instr >> 8) & 23;
+                            let imm4 = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_HLT_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_BKPT_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_HVC_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_SMC_A1_AS");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, _, _, _, _, x6, _) if x6 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let mask = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let B = (instr >> 9) & 1;
+                            let m = (instr >> 8) & 1;
+                            let Rn = instr & 7;
+                            match (opc, B) {
+                                (x0, x1) if x0 & 1 == 0 && x1 == 0 => {
+                                    println!("encoding: aarch32_MRS_A1_AS");
+                                }
+                                (x0, x1) if x0 & 1 == 0 && x1 == 1 => {
+                                    println!("encoding: aarch32_MRS_br_A1_AS");
+                                }
+                                (x0, x1) if x0 & 1 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_MSR_r_A1_AS");
+                                }
+                                (x0, x1) if x0 & 1 == 1 && x1 == 1 => {
+                                    println!("encoding: aarch32_MSR_br_A1_AS");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, _, _, _, _, x6, _) if x6 == 4 => {
+                            let cond = (instr >> 28) & 7;
+                            let sz = (instr >> 21) & 3;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let C = (instr >> 9) & 1;
+                            let Rm = instr & 7;
+                            match (sz, C) {
+                                (x0, x1) if x0 == 0 && x1 == 0 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 1 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 1 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, x1) if x0 == 2 && x1 == 0 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, x1) if x0 == 2 && x1 == 1 => {
+                                    println!("encoding: aarch32_CRC32_A1_A");
+                                }
+                                (x0, _) if x0 == 3 => {
+                                    println!("unpredictable");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, _, _, _, _, x6, _) if x6 == 5 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_QADD_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_QSUB_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_QDADD_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_QDSUB_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, x5, _, x7, _) if x2 == 0 && x3 & 25 == 16 && x5 == 1 && x7 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let opc = (instr >> 21) & 3;
+                    let Rd = (instr >> 16) & 7;
+                    let Ra = (instr >> 12) & 7;
+                    let Rm = (instr >> 8) & 7;
+                    let M = (instr >> 6) & 1;
+                    let N = (instr >> 5) & 1;
+                    let Rn = instr & 7;
+                    match (opc, M, N) {
+                        (x0, _, _) if x0 == 0 => {
+                            println!("encoding: aarch32_SMLABB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_SMLAWB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_SMULWB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_SMLAWB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                            println!("encoding: aarch32_SMULWB_A1_A");
+                        }
+                        (x0, _, _) if x0 == 2 => {
+                            println!("encoding: aarch32_SMLALBB_A1_A");
+                        }
+                        (x0, _, _) if x0 == 3 => {
+                            println!("encoding: aarch32_SMULBB_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, _, _, x7, _) if x2 == 0 && x3 & 25 != 16 && x7 == 0 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 23) & 3, (instr >> 21) & 3, (instr >> 20) & 1, (instr >> 5) & 29, (instr >> 4) & 1, instr & 7) {
+                        (_, _, x2, _, _, _, _, _) if x2 & 2 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 5;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let imm5 = (instr >> 7) & 9;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match (opc, S, Rn) {
+                                (x0, _, _) if x0 == 0 => {
+                                    println!("encoding: aarch32_AND_r_A1_A");
+                                }
+                                (x0, _, _) if x0 == 1 => {
+                                    println!("encoding: aarch32_EOR_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 != 13 => {
+                                    println!("encoding: aarch32_SUB_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 13 => {
+                                    println!("encoding: aarch32_SUB_SP_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 != 13 => {
+                                    println!("encoding: aarch32_SUB_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 13 => {
+                                    println!("encoding: aarch32_SUB_SP_r_A1_A");
+                                }
+                                (x0, _, _) if x0 == 3 => {
+                                    println!("encoding: aarch32_RSB_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 != 13 => {
+                                    println!("encoding: aarch32_ADD_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 13 => {
+                                    println!("encoding: aarch32_ADD_SP_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 != 13 => {
+                                    println!("encoding: aarch32_ADD_r_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 == 13 => {
+                                    println!("encoding: aarch32_ADD_SP_r_A1_A");
+                                }
+                                (x0, _, _) if x0 == 5 => {
+                                    println!("encoding: aarch32_ADC_r_A1_A");
+                                }
+                                (x0, _, _) if x0 == 6 => {
+                                    println!("encoding: aarch32_SBC_r_A1_A");
+                                }
+                                (x0, _, _) if x0 == 7 => {
+                                    println!("encoding: aarch32_RSC_r_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _, _, _) if x2 == 2 && x4 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let Rn = (instr >> 16) & 7;
+                            let imm5 = (instr >> 7) & 9;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_TST_r_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_TEQ_r_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_CMP_r_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_CMN_r_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, _, _, _, _) if x2 == 3 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let imm5 = (instr >> 7) & 9;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_ORR_r_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_MOV_r_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_BIC_r_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_MVN_r_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, x3, _, x5, _, x7, _) if x2 == 0 && x3 & 25 != 16 && x5 == 0 && x7 == 1 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 23) & 3, (instr >> 21) & 3, (instr >> 20) & 1, (instr >> 8) & 23, (instr >> 7) & 1, (instr >> 5) & 3, (instr >> 4) & 1, instr & 7) {
+                        (_, _, x2, _, _, _, _, _, _, _) if x2 & 2 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 5;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let Rs = (instr >> 8) & 7;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_AND_rr_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_EOR_rr_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_SUB_rr_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_RSB_rr_A1_A");
+                                }
+                                x0 if x0 == 4 => {
+                                    println!("encoding: aarch32_ADD_rr_A1_A");
+                                }
+                                x0 if x0 == 5 => {
+                                    println!("encoding: aarch32_ADC_rr_A1_A");
+                                }
+                                x0 if x0 == 6 => {
+                                    println!("encoding: aarch32_SBC_rr_A1_A");
+                                }
+                                x0 if x0 == 7 => {
+                                    println!("encoding: aarch32_RSC_rr_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _, _, _, _, _) if x2 == 2 && x4 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let Rn = (instr >> 16) & 7;
+                            let Rs = (instr >> 8) & 7;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_TST_rr_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_TEQ_rr_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_CMP_rr_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_CMN_rr_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, _, _, _, _, _, _) if x2 == 3 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let Rs = (instr >> 8) & 7;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_ORR_rr_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_MOV_rr_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_BIC_rr_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_MVN_rr_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, _, _, _, _, _) if x2 == 1 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 23) & 3, (instr >> 22) & 1, (instr >> 20) & 3, instr & 39) {
+                        (_, _, x2, _, _, _) if x2 & 2 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 5;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let imm12 = instr & 23;
+                            match (opc, S, Rn) {
+                                (x0, _, _) if x0 == 0 => {
+                                    println!("encoding: aarch32_AND_i_A1_A");
+                                }
+                                (x0, _, _) if x0 == 1 => {
+                                    println!("encoding: aarch32_EOR_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 & 13 != 13 => {
+                                    println!("encoding: aarch32_SUB_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 13 => {
+                                    println!("encoding: aarch32_SUB_SP_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 15 => {
+                                    println!("encoding: aarch32_ADR_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 != 13 => {
+                                    println!("encoding: aarch32_SUB_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 13 => {
+                                    println!("encoding: aarch32_SUB_SP_i_A1_A");
+                                }
+                                (x0, _, _) if x0 == 3 => {
+                                    println!("encoding: aarch32_RSB_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 & 13 != 13 => {
+                                    println!("encoding: aarch32_ADD_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 13 => {
+                                    println!("encoding: aarch32_ADD_SP_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 0 && x2 == 15 => {
+                                    println!("encoding: aarch32_ADR_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 != 13 => {
+                                    println!("encoding: aarch32_ADD_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 4 && x1 == 1 && x2 == 13 => {
+                                    println!("encoding: aarch32_ADD_SP_i_A1_A");
+                                }
+                                (x0, _, _) if x0 == 5 => {
+                                    println!("encoding: aarch32_ADC_i_A1_A");
+                                }
+                                (x0, _, _) if x0 == 6 => {
+                                    println!("encoding: aarch32_SBC_i_A1_A");
+                                }
+                                (x0, _, _) if x0 == 7 => {
+                                    println!("encoding: aarch32_RSC_i_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _) if x2 == 2 && x4 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let H = (instr >> 22) & 1;
+                            let imm4 = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let imm12 = instr & 23;
+                            match H {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_MOV_i_A2_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_MOVT_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _) if x2 == 2 && x4 == 2 => {
+                            let cond = (instr >> 28) & 7;
+                            let R = (instr >> 22) & 1;
+                            let imm4 = (instr >> 16) & 7;
+                            let imm12 = instr & 23;
+                            match ((R << 4) | imm4, imm12) {
+                                (x0, _) if x0 != 0 => {
+                                    println!("encoding: aarch32_MSR_i_A1_AS");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 0 => {
+                                    println!("encoding: aarch32_NOP_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 1 => {
+                                    println!("encoding: aarch32_YIELD_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 2 => {
+                                    println!("encoding: aarch32_WFE_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 3 => {
+                                    println!("encoding: aarch32_WFI_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 4 => {
+                                    println!("encoding: aarch32_SEV_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 5 => {
+                                    println!("encoding: aarch32_SEVL_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 254 == 6 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 248 == 8 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 16 => {
+                                    println!("encoding: aarch32_ESB_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 17 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 18 => {
+                                    println!("encoding: aarch32_TSB_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 19 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 20 => {
+                                    println!("encoding: aarch32_CSDB_A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 255 == 21 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 248 == 24 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 254 == 30 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 224 == 32 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 192 == 64 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 192 == 128 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 224 == 192 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 240 == 224 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 240 == 240 => {
+                                    println!("encoding: aarch32_DBG_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _) if x2 == 2 && x4 & 1 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let Rn = (instr >> 16) & 7;
+                            let imm12 = instr & 23;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_TST_i_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_TEQ_i_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_CMP_i_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_CMN_i_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, _, _) if x2 == 3 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc = (instr >> 21) & 3;
+                            let S = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Rd = (instr >> 12) & 7;
+                            let imm12 = instr & 23;
+                            match opc {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_ORR_i_A1_A");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_MOV_i_A1_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_BIC_i_A1_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_MVN_i_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                _ => unreachable!()
+            }
+        }
+        (x0, x1, _, _, _) if x0 != 15 && x1 == 2 => {
+            let cond = (instr >> 28) & 7;
+            let P = (instr >> 24) & 1;
+            let U = (instr >> 23) & 1;
+            let o2 = (instr >> 22) & 1;
+            let W = (instr >> 21) & 1;
+            let o1 = (instr >> 20) & 1;
+            let Rn = (instr >> 16) & 7;
+            let Rt = (instr >> 12) & 7;
+            let imm12 = instr & 23;
+            match ((P << 1) | W, o2, o1, Rn) {
+                (x0, x1, x2, x3) if x0 != 1 && x1 == 0 && x2 == 1 && x3 == 15 => {
+                    println!("encoding: aarch32_LDR_l_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 != 1 && x1 == 1 && x2 == 1 && x3 == 15 => {
+                    println!("encoding: aarch32_LDRB_l_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
+                    println!("encoding: aarch32_STR_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDR_i_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
+                    println!("encoding: aarch32_STRB_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDRB_i_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
+                    println!("encoding: aarch32_STRT_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
+                    println!("encoding: aarch32_LDRT_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
+                    println!("encoding: aarch32_STRBT_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                    println!("encoding: aarch32_LDRBT_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 2 && x1 == 0 && x2 == 0 => {
+                    println!("encoding: aarch32_STR_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 2 && x1 == 0 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDR_i_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 2 && x1 == 1 && x2 == 0 => {
+                    println!("encoding: aarch32_STRB_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 2 && x1 == 1 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDRB_i_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 3 && x1 == 0 && x2 == 0 => {
+                    println!("encoding: aarch32_STR_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 3 && x1 == 0 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDR_i_A1_A");
+                }
+                (x0, x1, x2, _) if x0 == 3 && x1 == 1 && x2 == 0 => {
+                    println!("encoding: aarch32_STRB_i_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 3 && x1 == 1 && x2 == 1 && x3 != 15 => {
+                    println!("encoding: aarch32_LDRB_i_A1_A");
+                }
+                _ => unreachable!()
+            }
+        }
+        (x0, x1, _, x3, _) if x0 != 15 && x1 == 3 && x3 == 0 => {
+            let cond = (instr >> 28) & 7;
+            let P = (instr >> 24) & 1;
+            let U = (instr >> 23) & 1;
+            let o2 = (instr >> 22) & 1;
+            let W = (instr >> 21) & 1;
+            let o1 = (instr >> 20) & 1;
+            let Rn = (instr >> 16) & 7;
+            let Rt = (instr >> 12) & 7;
+            let imm5 = (instr >> 7) & 9;
+            let stype = (instr >> 5) & 3;
+            let Rm = instr & 7;
+            match (P, o2, W, o1) {
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                    println!("encoding: aarch32_STR_r_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                    println!("encoding: aarch32_LDR_r_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                    println!("encoding: aarch32_STRT_A2_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 => {
+                    println!("encoding: aarch32_LDRT_A2_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                    println!("encoding: aarch32_STRB_r_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                    println!("encoding: aarch32_LDRB_r_A1_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                    println!("encoding: aarch32_STRBT_A2_A");
+                }
+                (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                    println!("encoding: aarch32_LDRBT_A2_A");
+                }
+                (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 0 => {
+                    println!("encoding: aarch32_STR_r_A1_A");
+                }
+                (x0, x1, _, x3) if x0 == 1 && x1 == 0 && x3 == 1 => {
+                    println!("encoding: aarch32_LDR_r_A1_A");
+                }
+                (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 0 => {
+                    println!("encoding: aarch32_STRB_r_A1_A");
+                }
+                (x0, x1, _, x3) if x0 == 1 && x1 == 1 && x3 == 1 => {
+                    println!("encoding: aarch32_LDRB_r_A1_A");
+                }
+                _ => unreachable!()
+            }
+        }
+        (x0, x1, _, x3, _) if x0 != 15 && x1 == 3 && x3 == 1 => {
+            match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 20) & 9, (instr >> 8) & 23, (instr >> 5) & 5, (instr >> 4) & 1, instr & 7) {
+                (_, _, x2, _, _, _, _) if x2 & 24 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let op1 = (instr >> 20) & 5;
+                    let Rn = (instr >> 16) & 7;
+                    let Rd = (instr >> 12) & 7;
+                    let B = (instr >> 7) & 1;
+                    let op2 = (instr >> 5) & 3;
+                    let Rm = instr & 7;
+                    match (op1, B, op2) {
+                        (x0, _, _) if x0 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_SADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_SASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_SSAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_SSUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_SADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_SSUB8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_QADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_QASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_QSAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_QSUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_QADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 2 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_QSUB8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_SHADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_SHASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_SHSAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_SHSUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_SHADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 3 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_SHSUB8_A1_A");
+                        }
+                        (x0, _, _) if x0 == 4 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_UADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_UASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_USAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_USUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_UADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_USUB8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_UQADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_UQASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_UQSAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_UQSUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_UQADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 6 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_UQSUB8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 0 => {
+                            println!("encoding: aarch32_UHADD16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 1 => {
+                            println!("encoding: aarch32_UHASX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 2 => {
+                            println!("encoding: aarch32_UHSAX_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 0 && x2 == 3 => {
+                            println!("encoding: aarch32_UHSUB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_UHADD8_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 7 && x1 == 1 && x2 == 3 => {
+                            println!("encoding: aarch32_UHSUB8_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 8 && x4 == 5 => {
+                    let cond = (instr >> 28) & 7;
+                    let Rn = (instr >> 16) & 7;
+                    let Rd = (instr >> 12) & 7;
+                    let Rm = instr & 7;
+                    match () {
+                        () => {
+                            println!("encoding: aarch32_SEL_A1_A");
+                        }
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 8 && x4 == 1 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 8 && x4 & 1 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let Rn = (instr >> 16) & 7;
+                    let Rd = (instr >> 12) & 7;
+                    let imm5 = (instr >> 7) & 9;
+                    let tb = (instr >> 6) & 1;
+                    let Rm = instr & 7;
+                    match () {
+                        () => {
+                            println!("encoding: aarch32_PKH_A1_A");
+                        }
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 9 && x4 & 3 == 1 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 9 && x4 & 1 == 0 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 12 && x4 & 3 == 1 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 12 && x4 & 1 == 0 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 27 == 10 && x4 == 1 => {
+                    let cond = (instr >> 28) & 7;
+                    let U = (instr >> 22) & 1;
+                    let sat_imm = (instr >> 16) & 7;
+                    let Rd = (instr >> 12) & 7;
+                    let Rn = instr & 7;
+                    match U {
+                        x0 if x0 == 0 => {
+                            println!("encoding: aarch32_SSAT16_A1_A");
+                        }
+                        x0 if x0 == 1 => {
+                            println!("encoding: aarch32_USAT16_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 27 == 10 && x4 == 5 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 27 == 11 && x4 & 3 == 1 => {
+                    let cond = (instr >> 28) & 7;
+                    let o1 = (instr >> 22) & 1;
+                    let Rd = (instr >> 12) & 7;
+                    let o2 = (instr >> 7) & 1;
+                    let Rm = instr & 7;
+                    match (o1, o2) {
+                        (x0, x1) if x0 == 0 && x1 == 0 => {
+                            println!("encoding: aarch32_REV_A1_A");
+                        }
+                        (x0, x1) if x0 == 0 && x1 == 1 => {
+                            println!("encoding: aarch32_REV16_A1_A");
+                        }
+                        (x0, x1) if x0 == 1 && x1 == 0 => {
+                            println!("encoding: aarch32_RBIT_A1_A");
+                        }
+                        (x0, x1) if x0 == 1 && x1 == 1 => {
+                            println!("encoding: aarch32_REVSH_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 26 == 10 && x4 & 1 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let U = (instr >> 22) & 1;
+                    let sat_imm = (instr >> 16) & 9;
+                    let Rd = (instr >> 12) & 7;
+                    let imm5 = (instr >> 7) & 9;
+                    let sh = (instr >> 6) & 1;
+                    let Rn = instr & 7;
+                    match U {
+                        x0 if x0 == 0 => {
+                            println!("encoding: aarch32_SSAT_A1_A");
+                        }
+                        x0 if x0 == 1 => {
+                            println!("encoding: aarch32_USAT_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 24 == 8 && x4 == 7 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 24 == 8 && x4 == 3 => {
+                    let cond = (instr >> 28) & 7;
+                    let U = (instr >> 22) & 1;
+                    let op = (instr >> 20) & 3;
+                    let Rn = (instr >> 16) & 7;
+                    let Rd = (instr >> 12) & 7;
+                    let rotate = (instr >> 10) & 3;
+                    let Rm = instr & 7;
+                    match (U, op, Rn) {
+                        (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 != 15 => {
+                            println!("encoding: aarch32_SXTAB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 0 && x2 == 15 => {
+                            println!("encoding: aarch32_SXTB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 != 15 => {
+                            println!("encoding: aarch32_SXTAB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 2 && x2 == 15 => {
+                            println!("encoding: aarch32_SXTB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 != 15 => {
+                            println!("encoding: aarch32_SXTAH_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 3 && x2 == 15 => {
+                            println!("encoding: aarch32_SXTH_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 != 15 => {
+                            println!("encoding: aarch32_UXTAB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 == 15 => {
+                            println!("encoding: aarch32_UXTB16_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 != 15 => {
+                            println!("encoding: aarch32_UXTAB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 15 => {
+                            println!("encoding: aarch32_UXTB_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 != 15 => {
+                            println!("encoding: aarch32_UXTAH_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 1 && x1 == 3 && x2 == 15 => {
+                            println!("encoding: aarch32_UXTH_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, _, _, _) if x2 & 24 == 16 => {
+                    let cond = (instr >> 28) & 7;
+                    let op1 = (instr >> 20) & 5;
+                    let Rd = (instr >> 16) & 7;
+                    let Ra = (instr >> 12) & 7;
+                    let Rm = (instr >> 8) & 7;
+                    let op2 = (instr >> 5) & 5;
+                    let Rn = instr & 7;
+                    match (op1, Ra, op2) {
+                        (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 0 => {
+                            println!("encoding: aarch32_SMLAD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 1 => {
+                            println!("encoding: aarch32_SMLAD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 2 => {
+                            println!("encoding: aarch32_SMLSD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 != 15 && x2 == 3 => {
+                            println!("encoding: aarch32_SMLSD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 0 && x2 & 4 == 4 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 0 => {
+                            println!("encoding: aarch32_SMUAD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 1 => {
+                            println!("encoding: aarch32_SMUAD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 2 => {
+                            println!("encoding: aarch32_SMUSD_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 0 && x1 == 15 && x2 == 3 => {
+                            println!("encoding: aarch32_SMUSD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 1 && x2 == 0 => {
+                            println!("encoding: aarch32_SDIV_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 1 && x2 != 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, _) if x0 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2) if x0 == 3 && x2 == 0 => {
+                            println!("encoding: aarch32_UDIV_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 3 && x2 != 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2) if x0 == 4 && x2 == 0 => {
+                            println!("encoding: aarch32_SMLALD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 4 && x2 == 1 => {
+                            println!("encoding: aarch32_SMLALD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 4 && x2 == 2 => {
+                            println!("encoding: aarch32_SMLSLD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 4 && x2 == 3 => {
+                            println!("encoding: aarch32_SMLSLD_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 4 && x2 & 4 == 4 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 != 15 && x2 == 0 => {
+                            println!("encoding: aarch32_SMMLA_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 != 15 && x2 == 1 => {
+                            println!("encoding: aarch32_SMMLA_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 5 && x2 & 6 == 2 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2) if x0 == 5 && x2 & 6 == 4 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2) if x0 == 5 && x2 == 6 => {
+                            println!("encoding: aarch32_SMMLS_A1_A");
+                        }
+                        (x0, _, x2) if x0 == 5 && x2 == 7 => {
+                            println!("encoding: aarch32_SMMLS_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 15 && x2 == 0 => {
+                            println!("encoding: aarch32_SMMUL_A1_A");
+                        }
+                        (x0, x1, x2) if x0 == 5 && x1 == 15 && x2 == 1 => {
+                            println!("encoding: aarch32_SMMUL_A1_A");
+                        }
+                        (x0, _, _) if x0 & 6 == 6 => {
+                            println!("unallocated");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 24 && x4 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let Rd = (instr >> 16) & 7;
+                    let Ra = (instr >> 12) & 7;
+                    let Rm = (instr >> 8) & 7;
+                    let Rn = instr & 7;
+                    match Ra {
+                        x0 if x0 != 15 => {
+                            println!("encoding: aarch32_USADA8_A1_A");
+                        }
+                        x0 if x0 == 15 => {
+                            println!("encoding: aarch32_USAD8_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 24 && x4 == 4 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 25 && x4 & 3 == 0 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 26 && x4 & 3 == 0 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 28 == 24 && x4 == 7 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 28 && x4 == 7 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 28 && x4 & 3 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let msb = (instr >> 16) & 9;
+                    let Rd = (instr >> 12) & 7;
+                    let lsb = (instr >> 7) & 9;
+                    let Rn = instr & 7;
+                    match Rn {
+                        x0 if x0 != 15 => {
+                            println!("encoding: aarch32_BFI_A1_A");
+                        }
+                        x0 if x0 == 15 => {
+                            println!("encoding: aarch32_BFC_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 30 && x4 == 7 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 == 31 && x4 == 7 => {
+                    let cond = (instr >> 28) & 7;
+                    let imm12 = (instr >> 8) & 23;
+                    let imm4 = instr & 7;
+                    match cond {
+                        x0 if x0 & 8 == 0 => {
+                            println!("unallocated");
+                        }
+                        x0 if x0 & 12 == 8 => {
+                            println!("unallocated");
+                        }
+                        x0 if x0 & 14 == 12 => {
+                            println!("unallocated");
+                        }
+                        x0 if x0 == 14 => {
+                            println!("encoding: aarch32_UDF_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 30 == 30 && x4 & 3 == 0 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 26 == 24 && x4 & 3 == 2 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 26 == 26 && x4 & 3 == 2 => {
+                    let cond = (instr >> 28) & 7;
+                    let U = (instr >> 22) & 1;
+                    let widthm1 = (instr >> 16) & 9;
+                    let Rd = (instr >> 12) & 7;
+                    let lsb = (instr >> 7) & 9;
+                    let Rn = instr & 7;
+                    match U {
+                        x0 if x0 == 0 => {
+                            println!("encoding: aarch32_SBFX_A1_A");
+                        }
+                        x0 if x0 == 1 => {
+                            println!("encoding: aarch32_UBFX_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 24 == 24 && x4 == 3 => {
+                    println!("unpredictable");
+                }
+                (_, _, x2, _, x4, _, _) if x2 & 24 == 24 && x4 & 3 == 1 => {
+                    println!("unpredictable");
+                }
+                _ => unreachable!()
+            }
+        }
+        (_, x1, _, _, _) if x1 & 6 == 4 => {
+            match ((instr >> 28) & 7, (instr >> 26) & 3, (instr >> 25) & 1, instr & 49) {
+                (x0, _, x2, _) if x0 == 15 && x2 == 0 => {
+                    let P = (instr >> 24) & 1;
+                    let U = (instr >> 23) & 1;
+                    let S = (instr >> 22) & 1;
+                    let W = (instr >> 21) & 1;
+                    let L = (instr >> 20) & 1;
+                    let Rn = (instr >> 16) & 7;
+                    let op = (instr >> 5) & 21;
+                    let mode = instr & 9;
+                    match (P, U, S, L) {
+                        (_, _, x2, x3) if x2 == 0 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_RFE_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                            println!("encoding: aarch32_SRS_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_RFE_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                            println!("encoding: aarch32_SRS_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_RFE_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                            println!("encoding: aarch32_SRS_A1_AS");
+                        }
+                        (_, _, x2, x3) if x2 == 1 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_RFE_A1_AS");
+                        }
+                        (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                            println!("encoding: aarch32_SRS_A1_AS");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (x0, _, x2, _) if x0 != 15 && x2 == 0 => {
+                    let cond = (instr >> 28) & 7;
+                    let P = (instr >> 24) & 1;
+                    let U = (instr >> 23) & 1;
+                    let op = (instr >> 22) & 1;
+                    let W = (instr >> 21) & 1;
+                    let L = (instr >> 20) & 1;
+                    let Rn = (instr >> 16) & 7;
+                    let register_list = instr & 31;
+                    match (P, U, op, L, register_list) {
+                        (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                            println!("encoding: aarch32_STMDA_A1_A");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_LDMDA_A1_A");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                            println!("encoding: aarch32_STM_A1_A");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_LDM_A1_A");
+                        }
+                        (_, _, x2, x3, _) if x2 == 1 && x3 == 0 => {
+                            println!("encoding: aarch32_STM_u_A1_AS");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 0 => {
+                            println!("encoding: aarch32_STMDB_A1_A");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 1 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_LDMDB_A1_A");
+                        }
+                        (_, _, x2, x3, x4) if x2 == 1 && x3 == 1 && x4 & 32768 == 0 => {
+                            println!("encoding: aarch32_LDM_u_A1_AS");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 0 => {
+                            println!("encoding: aarch32_STMIB_A1_A");
+                        }
+                        (x0, x1, x2, x3, _) if x0 == 1 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("encoding: aarch32_LDMIB_A1_A");
+                        }
+                        (_, _, x2, x3, x4) if x2 == 1 && x3 == 1 && x4 & 32768 == 32768 => {
+                            println!("encoding: aarch32_LDM_e_A1_AS");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _) if x2 == 1 => {
+                    let cond = (instr >> 28) & 7;
+                    let H = (instr >> 24) & 1;
+                    let imm24 = instr & 47;
+                    match (cond, H) {
+                        (x0, x1) if x0 != 15 && x1 == 0 => {
+                            println!("encoding: aarch32_B_A1_A");
+                        }
+                        (x0, x1) if x0 != 15 && x1 == 1 => {
+                            println!("encoding: aarch32_BL_i_A1_A");
+                        }
+                        (x0, _) if x0 == 15 => {
+                            println!("encoding: aarch32_BL_i_A1_A");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                _ => unreachable!()
+            }
+        }
+        (_, x1, _, _, _) if x1 & 6 == 6 => {
+            match ((instr >> 28) & 7, (instr >> 26) & 3, (instr >> 24) & 3, (instr >> 12) & 23, (instr >> 9) & 5, (instr >> 5) & 7, (instr >> 4) & 1, instr & 7) {
+                (_, _, x2, _, x4, _, _, _) if x2 & 2 == 0 && x4 == 7 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 21) & 7, (instr >> 12) & 17, (instr >> 9) & 5, instr & 17) {
+                        (_, _, x2, _, _, _) if x2 & 13 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let D = (instr >> 22) & 1;
+                            let L = (instr >> 20) & 1;
+                            let Rt2 = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let cp15 = (instr >> 8) & 1;
+                            let opc1 = (instr >> 4) & 7;
+                            let CRm = instr & 7;
+                            match (cond, D, L) {
+                                (x0, x1, x2) if x0 != 15 && x1 == 1 && x2 == 0 => {
+                                    println!("encoding: aarch32_MCRR_T1A1_A");
+                                }
+                                (x0, x1, x2) if x0 != 15 && x1 == 1 && x2 == 1 => {
+                                    println!("encoding: aarch32_MRRC_T1A1_A");
+                                }
+                                (_, x1, _) if x1 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _) if x0 == 15 && x1 == 1 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, _, _) if x2 & 13 != 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let P = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let D = (instr >> 22) & 1;
+                            let W = (instr >> 21) & 1;
+                            let L = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let CRd = (instr >> 12) & 7;
+                            let cp15 = (instr >> 8) & 1;
+                            let imm8 = instr & 15;
+                            match (cond, (P << 1) | U, D, L, Rn, CRd, cp15) {
+                                (x0, x1, x2, _, _, x5, x6) if x0 != 15 && x1 != 0 && x2 == 0 && x5 != 5 && x6 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 != 0 && x2 == 0 && x3 == 1 && x4 == 15 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_LDC_l_T1A1_A");
+                                }
+                                (x0, x1, _, _, _, _, x6) if x0 != 15 && x1 != 0 && x6 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, _, _, x5, x6) if x0 != 15 && x1 != 0 && x2 == 1 && x5 == 5 && x6 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 1 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_STC_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 1 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_LDC_i_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_STC_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 == 2 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_LDC_i_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 4 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_STC_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 4 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_LDC_i_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 != 15 && x1 & 5 == 5 && x2 == 0 && x3 == 0 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_STC_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4, x5, x6) if x0 != 15 && x1 & 5 == 5 && x2 == 0 && x3 == 1 && x4 != 15 && x5 == 5 && x6 == 0 => {
+                                    println!("encoding: aarch32_LDC_i_T1A1_A");
+                                }
+                                (x0, x1, _, _, _, _, _) if x0 == 15 && x1 != 0 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, x6, _) if x2 == 2 && x4 & 6 == 4 && x6 == 0 => {
+                    match ((instr >> 28) & 7, (instr >> 24) & 7, (instr >> 20) & 7, (instr >> 16) & 7, (instr >> 12) & 7, (instr >> 10) & 3, (instr >> 8) & 3, (instr >> 7) & 1, (instr >> 6) & 1, (instr >> 5) & 1, (instr >> 4) & 1, instr & 7) {
+                        (x0, _, x2, _, _, _, x6, _, x8, _, _, _) if x0 == 15 && x2 & 8 == 0 && x6 != 0 && x8 == 0 => {
+                            let D = (instr >> 22) & 1;
+                            let cc = (instr >> 20) & 3;
+                            let Vn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let N = (instr >> 7) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match (cc, size) {
+                                (x0, _) if x0 == 0 => {
+                                    println!("encoding: aarch32_VSEL_A1_A");
+                                }
+                                (x0, _) if x0 == 1 => {
+                                    println!("encoding: aarch32_VSEL_A1_A");
+                                }
+                                (_, x1) if x1 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _) if x0 == 2 => {
+                                    println!("encoding: aarch32_VSEL_A1_A");
+                                }
+                                (x0, _) if x0 == 3 => {
+                                    println!("encoding: aarch32_VSEL_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, _, _, _, x6, _, _, _, _, _) if x0 == 15 && x2 & 11 == 8 && x6 != 0 => {
+                            let D = (instr >> 22) & 1;
+                            let Vn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let N = (instr >> 7) & 1;
+                            let op = (instr >> 6) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match (size, op) {
+                                (_, x1) if x1 == 0 => {
+                                    println!("encoding: aarch32_VMAXNM_A2_A");
+                                }
+                                (x0, _) if x0 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (_, x1) if x1 == 1 => {
+                                    println!("encoding: aarch32_VMAXNM_A2_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, x3, _, _, x6, _, x8, _, _, _) if x0 == 15 && x2 & 11 == 11 && x3 == 0 && x6 != 0 && x8 == 1 => {
+                            let D = (instr >> 22) & 1;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let op = (instr >> 7) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match (size, op) {
+                                (x0, _) if x0 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1) if x0 == 2 && x1 == 0 => {
+                                    println!("encoding: aarch32_VMOVX_A1_A");
+                                }
+                                (x0, x1) if x0 == 2 && x1 == 1 => {
+                                    println!("encoding: aarch32_VINS_A1_A");
+                                }
+                                (x0, _) if x0 == 3 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, x3, _, _, x6, _, x8, _, _, _) if x0 == 15 && x2 & 11 == 11 && x3 & 8 == 8 && x6 != 0 && x8 == 1 => {
+                            let D = (instr >> 22) & 1;
+                            let o1 = (instr >> 18) & 1;
+                            let RM = (instr >> 16) & 3;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let op = (instr >> 7) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match (o1, RM, size) {
+                                (x0, x1, _) if x0 == 0 && x1 == 0 => {
+                                    println!("encoding: aarch32_VRINTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 0 && x1 == 1 => {
+                                    println!("encoding: aarch32_VRINTA_vfp_A1_A");
+                                }
+                                (_, _, x2) if x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _) if x0 == 0 && x1 == 2 => {
+                                    println!("encoding: aarch32_VRINTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 0 && x1 == 3 => {
+                                    println!("encoding: aarch32_VRINTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_VCVTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 1 => {
+                                    println!("encoding: aarch32_VCVTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 2 => {
+                                    println!("encoding: aarch32_VCVTA_vfp_A1_A");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 3 => {
+                                    println!("encoding: aarch32_VCVTA_vfp_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, _, _, _, _, _, x8, _, _, _) if x0 != 15 && x2 & 11 == 11 && x8 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let D = (instr >> 22) & 1;
+                            let o1 = (instr >> 19) & 1;
+                            let opc2 = (instr >> 16) & 5;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let o3 = (instr >> 7) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match (o1, opc2, size, o3) {
+                                (_, _, x2, _) if x2 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 0 && x3 == 1 => {
+                                    println!("encoding: aarch32_VABS_A2_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 2 && x3 == 0 => {
+                                    println!("encoding: aarch32_VMOV_r_T2A2_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 0 && x2 == 3 && x3 == 0 => {
+                                    println!("encoding: aarch32_VMOV_r_T2A2_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_VNEG_A2_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_VSQRT_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 2 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 2 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVTB_bf16_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVTT_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 2 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 2 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 3 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 3 && x2 == 3 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVTB_T1A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 4 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCMP_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 4 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCMP_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 5 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCMP_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 5 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCMP_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 6 && x3 == 0 => {
+                                    println!("encoding: aarch32_VRINTZ_vfp_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 6 && x3 == 1 => {
+                                    println!("encoding: aarch32_VRINTZ_vfp_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 0 && x1 == 7 && x3 == 0 => {
+                                    println!("encoding: aarch32_VRINTX_vfp_A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 1 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 2 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVT_ds_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 7 && x2 == 3 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVT_ds_T1A1_A");
+                                }
+                                (x0, x1, _, _) if x0 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_VCVT_iv_A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 2 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 3 && x3 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3) if x0 == 1 && x1 == 1 && x2 == 3 && x3 == 1 => {
+                                    println!("encoding: aarch32_VJCVT_A1_A");
+                                }
+                                (x0, x1, _, _) if x0 == 1 && x1 & 6 == 2 => {
+                                    println!("encoding: aarch32_VCVT_xv_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 4 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVT_iv_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 4 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVT_iv_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 5 && x3 == 0 => {
+                                    println!("encoding: aarch32_VCVT_iv_A1_A");
+                                }
+                                (x0, x1, _, x3) if x0 == 1 && x1 == 5 && x3 == 1 => {
+                                    println!("encoding: aarch32_VCVT_iv_A1_A");
+                                }
+                                (x0, x1, _, _) if x0 == 1 && x1 & 6 == 6 => {
+                                    println!("encoding: aarch32_VCVT_xv_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, _, _, _, _, _, x8, _, _, _) if x0 != 15 && x2 & 11 == 11 && x8 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let D = (instr >> 22) & 1;
+                            let imm4H = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let imm4L = instr & 7;
+                            match size {
+                                x0 if x0 == 0 => {
+                                    println!("unallocated");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_VMOV_i_A2_A");
+                                }
+                                x0 if x0 == 2 => {
+                                    println!("encoding: aarch32_VMOV_i_A2_A");
+                                }
+                                x0 if x0 == 3 => {
+                                    println!("encoding: aarch32_VMOV_i_A2_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (x0, _, x2, _, _, _, _, _, _, _, _, _) if x0 != 15 && x2 & 11 != 11 => {
+                            let cond = (instr >> 28) & 7;
+                            let o0 = (instr >> 23) & 1;
+                            let D = (instr >> 22) & 1;
+                            let o1 = (instr >> 20) & 3;
+                            let Vn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let N = (instr >> 7) & 1;
+                            let o2 = (instr >> 6) & 1;
+                            let M = (instr >> 5) & 1;
+                            let Vm = instr & 7;
+                            match ((o0 << 2) | o1, size, o2) {
+                                (x0, x1, _) if x0 != 7 && x1 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _, x2) if x0 == 0 && x2 == 0 => {
+                                    println!("encoding: aarch32_VMLA_f_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 0 && x2 == 1 => {
+                                    println!("encoding: aarch32_VMLA_f_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 1 && x2 == 0 => {
+                                    println!("encoding: aarch32_VNMLA_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 1 && x2 == 1 => {
+                                    println!("encoding: aarch32_VNMLA_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 2 && x2 == 0 => {
+                                    println!("encoding: aarch32_VMUL_f_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 2 && x2 == 1 => {
+                                    println!("encoding: aarch32_VNMLA_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 3 && x2 == 0 => {
+                                    println!("encoding: aarch32_VADD_f_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 3 && x2 == 1 => {
+                                    println!("encoding: aarch32_VSUB_f_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 4 && x2 == 0 => {
+                                    println!("encoding: aarch32_VDIV_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 5 && x2 == 0 => {
+                                    println!("encoding: aarch32_VFNMA_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 5 && x2 == 1 => {
+                                    println!("encoding: aarch32_VFNMA_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 6 && x2 == 0 => {
+                                    println!("encoding: aarch32_VFMA_A2_A");
+                                }
+                                (x0, _, x2) if x0 == 6 && x2 == 1 => {
+                                    println!("encoding: aarch32_VFMA_A2_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, x4, _, x6, _) if x2 == 2 && x4 == 7 && x6 == 1 => {
+                    let cond = (instr >> 28) & 7;
+                    let opc1 = (instr >> 21) & 5;
+                    let L = (instr >> 20) & 1;
+                    let CRn = (instr >> 16) & 7;
+                    let Rt = (instr >> 12) & 7;
+                    let cp15 = (instr >> 8) & 1;
+                    let opc2 = (instr >> 5) & 5;
+                    let CRm = instr & 7;
+                    match (cond, L) {
+                        (x0, x1) if x0 != 15 && x1 == 0 => {
+                            println!("encoding: aarch32_MCR_T1A1_A");
+                        }
+                        (x0, x1) if x0 != 15 && x1 == 1 => {
+                            println!("encoding: aarch32_MRC_T1A1_A");
+                        }
+                        (x0, _) if x0 == 15 => {
+                            println!("unallocated");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, _, x2, _, _, _, _, _) if x2 == 3 => {
+                    match ((instr >> 28) & 7, (instr >> 24) & 7, instr & 47) {
+                        (x0, _, _) if x0 == 15 => {
+                            println!("unpredictable");
+                        }
+                        (x0, _, _) if x0 != 15 => {
+                            let cond = (instr >> 28) & 7;
+                            let imm24 = instr & 47;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_SVC_A1_A");
+                                }
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (x0, _, x2, _, x4, _, _, _) if x0 == 15 && x2 & 2 == 0 && x4 & 5 == 4 => {
+                    let op1 = (instr >> 23) & 3;
+                    let D = (instr >> 22) & 1;
+                    let op2 = (instr >> 20) & 3;
+                    let Vn = (instr >> 16) & 7;
+                    let Vd = (instr >> 12) & 7;
+                    let op3 = (instr >> 10) & 1;
+                    let op4 = (instr >> 8) & 1;
+                    let N = (instr >> 7) & 1;
+                    let Q = (instr >> 6) & 1;
+                    let M = (instr >> 5) & 1;
+                    let U = (instr >> 4) & 1;
+                    let Vm = instr & 7;
+                    match (op1, op2, op3, op4, Q, U) {
+                        (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VCADD_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VCADD_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 & 1 == 1 && x1 & 2 == 0 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 & 2 == 0 && x2 == 0 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 & 2 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 0 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VMMLA_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_bf16_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_bf16_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMAL_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 2 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, _) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_MMLA_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
+                            println!("encoding: aarch32_MMLA_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VDOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
+                            println!("encoding: aarch32_VDOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMA_bf_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 1 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 2 && x2 == 0 && x3 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMAL_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 2 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, _) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_MMLA_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 0 && x4 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VUSDOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VUSDOT_A1_A");
+                        }
+                        (x0, x1, _, _, _, _) if x0 == 1 && x1 == 3 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, x2, x3, _, x5) if x1 & 2 == 2 && x2 == 0 && x3 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VCMLA_A1_A");
+                        }
+                        (x0, x1, _, _, _, _) if x0 == 2 && x1 == 3 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, _, _, _, _) if x0 == 3 && x1 == 3 => {
+                            println!("unallocated");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (x0, _, x2, _, x4, _, _, _) if x0 == 15 && x2 == 2 && x4 & 5 == 4 => {
+                    let op1 = (instr >> 23) & 1;
+                    let D = (instr >> 22) & 1;
+                    let op2 = (instr >> 20) & 3;
+                    let Vn = (instr >> 16) & 7;
+                    let Vd = (instr >> 12) & 7;
+                    let op3 = (instr >> 10) & 1;
+                    let op4 = (instr >> 8) & 1;
+                    let N = (instr >> 7) & 1;
+                    let Q = (instr >> 6) & 1;
+                    let M = (instr >> 5) & 1;
+                    let U = (instr >> 4) & 1;
+                    let Vm = instr & 7;
+                    match (op1, op2, op3, op4, Q, U) {
+                        (x0, _, x2, x3, _, x5) if x0 == 0 && x2 == 0 && x3 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VCMLA_idx_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMAL_i_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_bf16_i_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_bf16_i_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x5 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMAL_i_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 0 && x4 == 1 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMAL_i_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 1 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, _, _, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_s_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VDOT_s_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_VDOT_s_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 0 && x1 == 2 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
+                            println!("encoding: aarch32_VDOT_s_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 0 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, x5) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_VFMA_bfs_A1_A");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 0 && x1 == 3 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, _, _, _) if x0 == 0 && x1 == 3 && x2 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2, x3, _, x5) if x0 == 1 && x2 == 0 && x3 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_VCMLA_idx_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 0 => {
+                            println!("encoding: aarch32_DOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 0 && x5 == 1 => {
+                            println!("encoding: aarch32_DOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 0 => {
+                            println!("encoding: aarch32_DOT_A1_A");
+                        }
+                        (x0, x1, x2, x3, x4, x5) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x4 == 1 && x5 == 1 => {
+                            println!("encoding: aarch32_DOT_A1_A");
+                        }
+                        (x0, _, x2, x3, _, _) if x0 == 1 && x2 == 0 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 1 && x1 == 1 && x2 == 1 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, x1, x2, x3, _, _) if x0 == 1 && x1 & 2 == 2 && x2 == 1 && x3 == 1 => {
+                            println!("unallocated");
+                        }
+                        (x0, _, x2, x3, _, _) if x0 == 1 && x2 == 1 && x3 == 0 => {
+                            println!("unallocated");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (x0, _, x2, _, x4, _, _, _) if x0 != 15 && x2 & 2 == 0 && x4 & 6 == 4 => {
+                    match ((instr >> 28) & 7, (instr >> 25) & 5, (instr >> 21) & 7, (instr >> 12) & 17, (instr >> 10) & 3, instr & 19) {
+                        (_, _, x2, _, _, _) if x2 & 13 == 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let D = (instr >> 22) & 1;
+                            let op = (instr >> 20) & 1;
+                            let Rt2 = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let opc2 = (instr >> 6) & 3;
+                            let M = (instr >> 5) & 1;
+                            let o3 = (instr >> 4) & 1;
+                            let Vm = instr & 7;
+                            match (D, op, size, opc2, o3) {
+                                (x0, _, _, _, _) if x0 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _, _, _, x4) if x0 == 1 && x4 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _, x2, x3, x4) if x0 == 1 && x2 & 2 == 0 && x3 == 0 && x4 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _, _, x3, _) if x0 == 1 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 2 && x3 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMOV_ss_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 0 && x2 == 3 && x3 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMOV_d_T1A1_A");
+                                }
+                                (x0, _, _, x3, _) if x0 == 1 && x3 & 2 == 2 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 2 && x3 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMOV_ss_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 == 1 && x2 == 3 && x3 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMOV_d_T1A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, _, _) if x2 & 13 != 0 => {
+                            let cond = (instr >> 28) & 7;
+                            let P = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let D = (instr >> 22) & 1;
+                            let W = (instr >> 21) & 1;
+                            let L = (instr >> 20) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 8) & 3;
+                            let imm8 = instr & 15;
+                            match (P, U, W, L, Rn, size, imm8) {
+                                (x0, x1, x2, _, _, _, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, _, _, x5, _) if x0 == 0 && x1 == 1 && x5 & 2 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _, x3, _, x5, _) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 2 => {
+                                    println!("encoding: aarch32_VSTM_T2A2_A");
+                                }
+                                (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 0 => {
+                                    println!("encoding: aarch32_VSTM_T1A1_A");
+                                }
+                                (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 1 => {
+                                    println!("encoding: aarch32_VSTM_T1A1_A");
+                                }
+                                (x0, x1, _, x3, _, x5, _) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 2 => {
+                                    println!("encoding: aarch32_VLDM_T2A2_A");
+                                }
+                                (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 0 => {
+                                    println!("encoding: aarch32_VLDM_T1A1_A");
+                                }
+                                (x0, x1, _, x3, _, x5, x6) if x0 == 0 && x1 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 1 => {
+                                    println!("encoding: aarch32_VLDM_T1A1_A");
+                                }
+                                (x0, _, x2, x3, _, _, _) if x0 == 1 && x2 == 0 && x3 == 0 => {
+                                    println!("encoding: aarch32_VSTR_A1_A");
+                                }
+                                (x0, _, x2, _, _, x5, _) if x0 == 1 && x2 == 0 && x5 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, _, x2, x3, x4, _, _) if x0 == 1 && x2 == 0 && x3 == 1 && x4 != 15 => {
+                                    println!("encoding: aarch32_VLDR_A1_A");
+                                }
+                                (x0, x1, x2, _, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x5 & 2 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, x3, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 2 => {
+                                    println!("encoding: aarch32_VSTM_T2A2_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 0 => {
+                                    println!("encoding: aarch32_VSTM_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 0 && x5 == 3 && x6 & 1 == 1 => {
+                                    println!("encoding: aarch32_VSTM_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, _) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 2 => {
+                                    println!("encoding: aarch32_VLDM_T2A2_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 0 => {
+                                    println!("encoding: aarch32_VLDM_T1A1_A");
+                                }
+                                (x0, x1, x2, x3, _, x5, x6) if x0 == 1 && x1 == 0 && x2 == 1 && x3 == 1 && x5 == 3 && x6 & 1 == 1 => {
+                                    println!("encoding: aarch32_VLDM_T1A1_A");
+                                }
+                                (x0, _, x2, x3, x4, _, _) if x0 == 1 && x2 == 0 && x3 == 1 && x4 == 15 => {
+                                    println!("encoding: aarch32_VLDR_A1_A");
+                                }
+                                (x0, x1, x2, _, _, _, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (x0, _, x2, _, x4, _, x6, _) if x0 != 15 && x2 == 2 && x4 & 6 == 4 && x6 == 1 => {
+                    match ((instr >> 28) & 7, (instr >> 24) & 7, (instr >> 21) & 5, (instr >> 12) & 17, (instr >> 10) & 3, (instr >> 8) & 3, (instr >> 5) & 5, instr & 9) {
+                        (_, _, x2, _, _, x5, _, _) if x2 == 0 && x5 == 1 => {
+                            let cond = (instr >> 28) & 7;
+                            let op = (instr >> 20) & 1;
+                            let Vn = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let N = (instr >> 7) & 1;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_VMOV_h_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, x5, _, _) if x2 == 0 && x5 == 2 => {
+                            let cond = (instr >> 28) & 7;
+                            let op = (instr >> 20) & 1;
+                            let Vn = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let N = (instr >> 7) & 1;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_VMOV_s_A1_A");
+                                }
+                            }
+                        }
+                        (_, _, x2, _, _, x5, _, _) if x2 == 7 && x5 == 2 => {
+                            let cond = (instr >> 28) & 7;
+                            let L = (instr >> 20) & 1;
+                            let reg = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            match L {
+                                x0 if x0 == 0 => {
+                                    println!("encoding: aarch32_VMSR_T1A1_AS");
+                                }
+                                x0 if x0 == 1 => {
+                                    println!("encoding: aarch32_VMRS_T1A1_AS");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, _, _, _, x5, _, _) if x5 == 3 => {
+                            let cond = (instr >> 28) & 7;
+                            let opc1 = (instr >> 21) & 5;
+                            let L = (instr >> 20) & 1;
+                            let Vn = (instr >> 16) & 7;
+                            let Rt = (instr >> 12) & 7;
+                            let N = (instr >> 7) & 1;
+                            let opc2 = (instr >> 5) & 3;
+                            match (opc1, L, opc2) {
+                                (x0, x1, _) if x0 & 4 == 0 && x1 == 0 => {
+                                    println!("encoding: aarch32_VMOV_rs_T1A1_A");
+                                }
+                                (_, x1, _) if x1 == 1 => {
+                                    println!("encoding: aarch32_VMOV_sr_T1A1_A");
+                                }
+                                (x0, x1, x2) if x0 & 4 == 4 && x1 == 0 && x2 & 2 == 0 => {
+                                    println!("encoding: aarch32_VDUP_r_T1A1_A");
+                                }
+                                (x0, x1, x2) if x0 & 4 == 4 && x1 == 0 && x2 & 2 == 2 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                _ => unreachable!()
+            }
+        }
+        (x0, x1, _, _, _) if x0 == 15 && x1 & 4 == 0 => {
+            match ((instr >> 27) & 9, (instr >> 25) & 3, (instr >> 21) & 7, (instr >> 20) & 1, instr & 39) {
+                (_, x1, _, _, _) if x1 == 0 => {
+                    match ((instr >> 25) & 13, (instr >> 20) & 9, (instr >> 8) & 23, (instr >> 4) & 7, instr & 7) {
+                        (_, x1, _, _, _) if x1 & 16 == 0 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 == 16 && x3 & 2 == 0 => {
+                            let imod = (instr >> 18) & 3;
+                            let M = (instr >> 17) & 1;
+                            let op = (instr >> 16) & 1;
+                            let E = (instr >> 9) & 1;
+                            let A = (instr >> 8) & 1;
+                            let I = (instr >> 7) & 1;
+                            let F = (instr >> 6) & 1;
+                            let mode = instr & 9;
+                            match (imod, M, op, mode) {
+                                (_, _, x2, x3) if x2 == 1 && x3 & 16 == 0 => {
+                                    println!("encoding: aarch32_SETEND_A1_A");
+                                }
+                                (_, _, x2, _) if x2 == 0 => {
+                                    println!("encoding: aarch32_CPS_A1_AS");
+                                }
+                                (_, _, x2, x3) if x2 == 1 && x3 & 16 == 16 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, x3, _) if x1 == 17 && x3 == 8 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 == 17 && x3 & 7 == 4 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 == 17 && x3 & 3 == 1 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 == 17 && x3 == 0 => {
+                            let imm1 = (instr >> 9) & 1;
+                            match () {
+                                () => {
+                                    println!("encoding: aarch32_SETPAN_A1_A");
+                                }
+                            }
+                        }
+                        (_, x1, _, x3, _) if x1 & 30 == 16 && x3 == 7 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 == 18 && x3 == 7 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, _, x3, _) if x1 == 19 && x3 == 7 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 & 30 == 18 && x3 & 2 == 0 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 & 28 == 16 && x3 == 3 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 & 28 == 16 && x3 & 11 == 2 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, x3, _) if x1 & 28 == 16 && x3 & 10 == 10 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, _, _) if x1 & 28 == 20 => {
+                            println!("unpredictable");
+                        }
+                        (_, x1, _, _, _) if x1 & 24 == 24 => {
+                            println!("unpredictable");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, x1, _, _, _) if x1 == 1 => {
+                    match ((instr >> 25) & 13, (instr >> 24) & 1, (instr >> 23) & 1, (instr >> 5) & 35, (instr >> 4) & 1, instr & 7) {
+                        (_, _, x2, _, _, _) if x2 == 0 => {
+                            let U = (instr >> 24) & 1;
+                            let D = (instr >> 22) & 1;
+                            let size = (instr >> 20) & 3;
+                            let Vn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let opc = (instr >> 8) & 7;
+                            let N = (instr >> 7) & 1;
+                            let Q = (instr >> 6) & 1;
+                            let M = (instr >> 5) & 1;
+                            let o1 = (instr >> 4) & 1;
+                            let Vm = instr & 7;
+                            match (U, size, opc, Q, o1) {
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 12 && x4 == 1 => {
+                                    println!("encoding: aarch32_VFMA_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 13 && x4 == 0 => {
+                                    println!("encoding: aarch32_VADD_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 13 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMLA_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 14 && x4 == 0 => {
+                                    println!("encoding: aarch32_VCEQ_r_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 15 && x4 == 0 => {
+                                    println!("encoding: aarch32_VMAX_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 0 && x2 == 15 && x4 == 1 => {
+                                    println!("encoding: aarch32_VRECPS_A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 0 && x4 == 0 => {
+                                    println!("encoding: aarch32_VHADD_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VAND_r_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQADD_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 1 && x4 == 0 => {
+                                    println!("encoding: aarch32_VRHADD_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 0 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA1C_A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 2 && x4 == 0 => {
+                                    println!("encoding: aarch32_VHADD_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VBIC_r_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 2 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQSUB_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 3 && x4 == 0 => {
+                                    println!("encoding: aarch32_VCGT_r_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 3 && x4 == 1 => {
+                                    println!("encoding: aarch32_VCGE_r_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 1 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA1P_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 12 && x4 == 1 => {
+                                    println!("encoding: aarch32_VFMA_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 13 && x4 == 0 => {
+                                    println!("encoding: aarch32_VSUB_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 13 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMLA_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 14 && x4 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 15 && x4 == 0 => {
+                                    println!("encoding: aarch32_VMAX_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 & 2 == 2 && x2 == 15 && x4 == 1 => {
+                                    println!("encoding: aarch32_VRSQRTS_A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 4 && x4 == 0 => {
+                                    println!("encoding: aarch32_VSHL_r_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 0 && x2 == 8 && x4 == 0 => {
+                                    println!("encoding: aarch32_VADD_i_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 2 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VORR_r_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 0 && x2 == 8 && x4 == 1 => {
+                                    println!("encoding: aarch32_VTST_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 4 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQSHL_r_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 0 && x2 == 9 && x4 == 0 => {
+                                    println!("encoding: aarch32_VMLA_i_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 5 && x4 == 0 => {
+                                    println!("encoding: aarch32_VRSHL_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 5 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQRSHL_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 0 && x2 == 11 && x4 == 0 => {
+                                    println!("encoding: aarch32_VQDMULH_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 2 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA1M_A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 0 && x2 == 11 && x4 == 1 => {
+                                    println!("encoding: aarch32_VPADD_i_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 6 && x4 == 0 => {
+                                    println!("encoding: aarch32_VMAX_i_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 3 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VORN_r_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 6 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMAX_i_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 7 && x4 == 0 => {
+                                    println!("encoding: aarch32_VABD_i_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 7 && x4 == 1 => {
+                                    println!("encoding: aarch32_VABA_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 0 && x1 == 3 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA1SU0_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 13 && x4 == 0 => {
+                                    println!("encoding: aarch32_VPADD_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 13 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMUL_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 14 && x4 == 0 => {
+                                    println!("encoding: aarch32_VCGE_r_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 14 && x4 == 1 => {
+                                    println!("encoding: aarch32_VACGE_A1_A");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 15 && x3 == 0 && x4 == 0 => {
+                                    println!("encoding: aarch32_VPMAX_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 0 && x2 == 15 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMAXNM_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VEOR_T1A1_A");
+                                }
+                                (_, _, x2, _, x4) if x2 == 9 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMUL_i_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 0 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA256H_A1_A");
+                                }
+                                (_, _, x2, x3, x4) if x2 == 10 && x3 == 0 && x4 == 0 => {
+                                    println!("encoding: aarch32_VPMAX_i_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VBIF_T1A1_A");
+                                }
+                                (_, _, x2, x3, x4) if x2 == 10 && x3 == 0 && x4 == 1 => {
+                                    println!("encoding: aarch32_VPMAX_i_T1A1_A");
+                                }
+                                (_, _, x2, x3, _) if x2 == 10 && x3 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 1 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA256H2_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 13 && x4 == 0 => {
+                                    println!("encoding: aarch32_VABD_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 14 && x4 == 0 => {
+                                    println!("encoding: aarch32_VCGT_r_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 14 && x4 == 1 => {
+                                    println!("encoding: aarch32_VACGE_A1_A");
+                                }
+                                (x0, x1, x2, x3, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 15 && x3 == 0 && x4 == 0 => {
+                                    println!("encoding: aarch32_VPMAX_f_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 & 2 == 2 && x2 == 15 && x4 == 1 => {
+                                    println!("encoding: aarch32_VMAXNM_A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 8 && x4 == 0 => {
+                                    println!("encoding: aarch32_VSUB_i_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 2 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VBIF_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 8 && x4 == 1 => {
+                                    println!("encoding: aarch32_VCEQ_r_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 9 && x4 == 0 => {
+                                    println!("encoding: aarch32_VMLA_i_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 11 && x4 == 0 => {
+                                    println!("encoding: aarch32_VQRDMULH_T1A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 2 && x2 == 12 && x4 == 0 => {
+                                    println!("encoding: aarch32_SHA256SU1_A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 11 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQRDMLAH_A1_A");
+                                }
+                                (x0, x1, x2, _, x4) if x0 == 1 && x1 == 3 && x2 == 1 && x4 == 1 => {
+                                    println!("encoding: aarch32_VBIF_T1A1_A");
+                                }
+                                (x0, _, x2, _, x4) if x0 == 1 && x2 == 12 && x4 == 1 => {
+                                    println!("encoding: aarch32_VQRDMLSH_A1_A");
+                                }
+                                (x0, _, x2, x3, x4) if x0 == 1 && x2 == 15 && x3 == 1 && x4 == 0 => {
+                                    println!("unallocated");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _) if x2 == 1 && x4 == 0 => {
+                            match ((instr >> 25) & 13, (instr >> 24) & 1, (instr >> 23) & 1, (instr >> 22) & 1, (instr >> 20) & 3, (instr >> 12) & 15, (instr >> 10) & 3, (instr >> 7) & 5, (instr >> 6) & 1, (instr >> 5) & 1, (instr >> 4) & 1, instr & 7) {
+                                (_, x1, _, _, x4, _, _, _, _, _, _, _) if x1 == 0 && x4 == 3 => {
+                                    let D = (instr >> 22) & 1;
+                                    let Vn = (instr >> 16) & 7;
+                                    let Vd = (instr >> 12) & 7;
+                                    let imm4 = (instr >> 8) & 7;
+                                    let N = (instr >> 7) & 1;
+                                    let Q = (instr >> 6) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match () {
+                                        () => {
+                                            println!("encoding: aarch32_VEXT_T1A1_A");
+                                        }
+                                    }
+                                }
+                                (_, x1, _, _, x4, _, x6, _, _, _, _, _) if x1 == 1 && x4 == 3 && x6 & 2 == 0 => {
+                                    let D = (instr >> 22) & 1;
+                                    let size = (instr >> 18) & 3;
+                                    let opc1 = (instr >> 16) & 3;
+                                    let Vd = (instr >> 12) & 7;
+                                    let opc2 = (instr >> 7) & 7;
+                                    let Q = (instr >> 6) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match (size, opc1, opc2, Q) {
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 0 => {
+                                            println!("encoding: aarch32_VREV16_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 1 => {
+                                            println!("encoding: aarch32_VREV16_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 2 => {
+                                            println!("encoding: aarch32_VREV16_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 3 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 & 14 == 4 => {
+                                            println!("encoding: aarch32_VPADDL_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 0 && x2 == 6 && x3 == 0 => {
+                                            println!("encoding: aarch32_AESE_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 0 && x2 == 6 && x3 == 1 => {
+                                            println!("encoding: aarch32_AESD_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 0 && x2 == 7 && x3 == 0 => {
+                                            println!("encoding: aarch32_AESMC_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 0 && x2 == 7 && x3 == 1 => {
+                                            println!("encoding: aarch32_AESIMC_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 8 => {
+                                            println!("encoding: aarch32_VCLS_T1A1_A");
+                                        }
+                                        (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
+                                            println!("encoding: aarch32_VSWP_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 9 => {
+                                            println!("encoding: aarch32_VCLZ_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 10 => {
+                                            println!("encoding: aarch32_VCNT_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 11 => {
+                                            println!("encoding: aarch32_VMVN_r_T1A1_A");
+                                        }
+                                        (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 12 && x3 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 & 14 == 12 => {
+                                            println!("encoding: aarch32_VPADAL_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 14 => {
+                                            println!("encoding: aarch32_VQABS_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 0 && x2 == 15 => {
+                                            println!("encoding: aarch32_VQNEG_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 0 => {
+                                            println!("encoding: aarch32_VCGT_i_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 1 => {
+                                            println!("encoding: aarch32_VCGE_i_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 2 => {
+                                            println!("encoding: aarch32_VCEQ_i_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 3 => {
+                                            println!("encoding: aarch32_VCLE_i_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 4 => {
+                                            println!("encoding: aarch32_VCLT_i_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 6 => {
+                                            println!("encoding: aarch32_VABS_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 1 && x2 & 7 == 7 => {
+                                            println!("encoding: aarch32_VNEG_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 1 && x2 == 5 && x3 == 1 => {
+                                            println!("encoding: aarch32_SHA1H_A1_A");
+                                        }
+                                        (x0, x1, x2, x3) if x0 == 1 && x1 == 2 && x2 == 12 && x3 == 1 => {
+                                            println!("encoding: aarch32_VCVT_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 1 => {
+                                            println!("encoding: aarch32_VTRN_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 2 => {
+                                            println!("encoding: aarch32_VUZP_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 3 => {
+                                            println!("encoding: aarch32_VZIP_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 4 && x3 == 0 => {
+                                            println!("encoding: aarch32_VMOVN_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 4 && x3 == 1 => {
+                                            println!("encoding: aarch32_VQMOVN_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 5 => {
+                                            println!("encoding: aarch32_VQMOVN_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 6 && x3 == 0 => {
+                                            println!("encoding: aarch32_VSHLL_T2A2_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 7 && x3 == 0 => {
+                                            println!("encoding: aarch32_SHA1SU1_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 7 && x3 == 1 => {
+                                            println!("encoding: aarch32_SHA256SU0_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 8 => {
+                                            println!("encoding: aarch32_VRINTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 9 => {
+                                            println!("encoding: aarch32_VRINTX_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 10 => {
+                                            println!("encoding: aarch32_VRINTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 11 => {
+                                            println!("encoding: aarch32_VRINTZ_asimd_A1_A");
+                                        }
+                                        (x0, x1, x2, x3) if x0 == 2 && x1 == 2 && x2 == 12 && x3 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 12 && x3 == 0 => {
+                                            println!("encoding: aarch32_VCVT_hs_T1A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 13 => {
+                                            println!("encoding: aarch32_VRINTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 14 && x3 == 0 => {
+                                            println!("encoding: aarch32_VCVT_hs_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3) if x1 == 2 && x2 == 14 && x3 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1, x2, _) if x1 == 2 && x2 == 15 => {
+                                            println!("encoding: aarch32_VRINTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 14 == 0 => {
+                                            println!("encoding: aarch32_VCVTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 14 == 2 => {
+                                            println!("encoding: aarch32_VCVTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 14 == 4 => {
+                                            println!("encoding: aarch32_VCVTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 14 == 6 => {
+                                            println!("encoding: aarch32_VCVTA_asimd_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 13 == 8 => {
+                                            println!("encoding: aarch32_VRECPE_A1_A");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 13 == 9 => {
+                                            println!("encoding: aarch32_VRSQRTE_A1_A");
+                                        }
+                                        (x0, x1, x2, x3) if x0 == 3 && x1 == 2 && x2 == 12 && x3 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1, x2, _) if x1 == 3 && x2 & 12 == 12 => {
+                                            println!("encoding: aarch32_VCVT_is_A1_A");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                (_, x1, _, _, x4, _, x6, _, _, _, _, _) if x1 == 1 && x4 == 3 && x6 == 2 => {
+                                    let D = (instr >> 22) & 1;
+                                    let Vn = (instr >> 16) & 7;
+                                    let Vd = (instr >> 12) & 7;
+                                    let len = (instr >> 8) & 3;
+                                    let N = (instr >> 7) & 1;
+                                    let op = (instr >> 6) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match () {
+                                        () => {
+                                            println!("encoding: aarch32_VTBL_T1A1_A");
+                                        }
+                                    }
+                                }
+                                (_, x1, _, _, x4, _, x6, _, _, _, _, _) if x1 == 1 && x4 == 3 && x6 == 3 => {
+                                    let D = (instr >> 22) & 1;
+                                    let imm4 = (instr >> 16) & 7;
+                                    let Vd = (instr >> 12) & 7;
+                                    let opc = (instr >> 7) & 5;
+                                    let Q = (instr >> 6) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match opc {
+                                        x0 if x0 == 0 => {
+                                            println!("encoding: aarch32_VDUP_s_T1A1_A");
+                                        }
+                                        x0 if x0 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        x0 if x0 & 6 == 2 => {
+                                            println!("unallocated");
+                                        }
+                                        x0 if x0 & 4 == 4 => {
+                                            println!("unallocated");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                (_, _, _, _, x4, _, _, _, x8, _, _, _) if x4 != 3 && x8 == 0 => {
+                                    let U = (instr >> 24) & 1;
+                                    let D = (instr >> 22) & 1;
+                                    let size = (instr >> 20) & 3;
+                                    let Vn = (instr >> 16) & 7;
+                                    let Vd = (instr >> 12) & 7;
+                                    let opc = (instr >> 8) & 7;
+                                    let N = (instr >> 7) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match (U, opc) {
+                                        (_, x1) if x1 == 0 => {
+                                            println!("encoding: aarch32_VADDL_T1A1_A");
+                                        }
+                                        (_, x1) if x1 == 1 => {
+                                            println!("encoding: aarch32_VADDL_T1A1_A");
+                                        }
+                                        (_, x1) if x1 == 2 => {
+                                            println!("encoding: aarch32_VSUBL_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 4 => {
+                                            println!("encoding: aarch32_VADDHN_T1A1_A");
+                                        }
+                                        (_, x1) if x1 == 3 => {
+                                            println!("encoding: aarch32_VSUBL_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 6 => {
+                                            println!("encoding: aarch32_VSUBHN_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 9 => {
+                                            println!("encoding: aarch32_VQDMLAL_T1A1_A");
+                                        }
+                                        (_, x1) if x1 == 5 => {
+                                            println!("encoding: aarch32_VABA_T2A2_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 11 => {
+                                            println!("encoding: aarch32_VQDMLSL_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 13 => {
+                                            println!("encoding: aarch32_VQDMULL_T1A1_A");
+                                        }
+                                        (_, x1) if x1 == 7 => {
+                                            println!("encoding: aarch32_VABD_i_T2A2_A");
+                                        }
+                                        (_, x1) if x1 == 8 => {
+                                            println!("encoding: aarch32_VMLA_i_T2A2_A");
+                                        }
+                                        (_, x1) if x1 == 10 => {
+                                            println!("encoding: aarch32_VMLA_i_T2A2_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 4 => {
+                                            println!("encoding: aarch32_VRADDHN_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 6 => {
+                                            println!("encoding: aarch32_VRSUBHN_T1A1_A");
+                                        }
+                                        (_, x1) if x1 & 13 == 12 => {
+                                            println!("encoding: aarch32_VMUL_i_A2_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 9 => {
+                                            println!("unallocated");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 11 => {
+                                            println!("unallocated");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 13 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1) if x1 == 15 => {
+                                            println!("unallocated");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                (_, _, _, _, x4, _, _, _, x8, _, _, _) if x4 != 3 && x8 == 1 => {
+                                    let Q = (instr >> 24) & 1;
+                                    let D = (instr >> 22) & 1;
+                                    let size = (instr >> 20) & 3;
+                                    let Vn = (instr >> 16) & 7;
+                                    let Vd = (instr >> 12) & 7;
+                                    let opc = (instr >> 8) & 7;
+                                    let N = (instr >> 7) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match (Q, opc) {
+                                        (_, x1) if x1 & 14 == 0 => {
+                                            println!("encoding: aarch32_VMLA_s_A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 3 => {
+                                            println!("encoding: aarch32_VQDMLAL_T2A2_A");
+                                        }
+                                        (_, x1) if x1 == 2 => {
+                                            println!("encoding: aarch32_VMLA_s_T2A2_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 7 => {
+                                            println!("encoding: aarch32_VQDMLSL_T2A2_A");
+                                        }
+                                        (_, x1) if x1 & 14 == 4 => {
+                                            println!("encoding: aarch32_VMLA_s_A1_A");
+                                        }
+                                        (x0, x1) if x0 == 0 && x1 == 11 => {
+                                            println!("encoding: aarch32_VQDMULL_T2A2_A");
+                                        }
+                                        (_, x1) if x1 == 6 => {
+                                            println!("encoding: aarch32_VMLA_s_T2A2_A");
+                                        }
+                                        (_, x1) if x1 & 14 == 8 => {
+                                            println!("encoding: aarch32_VMUL_s_A1_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 3 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1) if x1 == 10 => {
+                                            println!("encoding: aarch32_VMUL_s_T2A2_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 7 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1) if x1 == 12 => {
+                                            println!("encoding: aarch32_VQDMULH_T2A2_A");
+                                        }
+                                        (_, x1) if x1 == 13 => {
+                                            println!("encoding: aarch32_VQRDMULH_T2A2_A");
+                                        }
+                                        (x0, x1) if x0 == 1 && x1 == 11 => {
+                                            println!("unallocated");
+                                        }
+                                        (_, x1) if x1 == 14 => {
+                                            println!("encoding: aarch32_VQRDMLAH_A2_A");
+                                        }
+                                        (_, x1) if x1 == 15 => {
+                                            println!("encoding: aarch32_VQRDMLSH_A2_A");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, _, x2, _, x4, _) if x2 == 1 && x4 == 1 => {
+                            match ((instr >> 25) & 13, (instr >> 24) & 1, (instr >> 23) & 1, (instr >> 22) & 1, (instr >> 7) & 29, (instr >> 5) & 3, (instr >> 4) & 1, instr & 7) {
+                                (_, _, _, _, x4, _, _, _) if x4 & 28673 == 0 => {
+                                    let i = (instr >> 24) & 1;
+                                    let D = (instr >> 22) & 1;
+                                    let imm3 = (instr >> 16) & 5;
+                                    let Vd = (instr >> 12) & 7;
+                                    let cmode = (instr >> 8) & 7;
+                                    let Q = (instr >> 6) & 1;
+                                    let op = (instr >> 5) & 1;
+                                    let imm4 = instr & 7;
+                                    match (cmode, op) {
+                                        (x0, x1) if x0 & 9 == 0 && x1 == 0 => {
+                                            println!("encoding: aarch32_VMOV_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 9 == 0 && x1 == 1 => {
+                                            println!("encoding: aarch32_VMVN_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 9 == 1 && x1 == 0 => {
+                                            println!("encoding: aarch32_VORR_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 9 == 1 && x1 == 1 => {
+                                            println!("encoding: aarch32_VBIC_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 13 == 8 && x1 == 0 => {
+                                            println!("encoding: aarch32_VMOV_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 13 == 8 && x1 == 1 => {
+                                            println!("encoding: aarch32_VMVN_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 13 == 9 && x1 == 0 => {
+                                            println!("encoding: aarch32_VORR_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 13 == 9 && x1 == 1 => {
+                                            println!("encoding: aarch32_VBIC_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 12 == 12 && x1 == 0 => {
+                                            println!("encoding: aarch32_VMOV_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 & 14 == 12 && x1 == 1 => {
+                                            println!("encoding: aarch32_VMVN_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 14 && x1 == 1 => {
+                                            println!("encoding: aarch32_VMOV_i_T1A1_A");
+                                        }
+                                        (x0, x1) if x0 == 15 && x1 == 1 => {
+                                            println!("unallocated");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                (_, _, _, _, x4, _, _, _) if x4 & 28673 != 0 => {
+                                    let U = (instr >> 24) & 1;
+                                    let D = (instr >> 22) & 1;
+                                    let imm3H = (instr >> 19) & 5;
+                                    let imm3L = (instr >> 16) & 5;
+                                    let Vd = (instr >> 12) & 7;
+                                    let opc = (instr >> 8) & 7;
+                                    let L = (instr >> 7) & 1;
+                                    let Q = (instr >> 6) & 1;
+                                    let M = (instr >> 5) & 1;
+                                    let Vm = instr & 7;
+                                    match (U, (imm3H << 1) | L, imm3L, opc, Q) {
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 == 0 => {
+                                            println!("encoding: aarch32_VSHR_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 == 1 => {
+                                            println!("encoding: aarch32_VSRA_T1A1_A");
+                                        }
+                                        (_, x1, x2, x3, x4) if x1 != 0 && x2 == 0 && x3 == 10 && x4 == 0 => {
+                                            println!("encoding: aarch32_VMOVL_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 == 2 => {
+                                            println!("encoding: aarch32_VRSHR_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 == 3 => {
+                                            println!("encoding: aarch32_VRSRA_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 == 7 => {
+                                            println!("encoding: aarch32_VQSHL_i_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, x4) if x1 != 0 && x3 == 9 && x4 == 0 => {
+                                            println!("encoding: aarch32_VQSHRN_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, x4) if x1 != 0 && x3 == 9 && x4 == 1 => {
+                                            println!("encoding: aarch32_VQRSHRN_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, x4) if x1 != 0 && x3 == 10 && x4 == 0 => {
+                                            println!("encoding: aarch32_VSHLL_T1A1_A");
+                                        }
+                                        (_, x1, _, x3, _) if x1 != 0 && x3 & 12 == 12 => {
+                                            println!("encoding: aarch32_VCVT_xs_A1_A");
+                                        }
+                                        (x0, x1, _, x3, _) if x0 == 0 && x1 != 0 && x3 == 5 => {
+                                            println!("encoding: aarch32_VSHL_i_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, x4) if x0 == 0 && x1 != 0 && x3 == 8 && x4 == 0 => {
+                                            println!("encoding: aarch32_VSHRN_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, x4) if x0 == 0 && x1 != 0 && x3 == 8 && x4 == 1 => {
+                                            println!("encoding: aarch32_VRSHRN_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 4 => {
+                                            println!("encoding: aarch32_VSRI_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 5 => {
+                                            println!("encoding: aarch32_VSLI_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, _) if x0 == 1 && x1 != 0 && x3 == 6 => {
+                                            println!("encoding: aarch32_VQSHL_i_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, x4) if x0 == 1 && x1 != 0 && x3 == 8 && x4 == 0 => {
+                                            println!("encoding: aarch32_VQSHRN_T1A1_A");
+                                        }
+                                        (x0, x1, _, x3, x4) if x0 == 1 && x1 != 0 && x3 == 8 && x4 == 1 => {
+                                            println!("encoding: aarch32_VQRSHRN_T1A1_A");
+                                        }
+                                        _ => unreachable!()
+                                    }
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, x1, _, x3, _) if x1 & 2 == 2 && x3 == 1 => {
+                    match ((instr >> 26) & 11, (instr >> 21) & 9, (instr >> 20) & 1, (instr >> 5) & 29, (instr >> 4) & 1, instr & 7) {
+                        (_, x1, _, _, _, _) if x1 & 25 == 1 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, _, _, _, _) if x1 == 9 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, _, _, _, _) if x1 == 11 => {
+                            let opcode = (instr >> 4) & 7;
+                            let option = instr & 7;
+                            match (opcode, option) {
+                                (x0, _) if x0 == 0 => {
+                                    println!("unpredictable");
+                                }
+                                (x0, _) if x0 == 1 => {
+                                    println!("encoding: aarch32_CLREX_A1_A");
+                                }
+                                (x0, _) if x0 & 14 == 2 => {
+                                    println!("unpredictable");
+                                }
+                                (x0, x1) if x0 == 4 && x1 & 11 != 0 => {
+                                    println!("encoding: aarch32_DSB_A1_A");
+                                }
+                                (x0, x1) if x0 == 4 && x1 == 0 => {
+                                    println!("encoding: aarch32_SSBB_A1_A");
+                                }
+                                (x0, x1) if x0 == 4 && x1 == 4 => {
+                                    println!("encoding: aarch32_PSSBB_A1_A");
+                                }
+                                (x0, _) if x0 == 5 => {
+                                    println!("encoding: aarch32_DMB_A1_A");
+                                }
+                                (x0, _) if x0 == 6 => {
+                                    println!("encoding: aarch32_ISB_A1_A");
+                                }
+                                (x0, _) if x0 == 7 => {
+                                    println!("encoding: aarch32_SB_A1_A");
+                                }
+                                (x0, _) if x0 & 8 == 8 => {
+                                    println!("unpredictable");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, _, _, _) if x1 & 29 == 13 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, _, _, _, _) if x1 & 17 == 0 => {
+                            let D = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let R = (instr >> 22) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let imm12 = instr & 23;
+                            match (D, R, Rn) {
+                                (x0, x1, _) if x0 == 0 && x1 == 0 => {
+                                }
+                                (x0, x1, _) if x0 == 0 && x1 == 1 => {
+                                    println!("encoding: aarch32_PLI_i_A1_A");
+                                }
+                                (x0, _, x2) if x0 == 1 && x2 == 15 => {
+                                    println!("encoding: aarch32_PLD_l_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 1 && x1 == 0 && x2 != 15 => {
+                                    println!("encoding: aarch32_PLD_i_A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 1 && x1 == 1 && x2 != 15 => {
+                                    println!("encoding: aarch32_PLD_i_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, _, x4, _) if x1 & 17 == 16 && x4 == 0 => {
+                            let D = (instr >> 24) & 1;
+                            let U = (instr >> 23) & 1;
+                            let o2 = (instr >> 22) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let imm5 = (instr >> 7) & 9;
+                            let stype = (instr >> 5) & 3;
+                            let Rm = instr & 7;
+                            match (D, o2) {
+                                (x0, x1) if x0 == 0 && x1 == 0 => {
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 1 => {
+                                    println!("encoding: aarch32_PLI_r_A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_PLD_r_A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 1 => {
+                                    println!("encoding: aarch32_PLD_r_A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, _, x4, _) if x1 & 17 == 17 && x4 == 0 => {
+                            println!("unallocated");
+                        }
+                        (_, x1, _, _, x4, _) if x1 & 16 == 16 && x4 == 1 => {
+                            println!("unpredictable");
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, x1, _, x3, _) if x1 == 2 && x3 == 0 => {
+                    match ((instr >> 24) & 15, (instr >> 23) & 1, (instr >> 21) & 3, (instr >> 20) & 1, (instr >> 12) & 15, (instr >> 10) & 3, instr & 19) {
+                        (_, x1, _, _, _, _, _) if x1 == 0 => {
+                            let D = (instr >> 22) & 1;
+                            let L = (instr >> 21) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let itype = (instr >> 8) & 7;
+                            let size = (instr >> 6) & 3;
+                            let align = (instr >> 4) & 3;
+                            let Rm = instr & 7;
+                            match (L, itype) {
+                                (x0, x1) if x0 == 0 && x1 & 14 == 0 => {
+                                    println!("encoding: aarch32_VST4_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 2 => {
+                                    println!("encoding: aarch32_VST1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 3 => {
+                                    println!("encoding: aarch32_VST2_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 14 == 4 => {
+                                    println!("encoding: aarch32_VST3_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 6 => {
+                                    println!("encoding: aarch32_VST1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 7 => {
+                                    println!("encoding: aarch32_VST1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 & 14 == 8 => {
+                                    println!("encoding: aarch32_VST2_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 0 && x1 == 10 => {
+                                    println!("encoding: aarch32_VST1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 & 14 == 0 => {
+                                    println!("encoding: aarch32_VLD4_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 2 => {
+                                    println!("encoding: aarch32_VLD1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 3 => {
+                                    println!("encoding: aarch32_VLD2_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 & 14 == 4 => {
+                                    println!("encoding: aarch32_VLD3_m_T1A1_A");
+                                }
+                                (_, x1) if x1 == 11 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 6 => {
+                                    println!("encoding: aarch32_VLD1_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 7 => {
+                                    println!("encoding: aarch32_VLD1_m_T1A1_A");
+                                }
+                                (_, x1) if x1 & 12 == 12 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1) if x0 == 1 && x1 & 14 == 8 => {
+                                    println!("encoding: aarch32_VLD2_m_T1A1_A");
+                                }
+                                (x0, x1) if x0 == 1 && x1 == 10 => {
+                                    println!("encoding: aarch32_VLD1_m_T1A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, _, _, x5, _) if x1 == 1 && x5 == 3 => {
+                            let D = (instr >> 22) & 1;
+                            let L = (instr >> 21) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let N = (instr >> 8) & 3;
+                            let size = (instr >> 6) & 3;
+                            let T = (instr >> 5) & 1;
+                            let a = (instr >> 4) & 1;
+                            let Rm = instr & 7;
+                            match (L, N, a) {
+                                (x0, _, _) if x0 == 0 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 0 => {
+                                    println!("encoding: aarch32_VLD1_a_T1A1_A");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 1 => {
+                                    println!("encoding: aarch32_VLD2_a_T1A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 0 => {
+                                    println!("encoding: aarch32_VLD3_a_T1A1_A");
+                                }
+                                (x0, x1, x2) if x0 == 1 && x1 == 2 && x2 == 1 => {
+                                    println!("unallocated");
+                                }
+                                (x0, x1, _) if x0 == 1 && x1 == 3 => {
+                                    println!("encoding: aarch32_VLD4_a_T1A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        (_, x1, _, _, _, x5, _) if x1 == 1 && x5 != 3 => {
+                            let D = (instr >> 22) & 1;
+                            let L = (instr >> 21) & 1;
+                            let Rn = (instr >> 16) & 7;
+                            let Vd = (instr >> 12) & 7;
+                            let size = (instr >> 10) & 3;
+                            let N = (instr >> 8) & 3;
+                            let index_align = (instr >> 4) & 7;
+                            let Rm = instr & 7;
+                            match (L, size, N, Rm) {
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 0 => {
+                                    println!("encoding: aarch32_VST1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 1 => {
+                                    println!("encoding: aarch32_VST2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 2 => {
+                                    println!("encoding: aarch32_VST3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 0 && x2 == 3 => {
+                                    println!("encoding: aarch32_VST4_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 0 => {
+                                    println!("encoding: aarch32_VST1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 1 => {
+                                    println!("encoding: aarch32_VST2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 2 => {
+                                    println!("encoding: aarch32_VST3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 1 && x2 == 3 => {
+                                    println!("encoding: aarch32_VST4_1_T2A2_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 0 => {
+                                    println!("encoding: aarch32_VST1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 1 => {
+                                    println!("encoding: aarch32_VST2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 0 && x1 == 2 && x2 == 2 => {
+                                    println!("encoding: aarch32_VST3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 & 13 != 13 => {
+                                    println!("encoding: aarch32_VST4_1_T3A3_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 == 13 => {
+                                    println!("encoding: aarch32_VST4_1_T3A3_A");
+                                }
+                                (x0, x1, x2, x3) if x0 == 0 && x1 == 2 && x2 == 3 && x3 == 15 => {
+                                    println!("encoding: aarch32_VST4_1_T3A3_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 0 => {
+                                    println!("encoding: aarch32_VLD1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 1 => {
+                                    println!("encoding: aarch32_VLD2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 2 => {
+                                    println!("encoding: aarch32_VLD3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 0 && x2 == 3 => {
+                                    println!("encoding: aarch32_VLD4_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 0 => {
+                                    println!("encoding: aarch32_VLD1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 1 => {
+                                    println!("encoding: aarch32_VLD2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 2 => {
+                                    println!("encoding: aarch32_VLD3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 1 && x2 == 3 => {
+                                    println!("encoding: aarch32_VLD4_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 0 => {
+                                    println!("encoding: aarch32_VLD1_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 1 => {
+                                    println!("encoding: aarch32_VLD2_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 2 => {
+                                    println!("encoding: aarch32_VLD3_1_T1A1_A");
+                                }
+                                (x0, x1, x2, _) if x0 == 1 && x1 == 2 && x2 == 3 => {
+                                    println!("encoding: aarch32_VLD4_1_T1A1_A");
+                                }
+                                _ => unreachable!()
+                            }
+                        }
+                        _ => unreachable!()
+                    }
+                }
+                (_, x1, _, x3, _) if x1 == 3 && x3 == 0 => {
+                    println!("unpredictable");
+                }
+                _ => unreachable!()
+            }
+        }
+        _ => unreachable!()
+    }
+} // end of decoding A32
 
 #[cfg(test)]
 mod tests {
-    use super::decode_a64;
+    use super::{decode_a64, decode_a32};
 
     #[test]
     fn test() {
-        decode_a64(0x30_00_00_00);
+        decode_a64(0xe3a00001);
+        decode_a32(0xe3a00001);
     }
 }
