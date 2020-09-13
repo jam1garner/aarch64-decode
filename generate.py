@@ -180,14 +180,7 @@ for op in dec.variants:
             print(f"        {field}: {ty},")
         print(f"    }},")
 print("}")
-print()
 print("""
 #[cfg(test)]
-mod tests {
-    use super::{decode_a32, Instr};
-
-    #[test]
-    fn test() {
-        assert_eq!(decode_a32(0xe3a00001).unwrap(), Instr::MovsIA1 { cond: 6, S: 0, Rn: 0, Rd: 0, imm12: 1 });
-    }
-}""")
+mod tests;
+""")
