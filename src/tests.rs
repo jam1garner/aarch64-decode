@@ -1,11 +1,11 @@
 use super::{decode_a32, decode_a64, Instr};
 
 #[test]
-fn test() {
+fn test_mov() {
     assert_eq!(
         decode_a32(0xe3a00001).unwrap(),
         Instr::MovsIA1 {
-            cond: 6,
+            cond: 14,
             S: 0,
             Rn: 0,
             Rd: 0,
@@ -13,6 +13,9 @@ fn test() {
         }
     );
 }
+
+//   left: `Subs64AddsubShift { Rm: 0, Rn: 5, Rd: 6 }`,
+//   right: `AddvlRRi { Rn: 5, imm6: 0, Rd: 6 }`'
 
 #[test]
 fn test_add() {
@@ -22,10 +25,10 @@ fn test_add() {
 
     assert_eq!(
         decode_a64(0x0b0000a6).unwrap(),
-        Instr::AddvlRRi {
+        Instr::Add32AddsubShift {
+            Rm: 0,
             Rn: 5,
-            imm6: 0,
-            Rd: 6,
+            Rd: 6
         }
     );
 
@@ -34,10 +37,11 @@ fn test_add() {
     // |         |     imm12   |  Rn |  Rd |
     assert_eq!(
         decode_a64(0x11040252).unwrap(),
-        Instr::AddsIA1 {
-            cond: 0,
-            Rd: 18,
-            imm12: 0x100,
+        Instr::Add32AddsubImm {
+            sh: 0,
+            imm12: 256,
+            Rn: 18,
+            Rd: 18
         }
     );
 }
@@ -45,11 +49,12 @@ fn test_add() {
 #[test]
 fn test_and() {
     // and w2, w8, #1
+    //  109876543 2 109876 543210 98765 43210
     // |000100100|0|000000|000000|01000|00010|
     // |         |N| immr | imms | Rn  |  Rd |
     assert_eq!(
         decode_a64(0x12000102).unwrap(),
-        Instr::Ands64SLogImm {
+        Instr::And32LogImm {
             immr: 0,
             imms: 0,
             Rn: 8,
