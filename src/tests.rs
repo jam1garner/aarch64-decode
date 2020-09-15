@@ -10010,3 +10010,200 @@ fn test_sbcs() {
         }
     );
 }
+
+#[test]
+fn test_crc32ch() {
+    // crc32ch w0, w1, w2
+    assert_eq!(
+        decode_a64(0x1AC25420).unwrap(),
+        Instr::Crc32Ch32CDp2Src {
+            Rm: 2,
+            Rn: 1,
+            Rd: 0
+        }
+    );
+}
+
+#[test]
+fn test_asrv() {
+    // asrv x0, x1, x3
+    assert_eq!(
+        decode_a64(0x9AC32820).unwrap(),
+        Instr::Asrv64Dp2Src {
+            Rm: 3,
+            Rn: 1,
+            Rd: 0
+        }
+    );
+}
+
+#[test]
+fn test_bfm() {
+    // bfm x5, x7, #4, #8
+    assert_eq!(
+        decode_a64(0xB34420E5).unwrap(),
+        Instr::Bfm64MBitfield {
+            immr: 4,
+            imms: 8,
+            Rn: 7,
+            Rd: 5
+        }
+    );
+}
+
+#[test]
+fn test_fminv() {
+    // fminv s0, v0.4s
+    assert_eq!(
+        decode_a64(0x6EB0F800).unwrap(),
+        Instr::FminvAsimdallOnlySd { Q: 1, Rn: 0, Rd: 0 }
+    );
+}
+
+#[test]
+fn test_cmlt() {
+    // cmlt d0, d0, #0
+    assert_eq!(
+        decode_a64(0x5EE0A800).unwrap(),
+        Instr::CmltAsisdmiscZ { Rn: 0, Rd: 0 }
+    );
+}
+
+#[test]
+fn test_sqxtn2_4s() {
+    // sqxtn2.4s v0, v1
+    assert_eq!(
+        decode_a64(0x4EA14820).unwrap(),
+        Instr::SqxtnAsimdmiscN { Q: 1, Rn: 1, Rd: 0 }
+    );
+}
+
+#[test]
+fn test_fcmle() {
+    // fcmle d3, d1, #0
+    assert_eq!(
+        decode_a64(0x7EE0D823).unwrap(),
+        Instr::FcmleAsisdmiscFz { Rn: 1, Rd: 3 }
+    );
+}
+
+#[test]
+fn test_shll2_4s() {
+    // shll2.4s v0, v1, #16
+    assert_eq!(
+        decode_a64(0x6E613820).unwrap(),
+        Instr::ShllAsimdmiscS { Q: 1, Rn: 1, Rd: 0 }
+    );
+}
+
+#[test]
+fn test_stur() {
+    // stur h0, [x0, #-20]
+    assert_eq!(
+        decode_a64(0x7C1EC000).unwrap(),
+        Instr::SturHLdstUnscaled {
+            imm9: 492,
+            Rn: 0,
+            Rt: 0
+        }
+    );
+}
+
+#[test]
+fn test_stp() {
+    // stp w0, w1, [x2]
+    assert_eq!(
+        decode_a64(0x29000440).unwrap(),
+        Instr::Stp32LdstpairOff {
+            imm7: 0,
+            Rt2: 1,
+            Rn: 2,
+            Rt: 0
+        }
+    );
+}
+
+#[test]
+fn test_ldtrsb() {
+    // ldtrsb x1, [x3, #196]
+    assert_eq!(
+        decode_a64(0x388C4861).unwrap(),
+        Instr::Ldtrsb64LdstUnpriv {
+            imm9: 196,
+            Rn: 3,
+            Rt: 1
+        }
+    );
+}
+
+#[test]
+fn test_uhsub() {
+    // uhsub v0.8b, v1.8b, v3.8b
+    assert_eq!(
+        decode_a64(0x2E232420).unwrap(),
+        Instr::UhsubAsimdsameOnly {
+            Q: 0,
+            Rm: 3,
+            Rn: 1,
+            Rd: 0
+        }
+    );
+}
+
+#[test]
+fn test_uabdl2() {
+    // uabdl2 v4.2d, v1.4s, v3.4s
+    assert_eq!(
+        decode_a64(0x6EA37024).unwrap(),
+        Instr::UabdlAsimddiffL {
+            Q: 1,
+            size: 2,
+            Rm: 3,
+            Rn: 1,
+            Rd: 4
+        }
+    );
+}
+
+#[test]
+fn test_uminp() {
+    // uminp v0.8b, v1.8b, v3.8b
+    assert_eq!(
+        decode_a64(0x2E23AC20).unwrap(),
+        Instr::UminpAsimdsameOnly {
+            Q: 0,
+            Rm: 3,
+            Rn: 1,
+            Rd: 0
+        }
+    );
+}
+
+#[test]
+fn test_subhn2() {
+    // subhn2 v1.16B, v3.8H, v5.8H
+    assert_eq!(
+        decode_a64(0x4E256061).unwrap(),
+        Instr::SubhnAsimddiffN {
+            Q: 1,
+            size: 0,
+            Rm: 5,
+            Rn: 3,
+            Rd: 1
+        }
+    );
+}
+
+#[test]
+fn test_shadd() {
+    // shadd v1.8B, v3.8B, v5.8B
+    assert_eq!(
+        decode_a64(0xE250461).unwrap(),
+        Instr::ShaddAsimdsameOnly {
+            Q: 0,
+            Rm: 5,
+            Rn: 3,
+            Rd: 1
+        }
+    );
+}
