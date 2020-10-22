@@ -73,6 +73,7 @@ class Decoder(NopDecodeListener):
             print("#[allow(non_snake_case)]")
             print("#[allow(unreachable_patterns)]")
             if self.include_fields:
+                print("#[cfg(feature = \"include_fields\")]")
                 print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Instr> {{")
             else:
                 print(f"pub fn decode_mnemonic_{name.lower()}(instr: u32) -> Option<Mnemonic> {{")
