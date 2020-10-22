@@ -1,4 +1,4 @@
-use super::{decode_a32, decode_a64, Instr};
+use super::{decode_mnemonic_a64, decode_a32, decode_a64, Instr, Mnemonic};
 
 #[test]
 fn test_ldxrb() {
@@ -10,6 +10,10 @@ fn test_ldxrb() {
             Rn: 0,
             Rt: 9
         }
+    );
+    assert_eq!(
+        decode_mnemonic_a64(0x85F7C09).unwrap(),
+        Mnemonic::LdxrbLr32Ldstexcl
     );
     // ldxrb w8, [x0]
     assert_eq!(

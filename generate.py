@@ -12,7 +12,8 @@ def to_name(sym):
     return r(r(sym, "aarch32_"), "aarch64_").rstrip("_").replace("_", " ").title().replace(" ", "")
 
 class Decoder(NopDecodeListener):
-    def __init__(self):
+    def __init__(self, include_fields=True):
+        self.include_fields = include_fields
         self.tabs = 0
         self.field_sizes = {}
         self.variants = set(["Nop"])
@@ -71,7 +72,10 @@ class Decoder(NopDecodeListener):
             print("#[allow(unused_variables)]")
             print("#[allow(non_snake_case)]")
             print("#[allow(unreachable_patterns)]")
-            print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Instr> {{")
+            if self.include_fields:
+                print(f"pub fn decode_{name.lower()}(instr: u32) -> Option<Instr> {{")
+            else:
+                print(f"pub fn decode_mnemonic_{name.lower()}(instr: u32) -> Option<Mnemonic> {{")
             self.tabs += 1
             return True
 
@@ -79,22 +83,25 @@ class Decoder(NopDecodeListener):
         if comment:
             name = comment
         name = to_name(name)
-        self.variants.add(name)
-        fields = self.unused_in_scope_vars()
+        if self.include_fields:
+            self.variants.add(name)
+            fields = self.unused_in_scope_vars()
 
-        def to_field(x):
-            bits = self.field_sizes[x]
-            if bits <= 8:
-                ty = "u8"
-            elif bits <= 16:
-                ty = "u16"
-            else:
-                ty = "u32"
-            return (x, ty)
+            def to_field(x):
+                bits = self.field_sizes[x]
+                if bits <= 8:
+                    ty = "u8"
+                elif bits <= 16:
+                    ty = "u16"
+                else:
+                    ty = "u32"
+                return (x, ty)
 
-        self.variant_fields[name] = [to_field(x) for x in fields]
-        fields = "" if len(fields) == 0 else (" {" + ", ".join([f"{x}: {x} as _" for x in fields]) + "}")
-        print(f"{TAB * self.tabs}Some(Instr::{name}{fields})")
+            self.variant_fields[name] = [to_field(x) for x in fields]
+            fields = "" if len(fields) == 0 else (" {" + ", ".join([f"{x}: {x} as _" for x in fields]) + "}")
+            print(f"{TAB * self.tabs}Some(Instr::{name}{fields})")
+        else:
+            print(f"{TAB * self.tabs}Some(Mnemonic::{name})")
 
     def listen_field(self, name, start, run):
         self.unused_var_stack[-1].append(name)
@@ -116,7 +123,10 @@ class Decoder(NopDecodeListener):
         print(f"{TAB * self.tabs}None")
 
     def listen_nop(self):
-        print(f"{TAB * self.tabs}Some(Instr::Nop)")
+        if self.include_fields:
+            print(f"{TAB * self.tabs}Some(Instr::Nop)")
+        else:
+            print(f"{TAB * self.tabs}Some(Mnemonic::Nop)")
 
     def listen_unpredictable(self):
         print(f"{TAB * self.tabs}None")
@@ -164,6 +174,15 @@ class Decoder(NopDecodeListener):
 
 dec = Decoder()
 parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", dec)
+dec2 = Decoder(include_fields=False)
+parse_asl_decoder_file("../mra_tools/arch/arch_decode.asl", dec2)
+print()
+print("#[allow(non_snake_case)]")
+print("#[derive(Debug, PartialEq, Clone)]")
+print("pub enum Mnemonic {")
+for op in dec.variants:
+    print(f"    {op},")
+print("}")
 print()
 print("#[allow(non_snake_case)]")
 print("#[derive(Debug, PartialEq, Clone)]")
